@@ -15,7 +15,8 @@
       "import": "./dist/ttz-ui.es.js",
       "require": "./dist/ttz-ui.umd.cjs",
       "types": "./dist/index.d.ts"
-    }
+    },
+    "./*": "./*"
   },
   "author": "tetezi",
   "license": "MIT",
