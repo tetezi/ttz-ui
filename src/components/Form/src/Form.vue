@@ -1,5 +1,4 @@
 <template>
-    {{ modelValue }}
     <el-form ref="elFormInstanceRef" :model="getFormData" :labelWidth="getProps.labelWidth">
         <el-row v-bind="getProps.rowProps">
             <template v-for="schema of getFormSchemas" :key="schema.schemaKey">
@@ -18,7 +17,8 @@ import defaultProps from './defaultProps';
 import { useProps, useData, useFormSchemas, useElFormInstance, useSubmit } from './hooks';
 import FormItem from './FormItem.vue'
 import { getSlot } from '@/utils';
-import { ref, unref } from 'vue';
+import { onMounted, ref, unref } from 'vue';
+import type { FormMethods } from './types';
 const props = withDefaults(defineProps<Partial<FormProps>>(), defaultProps)
 const emit = defineEmits<FormShortEvent>()
 const modelValue = defineModel<Recordable>({
@@ -49,4 +49,11 @@ const { elFormInstanceRef, getElFormInstance, validate, setFormItemInstanceRef, 
  */
 const { submitLoadingRef, submitFunction } = useSubmit(getProps, emitEvent, validate, getFormData)
 
+const formMethods: FormMethods = {
+    setProps,
+    getFormData, setFormData, setFieldsValue, getFieldsValue, validate, submitFunction
+}
+onMounted(() => {
+    emitEvent('register', formMethods)
+})  
 </script>

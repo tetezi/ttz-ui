@@ -1,13 +1,13 @@
 <template> 
 {{ a }}
-    <Form :formSchemas="formSchemas"     v-model="a"   >
+    <BasicForm :formSchemas="formSchemas"     v-model="a"   >
         <template #slotTest>
             slot
         </template>
-    </Form>
+    </BasicForm>
 </template>
 <script lang="tsx" setup>
-import { Form } from '@/components'
+import { BasicForm } from '@/components'
 import type { FormSchemas } from '@/components/Form/src/types'; 
 import { computed, ref,watch } from 'vue';
 const a  = ref({input:

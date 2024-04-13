@@ -10,6 +10,7 @@ import type {
   RowProps as ELRowProps,
   ColProps as ELColProps,
 } from "element-plus";
+import type { FormMethods } from ".";
 export type FormProps = {
   defaultValue?: Recordable;
   labelWidth?: number | string;
@@ -36,6 +37,7 @@ export type FormItemProps = {
 export type FormShortEvent = {
   change: [formData: Recordable];
   submit: [formData: Recordable];
+  register:[formMethods:FormMethods]
 };
 
 export type FormEventObject = ShortEventToOnEvent<FormShortEvent>;
