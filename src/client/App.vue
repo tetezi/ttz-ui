@@ -1,6 +1,6 @@
 <template>
   <el-config-provider :locale="zhCn">
-    <div v-for="{ name, component } of demoList" :key="name">
+    <div v-for="{ name, component } of demoList" :key="name" style="margin:10px;border:1px solid red">
       <div>{{ name }}</div>
       <component :is="component"></component>
     </div>
@@ -15,7 +15,7 @@ const demoFiles: Recordable<{
 const demoList = shallowRef<{ name: string, component: DefineComponent }[]>([])
 for (const key in demoFiles) {
   if (demoFiles[key].default) {
-    const name = key.match(/demo\/(.*?)\/index\.vue$/)?.[1] || '';
+    const name = key.match(/client\/(.*?)\/index\.vue$/)?.[1] || '';
     demoList.value.push({
       name,
       component: demoFiles[key].default

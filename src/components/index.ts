@@ -6,4 +6,5 @@ export * from "./Slider";
 export * from "./DatePicker";
 export * from "./BasicButton"; 
  
-export  * from "./Form";  
+export  * from "./BasicForm";  
+export  * from "./BasicTable";  

@@ -8,7 +8,7 @@
 </template>
 <script lang="tsx" setup>
 import { BasicForm } from '@/components'
-import type { FormSchemas } from '@/components/Form/src/types'; 
+import type { FormSchemas } from '@/components/BasicForm/src/types'; 
 import { computed, ref,watch } from 'vue';
 const a  = ref({input:
     'asd'
