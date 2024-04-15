@@ -24,9 +24,7 @@ const setFieldsValue = function (
     key: any,
     value: any
 ) {
-    console.log(444,unref(modelValue))
     set(unref(modelValue), key, value);
-    console.log(444,unref(modelValue))
 };
 function www() {
     setFieldsValue('0.bb', buildUUID())
