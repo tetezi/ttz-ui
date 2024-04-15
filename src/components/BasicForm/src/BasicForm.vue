@@ -50,7 +50,7 @@ const { elFormInstanceRef, getElFormInstance, validate, setFormItemInstanceRef, 
 const { submitLoadingRef, submitFunction } = useSubmit(getProps, emitEvent, validate, getFormData)
 
 const formMethods: FormMethods = {
-    setProps,
+    setProps, getProps,
     getFormData, setFormData, setFieldsValue, getFieldsValue, validate, submitFunction
 }
 onMounted(() => {

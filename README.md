@@ -51,3 +51,7 @@ npm run pub
 - vite.config.ts：主要配置 build 的打包参数；
 - src/index.ts：用于配置打包内容；
 - package.json 修改配置，使其指向生成的库文件；以及基础的配置信息，方便上传到 npm 中。
+
+#### 待办
+- `BasicTable` 操作函数，分页，单选，多选，插槽
+- `ApiTable` ，搜索表单

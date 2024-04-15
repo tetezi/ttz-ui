@@ -53,11 +53,13 @@ export type TableColumnProps<Data extends Recordable> = {
     | "headerAlign"
   >
 >;
-export type TableShortEvent = {
-  register: [tableMethods: TableMethods];
+export type TableShortEvent<Data extends Recordable> = {
+  register: [tableMethods: TableMethods<Data>];
 };
 
-export type TableEventObject = ShortEventToOnEvent<TableShortEvent>;
+export type TableEventObject<Data extends Recordable> = ShortEventToOnEvent<
+  TableShortEvent<Data>
+>;
 
 export type TableBind<Data extends Recordable> = TableProps<Data> &
-  TableEventObject;
+  TableEventObject<Data>;
