@@ -16,21 +16,21 @@ const modelValue = defineModel<Data[]>({
 })
 const emit = defineEmits<TableShortEvent<Data>>()
 const { getProps, setProps, emitEvent } = useLocalProps<TableProps<Data>, TableShortEvent<Data>>(props, emit)
-const { localModelValue, setValue, getValue, getFieldsValue, setFieldsValue } = useLocalModel(modelValue)
+const { localModelValue, setModelValue, getModelValue, getFieldsValue, setFieldsValue } = useLocalModel(modelValue)
 const slots = defineSlots()
 
 const loadingRef = computed(() => unref(getProps).loading ?? false)
 const tableBind = computed(() => {
     return {
         data: unref(localModelValue),
-        highlightCurrentRow: false, 
+        highlightCurrentRow: false,
         ...omit(unref(getProps), ['loading', 'columns']),
         ...getInheritanceEvent(emit, []),
     }
 })
 const tableMethods: TableMethods<Data> = {
     getProps,
-    setProps, setValue, getValue, getFieldsValue, setFieldsValue
+    setProps, setModelValue, getModelValue, getFieldsValue, setFieldsValue
 }
 onMounted(() => {
     emitEvent('register', tableMethods)

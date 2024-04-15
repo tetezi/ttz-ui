@@ -5,8 +5,8 @@ import type { ComputedRef } from "vue";
 export type TableMethods<Data extends Recordable> = {
   setProps: (props: Partial<TableBind<Data>>) => void;
   getProps: ComputedRef<TableBind<Data>>;
-  setValue: (val: Data[]) => void;
-  getValue: ComputedRef<Data[]>;
+  setModelValue: (val: Data[]) => void;
+  getModelValue: ComputedRef<Data[]>;
   getFieldsValue: (key: PropertyPath) => any;
   setFieldsValue: (key: PropertyPath, val: any) => any;
 };

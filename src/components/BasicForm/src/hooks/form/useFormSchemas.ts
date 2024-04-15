@@ -1,31 +1,26 @@
 import { isFunction } from "lodash";
 import { computed, unref, type ComputedRef } from "vue";
 
-import type {
-  GetFormData,
-  GetFormSchemas,
-  SetFormData,
-  FormBind,
-  FormSchema, 
-} from "../../types";
+import type { GetFormSchemas, FormBind, FormSchema } from "../../types";
 import { buildUUID } from "@/utils/uuid";
+import type { GetModelValue, SetModelValue } from "@/utils";
 
 export function useFormSchemas(
   getProps: ComputedRef<FormBind>,
   {
-    setFormData,
-    getFormData,
+    setModelValue,
+    getModelValue,
   }: {
-    setFormData: SetFormData;
-    getFormData: GetFormData;
+    setModelValue: SetModelValue;
+    getModelValue: GetModelValue;
   }
 ) {
   const getFormSchemas: GetFormSchemas = computed(() => {
     const formSchemas = unref(getProps).formSchemas || [];
     const reuslt = isFunction(formSchemas)
       ? formSchemas({
-          getFormData: getFormData,
-          setFormData: setFormData,
+          getModelValue,
+          setModelValue,
         })
       : formSchemas;
     return reuslt.map((comp) => {

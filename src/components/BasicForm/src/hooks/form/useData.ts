@@ -9,14 +9,14 @@ export function useData(
   modelValue: ModelRef<Recordable, string>
 ) {
   const { defaultValue = {} } = unref(getProps);
-  const { setFieldsValue, getFieldsValue, setValue, getValue } =
+  const { setFieldsValue, getFieldsValue, getModelValue, setModelValue } =
     useLocalModel(modelValue);
   /**
    * 初始值
    */
   if (isPlainObject(defaultValue)) {
     if (isUndefined(unref(modelValue))) {
-      setValue(defaultValue);
+      setModelValue(defaultValue);
     }
   } else {
     console.warn(
@@ -25,7 +25,7 @@ export function useData(
     );
   }
   watch(
-    getValue,
+    getModelValue,
     (val) => {
       emitEvent("change", val);
     },
@@ -36,7 +36,7 @@ export function useData(
   return {
     setFieldsValue,
     getFieldsValue,
-    setFormData: setValue,
-    getFormData: getValue,
+    getModelValue,
+    setModelValue,
   };
 }

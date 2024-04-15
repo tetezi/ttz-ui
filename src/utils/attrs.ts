@@ -17,6 +17,7 @@ import {
   type Ref,
   type ModelRef,
   type UnwrapRef,
+  type ComputedRef,
 } from "vue";
 
 /**获取当前组件事件，用于传递子组件做事件继承 */
@@ -79,6 +80,12 @@ export function useLocalProps<
   };
   return { getProps, setProps, emitEvent };
 }
+
+export type SetModelValue<T = any> = (val: T) => void;
+export type GetModelValue<T = any> = ComputedRef<T>;
+export type SetFieldsValue = (key: PropertyPath, val: any) => void;
+export type GetFieldsValue<T = any> = (key: PropertyPath) => T;
+
 /**
  * 本地模式modelValue，如有使用v-model则使用原modelValue，否则生成一个本地modelValue
  * PS:vue的defineModel语法糖内部也会实现本地模式，但返回的是简单类型的customRefRef，无法监听深层修改，故作修改
@@ -89,23 +96,23 @@ export function useLocalModel<T>(modelValue: ModelRef<T>) {
     rawProps && "modelValue" in rawProps
       ? modelValue
       : (ref(cloneDeep(toRaw(unref(modelValue)))) as Ref<T>);
-  function getFieldsValue(key: PropertyPath) {
-    return get(unref(localModelValue), key);
-  }
-  function setFieldsValue(key: PropertyPath, val: any) {
+  const setFieldsValue: SetFieldsValue = (key, val) => {
     const model = unref(localModelValue);
     if (isObject(model)) {
       set(model, key, val);
     }
-  }
-  function setValue(val: T) {
+  };
+  const getFieldsValue: GetFieldsValue = (key) => {
+    return get(unref(localModelValue), key);
+  };
+  const setModelValue: SetModelValue<T> = (val) => {
     localModelValue.value = val;
-  }
-  const getValue = computed(() => unref(localModelValue));
+  };
+  const getModelValue: GetModelValue = computed(() => unref(localModelValue));
   return {
     localModelValue,
-    setValue,
-    getValue,
+    setModelValue,
+    getModelValue,
     getFieldsValue,
     setFieldsValue,
   };
