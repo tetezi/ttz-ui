@@ -1,3 +1,1 @@
-export function useTable(){
-    
-}
+export * from "./useTable";

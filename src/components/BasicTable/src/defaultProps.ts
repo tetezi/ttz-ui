@@ -6,6 +6,7 @@ export const defaultTableProps = narrow({
   fit: true,
   showHeader: true,
   treeProps: () => ({ hasChildren: "hasChildren", children: "children" }),
+  columns:()=>([])
 });
 
 export const defaultTableColumnProps = narrow({

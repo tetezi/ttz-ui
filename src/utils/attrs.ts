@@ -40,7 +40,7 @@ export function getInheritanceEvent<T extends string>(
 export function useLocalProps<
   Props extends Recordable,
   ShortEvent extends Recordable
->(props: Partial<Props>, emit: Function) {
+>(props: Props, emit: Function) {
   type EventObject = ShortEventToOnEvent<ShortEvent>;
   type Bind = Props & EventObject;
   const propsRef = ref<Partial<Bind>>({});

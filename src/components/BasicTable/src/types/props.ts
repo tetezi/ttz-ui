@@ -6,7 +6,7 @@ import type {
 } from "element-plus";
 export type TableProps<Data extends Recordable> = {
   loading?: boolean;
-  columns: TableColumnProps<Data>[];
+  columns?: TableColumnProps<Data>[];
 } & Partial<
   Pick<
     ElTableProps<Data>,
