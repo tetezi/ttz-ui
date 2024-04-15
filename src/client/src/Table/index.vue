@@ -1,25 +1,27 @@
 <template>
     <el-button @click='www'>www</el-button>
     {{ modelValue }}
-    <BasicTable v-model="modelValue" :columns="columns">
-    </BasicTable>
+    <TableVNode v-model="modelValue"  >
+    </TableVNode>
 </template>
 <script lang="tsx" setup>
 import { reactive, ref, unref } from 'vue'
-import { BasicTable, } from '@/components'
+import { BasicTable, useTable, } from '@/components'
 import type { TableColumnProps } from '@/components';
 import { buildUUID, getInheritanceEvent, getSlot, useLocalModel, useLocalProps } from '@/utils';
 import { omit, set } from 'lodash';
+const [TableVNode] = useTable({
+    columns: [
+        {
+            label: 'aa',
+            childrenColumns: [
+                { prop: 'aa', label: 'aa', formatter: ({ bb }) => <div>ww</div> },
+                { prop: 'bb', label: 'bb' }
+            ]
+        }, { prop: 'bb', label: 'bb' }
+    ]
+})
 const modelValue = reactive([{ aa: 'aa', bb: 'bb' }, { aa: 'aa1', bb: 'bb1' }, { aa: 'aa2', bb: 'bb2' },])
-const columns: TableColumnProps<any>[] = [
-    {
-        label: 'aa',
-        childrenColumns: [
-            { prop: 'aa', label: 'aa', formatter: ({ bb }) => <div>ww</div> },
-            { prop: 'bb', label: 'bb' }
-        ]
-    }, { prop: 'bb', label: 'bb' }
-]
 const setFieldsValue = function (
     key: any,
     value: any

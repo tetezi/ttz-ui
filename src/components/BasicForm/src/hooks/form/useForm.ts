@@ -7,17 +7,20 @@ export function useForm(
   props: FormProps,
   onRegister?: (formMethods: FormMethods) => void
 ): [VNode, FormMethods] {
-  let formMethods: FormMethods | {} = {};
-  const formMethodsProxy: FormMethods = new Proxy(formMethods as FormMethods, {
-    get(target, prop, receiver) {
-      if (isEmpty(target)) {
-        console.warn("表单实例未完成。");
-        throw new Error("表单实例未完成。");
-      } else {
-        return Reflect.get(target as FormMethods, prop, receiver);
-      }
-    },
-  });
+  let formMethods: FormMethods;
+  const formMethodsProxy = new Proxy(
+    {},
+    {
+      get(target, prop, receiver) {
+        if (isEmpty(formMethods)) {
+          console.warn("表单实例未完成。");
+          throw new Error("表单实例未完成。");
+        } else {
+          return Reflect.get(formMethods, prop, receiver);
+        }
+      },
+    }
+  ) as FormMethods;
   const register = (methods) => {
     formMethods = methods;
     if (props) {
