@@ -2,27 +2,27 @@
     <el-form :model="localModelValue" label-width="0px">
         <TableVNode v-model="localModelValue">
         </TableVNode>
+        <BasicButton type="success" :func="() => add()" style="width:100%">提交</BasicButton>
     </el-form>
 </template>
 <script lang="tsx" setup generic="Data extends Recordable">
-import { computed, unref } from 'vue';
-import { isFunction, omit } from 'lodash'
+import { computed, ref, unref } from 'vue';
+import { isArray, isFunction, omit } from 'lodash'
 import type { EditableTableProps, EditableTableRednerParams, EditableTableShortEvent } from './types'
 import { editableTableDefaultProps } from './defaultProps';
 import { buildUUID, getInheritanceEvent, getSlot, useLocalModel, useLocalProps } from '@/utils';
 import { useTable } from '@/components/BasicTable';
 import { toValue } from 'vue';
 import { FormItem, type FormSchema } from '@/components/BasicForm';
+import { BasicButton } from '@/components/BasicButton';
+import { watch } from 'vue';
 const props = withDefaults(defineProps<EditableTableProps<Data>>(), editableTableDefaultProps)
 const emit = defineEmits<EditableTableShortEvent<Data>>()
-const modelValue = defineModel<Data[]>()
+const modelValue = defineModel<Data[]>()  
 const { getProps, setProps, emitEvent } = useLocalProps(props, emit)
-const { localModelValue, setFieldsValue, setModelValue, getFieldsValue, getModelValue } = useLocalModel(modelValue)
-const slots = defineSlots()
-
+const { localModelValue, setFieldsValue, setModelValue, getFieldsValue, getModelValue } = useLocalModel(modelValue, [])
+const slots = defineSlots() 
 const [TableVNode] = useTable(() => {
-    console.log(unref(props).columns)
-    console.log(toValue(unref(getProps).columns))
     return {
         columns: toValue(unref(getProps).columns).map((column) => {
             return {
@@ -59,7 +59,7 @@ const [TableVNode] = useTable(() => {
                             labelShow: false,
                             labelWidth: 0,
                             category: actialEditConfig.category ?? "Input",
-                            schemaKey: actialEditConfig.schemaKey ??  ([index, column.prop]).join('-') ?? buildUUID(),
+                            schemaKey: actialEditConfig.schemaKey ?? ([index, column.prop]).join('-') ?? buildUUID(),
                         } as FormSchema<any>
 
 
@@ -72,6 +72,26 @@ const [TableVNode] = useTable(() => {
                 }
             }
         }),
+        actionColumn: (row, cellValue, index, column) => {
+            return <BasicButton func={() => del(index)}>删除</BasicButton>
+        }
     }
 })
+
+async function add() {
+    const { addBtnValue } = unref(getProps)
+    const value = isFunction(addBtnValue) ? await addBtnValue() : addBtnValue
+    const val = unref(localModelValue)
+    if (isArray(val)) {
+        val.push(value as any)
+    } else {
+        setModelValue([value as any])
+    }
+}
+async function del(index) {
+    const val = unref(localModelValue)
+    if (isArray(val)) {
+        val.splice(index, 1)
+    }
+}
 </script>

@@ -20,9 +20,7 @@ import { onMounted } from 'vue';
 import type { FormMethods } from './types';
 const props = withDefaults(defineProps<Partial<FormProps>>(), defaultProps)
 const emit = defineEmits<FormShortEvent>()
-const modelValue = defineModel<Recordable>({
-    default: () => ({})
-})
+const modelValue = defineModel<Recordable>()
 const slots = defineSlots()
 /**
  * 表单配置

@@ -53,6 +53,6 @@ npm run pub
 - package.json 修改配置，使其指向生成的库文件；以及基础的配置信息，方便上传到 npm 中。
 
 #### 待办
-- `BasicTable` 分页，单选，多选，插槽
+- `BasicTable` 操作列，增删，分页，单选，多选，插槽
 - `ApiTable` ，搜索表单
-- `EditableTable` 可编辑表格，rules校验
+- `EditableTable`  rules校验，增删

@@ -28,8 +28,12 @@ export type EditableTableColumn<Data extends Recordable> = {
       >;
 } & Omit<TableColumn<Data>, "prop">;
 
-export type EditableTableProps<Data extends Recordable> = Omit<TableProps<Data>,'columns'> & {
-  columns: MaybeRefOrGetter<Array<EditableTableColumn<Data>>>;
+export type EditableTableProps<Data extends Recordable> = Omit<
+  TableProps<Data>,
+  "columns"
+> & {
+  addBtnValue?: Partial<Data> | (() => MaybePromise<Partial<Data>>);
+  columns?: MaybeRefOrGetter<Array<EditableTableColumn<Data>>>;
 };
 
 export type EditableTableShortEvent<Data extends Recordable> = {};

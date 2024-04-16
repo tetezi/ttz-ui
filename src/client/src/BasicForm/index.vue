@@ -11,8 +11,8 @@ import { BasicForm, useForm } from '@/components'
 import type { FormSchemas } from '@/components/BasicForm/src/types';
 import { computed, ref, watch } from 'vue';
 const a = ref({
-    input:
-        'asd'
+    input:'asd',
+    
 })
 const [FormVNode, formMethods] = useForm({
     formSchemas: [{

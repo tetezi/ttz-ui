@@ -5,7 +5,7 @@ import { useComponentRegister } from "@/utils";
 export function useTable<Data extends Recordable>(
   props: MaybeRefOrGetter<TableProps<Data>>,
   onRegister?: (tableMethods: TableMethods<Data>) => void
-): [VNode, TableMethods<Data>] {
+): [DefineComponent, TableMethods<Data>] {
   return useComponentRegister(
     BasicTable as unknown as DefineComponent,
     props,

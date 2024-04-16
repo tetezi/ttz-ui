@@ -6,11 +6,11 @@ import { useLocalModel } from "@/utils";
 export function useData(
   getProps: GetProps,
   emitEvent: EmitEvent,
-  modelValue: ModelRef<Recordable, string>
+  modelValue: ModelRef<undefined | Recordable, string>
 ) {
   const { defaultValue = {} } = unref(getProps);
   const { setFieldsValue, getFieldsValue, getModelValue, setModelValue } =
-    useLocalModel(modelValue);
+    useLocalModel(modelValue, {});
   /**
    * 初始值
    */

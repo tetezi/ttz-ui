@@ -7,6 +7,7 @@ import type {
 export type TableProps<Data extends Recordable> = {
   loading?: boolean;
   columns?: MaybeRefOrGetter<TableColumn<Data>[]>;
+  actionColumn?:Partial<TableColumn<Data>>| TableColumn<Data>["formatter"]
 } & Partial<
   Pick<
     ElTableProps<Data>,

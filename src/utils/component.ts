@@ -1,5 +1,6 @@
 import { isEmpty } from "lodash";
 import {
+  defineComponent,
   h,
   toValue,
   watchEffect,
@@ -39,8 +40,11 @@ export function useComponentRegister<
     }
     onRegister?.(methodsProxy);
   };
-  return [h(component, { onRegister: register }), methodsProxy] as [
-    VNode,
-    Methods
-  ];
+
+  return [
+    defineComponent(() => {
+      return () => h(component, { onRegister: register });
+    }),
+    methodsProxy,
+  ] as [DefineComponent, Methods];
 }
