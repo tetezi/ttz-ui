@@ -22,13 +22,13 @@ import {
 
 /**获取当前组件事件，用于传递子组件做事件继承 */
 export function getInheritanceEvent<T extends string>(
-  emit: Function,
+  emit: Function | unknown,
   keys: T[]
 ) {
   const result: Recordable = {};
   keys.forEach((key) => {
     result[`on${upperFirst(key)}`] = (...arg: any[]) => {
-      emit(key, ...arg);
+      (emit as Function)(key, ...arg);
     };
   });
   return result;

@@ -2,16 +2,16 @@ import { ref, unref } from "vue";
 import type {
   GetProps,
   EmitEvent,
-  Validate,
-  GetFormData,
+  Validate, 
   SubmitFunction,
 } from "../../types";
+import type { GetModelValue } from "@/utils";
 
 export function useSubmit(
   getProps: GetProps,
   emitEvent: EmitEvent,
   validate: Validate,
-  getFormData: GetFormData
+  getFormData: GetModelValue
 ) {
   const submitLoadingRef = ref(false);
   /**

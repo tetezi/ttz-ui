@@ -1,7 +1,7 @@
 export default {
   labelWidth: 100,
   formSchemas: () => [],
-  rowProps: () => ({
-    gutter: 10,
-  }),
+  // rowProps: () => ({
+  //   gutter: 10,
+  // }),
 };

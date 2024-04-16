@@ -6,7 +6,7 @@ import type {
 } from "element-plus";
 export type TableProps<Data extends Recordable> = {
   loading?: boolean;
-  columns?: TableColumnProps<Data>[];
+  columns?: MaybeRefOrGetter<TableColumn<Data>[]>;
 } & Partial<
   Pick<
     ElTableProps<Data>,
@@ -28,14 +28,15 @@ export type TableProps<Data extends Recordable> = {
     | "treeProps"
   >
 >;
-export type TableColumnProps<Data extends Recordable> = {
-  childrenColumns?: TableColumnProps<Data>[];
+
+export type TableColumn<Data extends Recordable> = {
+  childrenColumns?: TableColumn<Data>[];
   isHideColumn?: MaybeRefOrGetter<boolean>;
   formatter?: (
     row: any,
     cellValue: any,
+    index: number,
     column: any,
-    index: number
   ) => VNode | string;
 } & Partial<
   Pick<
@@ -53,6 +54,8 @@ export type TableColumnProps<Data extends Recordable> = {
     | "headerAlign"
   >
 >;
+
+export type TableColumnProps<Data extends Recordable> = TableColumn<Data> & {};
 export type TableShortEvent<Data extends Recordable> = {
   register: [tableMethods: TableMethods<Data>];
 };

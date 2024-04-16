@@ -3,3 +3,4 @@ export * from "./type";
 export * from "./vnode";
 export * from "./uuid";
 export * from "./attrs"; 
+export * from "./component"; 

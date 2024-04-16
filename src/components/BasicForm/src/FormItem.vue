@@ -4,7 +4,7 @@
 <script lang="tsx" setup>
 import { unref, type VNodeChild, } from 'vue';
 import type { FormItemProps, FormSchema } from './types';
-import {  useRules, checkSchemaCategory, useContainerCategory, useDisplayCategory, useInputCategory } from './hooks';
+import { useRules, checkSchemaCategory, useContainerCategory, useDisplayCategory, useInputCategory } from './hooks';
 const props = defineProps<FormItemProps>()
 
 /**
@@ -21,7 +21,7 @@ function ItemRender() {
         return ifShowOfDynamic ? getContent() : null
     } else if (checkSchemaCategory(schema, 'Input')) {
         const { ifShowOfDynamic, getContent, getDynamicConfig } = useInputCategory(schema, props)
-        const { labelWidth, field, labelShow, labelRender, label } = schema;
+        const { labelWidth, field, labelShow = true, labelRender, label, schemaKey } = schema;
         const labelVnode = getDynamicConfig(labelShow)
             ? () => getDynamicConfig(labelRender || label)
             : undefined;
@@ -30,7 +30,7 @@ function ItemRender() {
             rules: rules,
             labelWidth: labelWidth,
             prop: field,
-            key: schema.schemaKey,
+            key: schemaKey,
         };
         return ifShowOfDynamic ? (
             <el-form-item {...elFormItemProps}>

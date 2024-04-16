@@ -1,9 +1,5 @@
 import type { PropertyPath } from "lodash";
-import type { VNodeChild, WritableComputedRef } from "vue";
-import type {
-  RowProps as ELRowProps,
-  ColProps as ELColProps,
-} from "element-plus";
+import type { VNodeChild, WritableComputedRef } from "vue"; 
 import type { ComponentType } from "./componentType";
 export type CategoryEnums = "Container" | "Input" | "Display"
 // 动态渲染参数

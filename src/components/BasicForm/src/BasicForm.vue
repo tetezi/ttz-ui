@@ -1,14 +1,13 @@
 <template>
     <el-form ref="elFormInstanceRef" :model="getModelValue" :labelWidth="getProps.labelWidth">
-        <el-row v-bind="getProps.rowProps">
+        <!-- <el-row v-bind="getProps.rowProps"> -->
             <template v-for="schema of getFormSchemas" :key="schema.schemaKey">
                 <FormItem :schema="(schema)" :formModel="getModelValue" :setFieldsValue="setFieldsValue"
-                    :submitFunction="submitFunction" :baseColProps="getProps.baseColProps"
-                    :getSlot="(slot, data) => getSlot(slots, slot, data)"
+                      :getSlot="(slot, data) => getSlot(slots, slot, data)"
                     :ref="(el) => setFormItemInstanceRef(schema.schemaKey, el as any)">
                 </FormItem>
             </template>
-        </el-row>
+        <!-- </el-row> -->
     </el-form>
 </template>
 <script lang="ts" setup>

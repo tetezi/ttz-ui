@@ -6,8 +6,7 @@
 </template>
 <script lang="tsx" setup>
 import { reactive, ref, unref } from 'vue'
-import { BasicTable, useTable, } from '@/components'
-import type { TableColumnProps } from '@/components';
+import { BasicTable, useTable, } from '@/components' 
 import { buildUUID, getInheritanceEvent, getSlot, useLocalModel, useLocalProps } from '@/utils';
 import { omit, set } from 'lodash';
 const [TableVNode] = useTable({

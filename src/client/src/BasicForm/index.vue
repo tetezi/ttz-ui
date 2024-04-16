@@ -14,11 +14,12 @@ const a = ref({
     input:
         'asd'
 })
-const [FormVNode] = useForm({
+const [FormVNode, formMethods] = useForm({
     formSchemas: [{
+        label: 'asd',
         field: 'render', render: ({ compValue }) => {
             return <el-input modelValue={compValue.value} onInput={(v) => {
-                console.log(4, v)
+                console.log(4, formMethods)
                 compValue.value = v
             }}></el-input>
         },
