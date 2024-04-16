@@ -2,7 +2,7 @@
     <el-form :model="localModelValue" label-width="0px">
         <TableVNode v-model="localModelValue">
         </TableVNode>
-        <BasicButton type="success" :func="() => add()" style="width:100%">提交</BasicButton>
+        <BasicButton type="success" :func="() => add()" style="width:100%">添加记录</BasicButton>
     </el-form>
 </template>
 <script lang="tsx" setup generic="Data extends Recordable">
