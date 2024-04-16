@@ -14,14 +14,14 @@ export type EditableTableColumn<Data extends Recordable> = {
   prop: string;
   editConfig?:
     | ((rednerParams: EditableTableRednerParams<Data>) => Omit<
-        FormSchema<any>,
+        FormSchema<"Input"> | FormSchema<"Container"> | FormSchema<"Display">,
         "field" | "label" | "labelWidth" | "labelShow"
         // | "component"
         // | "componentProps"
       >)
     | false
     | Omit<
-        FormSchema<any>,
+        FormSchema<"Input"> | FormSchema<"Container"> | FormSchema<"Display">,
         "field" | "label" | "labelWidth" | "labelShow"
         // | "component"
         // | "componentProps"

@@ -6,6 +6,7 @@ import { checkSchemaCategory } from "./hooks";
 import { Select } from "@/components/Select";
 import { InputNumber } from "@/components/InputNumber";
 import { Slider } from "@/components/Slider";
+import { Switch } from "@/components/Switch";
 import { ApiSelect } from "@/components/ApiSelect";
 import { DatePicker } from "@/components/DatePicker";
 import { Input } from "@/components/Input";
@@ -17,6 +18,7 @@ export const inputComponentMap = new Map<ComponentType<"Input">, Component>([
   ["Input", Input],
   ["InputNumber", InputNumber],
   ["Slider", Slider],
+  ["Switch", Switch],
   ["DatePicker", DatePicker],
   ["EditableTable", EditableTable],
 ]);

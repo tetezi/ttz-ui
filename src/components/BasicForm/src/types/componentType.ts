@@ -11,6 +11,7 @@ export type ComponentType<Category extends CategoryEnums> =
         | "ApiSelect"
         | "Input"
         | "InputNumber"
+        | "Switch"
         | "Slider"
         | "DatePicker"
         | "EditableTable"

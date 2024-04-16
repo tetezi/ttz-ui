@@ -1,5 +1,4 @@
 <template>
-
     <FormVNode v-model="a">
         <template #slotTest>
             slot
@@ -11,24 +10,12 @@ import { BasicForm, useForm } from '@/components'
 import type { FormSchemas } from '@/components/BasicForm/src/types';
 import { computed, ref, watch } from 'vue';
 const a = ref({
-    input:'asd',
-    
+    TableName: 'TableName',
+
 })
 const [FormVNode, formMethods] = useForm({
+    defaultValue: { TableName: 'wf' },
     formSchemas: [{
-        label: 'asd',
-        field: 'render', render: ({ compValue }) => {
-            return <el-input modelValue={compValue.value} onInput={(v) => {
-                console.log(4, formMethods)
-                compValue.value = v
-            }}></el-input>
-        },
-    }, {
-        field: 'slotTest',
-        slot: 'slotTest'
-    }, {
-        field: 'render2', render: () => ['bb', <div>daw</div>]
-    }, {
         field: 'input', component: 'Input', componentSlot: <div>test</div>
     }, {
         category: 'Display', component: 'BasicButton', componentSlot: <div>test</div>
@@ -38,7 +25,7 @@ const [FormVNode, formMethods] = useForm({
     { field: 'No', label: 'No', component: 'Input' },
     {
         field: 'Cols', label: 'Cols', component: 'EditableTable', componentProps: {
-            column: [
+            columns: [
                 { label: 'Id', prop: 'Id' },
                 {
                     label: 'Name', prop: 'Name', editConfig: {

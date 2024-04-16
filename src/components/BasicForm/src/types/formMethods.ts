@@ -11,4 +11,5 @@ export type FormMethods = {
   getFieldsValue: (key: PropertyPath) => any;
   validate: Validate;
   submitFunction: SubmitFunction;
+  initDefaultValue: () => void;
 };
