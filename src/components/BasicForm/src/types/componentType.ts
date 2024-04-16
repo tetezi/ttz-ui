@@ -6,5 +6,12 @@ export type ComponentType<Category extends CategoryEnums> =
     : Category extends "Display"
     ? "BasicButton"
     : Category extends "Input"
-    ? "Select" | "ApiSelect" | "Input" | "InputNumber" | "Slider" | "DatePicker"
+    ?
+        | "Select"
+        | "ApiSelect"
+        | "Input"
+        | "InputNumber"
+        | "Slider"
+        | "DatePicker"
+        | "EditableTable"
     : never;

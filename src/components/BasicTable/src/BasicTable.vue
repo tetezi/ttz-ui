@@ -13,7 +13,7 @@ import { omit } from 'lodash';
 const props = withDefaults(defineProps<TableProps<Data>>(), defaultTableProps)
 const modelValue = defineModel<Data[]>({
     default: () => ([])
-}) 
+})
 const emit = defineEmits<TableShortEvent<Data>>()
 const { getProps, setProps, emitEvent } = useLocalProps<TableProps<Data>, TableShortEvent<Data>>(props, emit)
 const { localModelValue, setModelValue, getModelValue, getFieldsValue, setFieldsValue } = useLocalModel(modelValue)

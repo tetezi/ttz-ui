@@ -32,7 +32,46 @@ const [FormVNode, formMethods] = useForm({
         field: 'input', component: 'Input', componentSlot: <div>test</div>
     }, {
         category: 'Display', component: 'BasicButton', componentSlot: <div>test</div>
-    }]
+    },
+    { field: 'TableName', label: 'TableName', component: 'Input' },
+    { field: 'Name', label: 'Name', component: 'Input' },
+    { field: 'No', label: 'No', component: 'Input' },
+    {
+        field: 'Cols', label: 'Cols', component: 'EditableTable', componentProps: {
+            column: [
+                { label: 'Id', prop: 'Id' },
+                {
+                    label: 'Name', prop: 'Name', editConfig: {
+                        component: 'Input'
+                    }
+                },
+                {
+                    label: 'No', prop: 'No', editConfig: {
+                        component: 'Input'
+                    }
+                },
+                {
+                    label: 'ColType', prop: 'ColType', editConfig: {
+                        component: 'Input'
+                    }
+                }, {
+                    label: 'IsSubTable', prop: 'IsSubTable', editConfig: {
+                        component: 'Input'
+                    }
+                }, {
+                    label: 'SubTableType', prop: 'SubTableType', editConfig: {
+                        component: 'Input'
+                    }
+                }, {
+                    label: 'IsSSSubTableIdubTableIdubTable', prop: 'SubTableId', editConfig: {
+                        component: 'Input'
+                    }
+                }
+            ]
+        }
+
+    },
+    ]
 })
 const ttt = computed(() => {
     return a.value.input

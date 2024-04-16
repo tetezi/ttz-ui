@@ -1,11 +1,15 @@
 <template>
     <el-table-column v-bind="tableColumnBind">
         <template v-if="props.childrenColumns.length > 0">
-            <BasicTableColumn v-for="item in props.childrenColumns" v-bind="item" :key="item.columnKey"></BasicTableColumn>
+            <BasicTableColumn v-for="item in props.childrenColumns" v-bind="item" :key="item.columnKey">
+            </BasicTableColumn>
+        </template>
+        <template v-if="props.renderHeader" #header="data">
+            <component :is="()=>props.renderHeader?.(data)"> </component>
         </template>
     </el-table-column>
 </template>
-<script lang="ts" setup  generic="Data extends Recordable">
+<script lang="ts" setup generic="Data extends Recordable">
 import { omit } from 'lodash';
 import { computed, unref } from 'vue';
 import type { TableColumnProps } from './types';
@@ -17,7 +21,7 @@ const tableColumnBind = computed<any>(() => {
         formatter: props.formatter ? (row: any, column: any, cellValue: any, index: number) => {
             return props.formatter?.(row, cellValue, index, column)
         } : undefined,
-        ...omit(props, ['columnKey', 'childrenColumns', 'formatter']),
+        ...omit(props, ['columnKey', 'childrenColumns', 'formatter', 'renderHeader']),
     }
 }) 
 </script>

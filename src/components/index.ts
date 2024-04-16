@@ -1,3 +1,6 @@
+export  * from "./BasicForm";  
+export  * from "./BasicTable";  
+
 export * from "./Select";
 export * from "./ApiSelect";
 export * from "./Input";
@@ -7,5 +10,3 @@ export * from "./DatePicker";
 export * from "./BasicButton"; 
 export * from "./EditableTable"; 
  
-export  * from "./BasicForm";  
-export  * from "./BasicTable";  
