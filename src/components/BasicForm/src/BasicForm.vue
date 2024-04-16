@@ -29,8 +29,7 @@ const { getProps, setProps, emitEvent } = useLocalProps<FormProps, FormShortEven
 /**
  * 表单数据
  */
-const { setFieldsValue, getFieldsValue, getModelValue, setModelValue } =
-    useLocalModel(modelValue, {});
+const { setFieldsValue, getFieldsValue, getModelValue, setModelValue } = useLocalModel(modelValue, {});
 watch(
     getModelValue,
     (val) => {

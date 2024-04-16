@@ -7,7 +7,7 @@
 </template>
 <script lang="tsx" setup generic="Data extends Recordable">
 import { computed, ref, unref } from 'vue';
-import { isArray, isFunction, omit } from 'lodash'
+import { isArray, isFunction, cloneDeep } from 'lodash'
 import type { EditableTableProps, EditableTableRednerParams, EditableTableShortEvent } from './types'
 import { editableTableDefaultProps } from './defaultProps';
 import { buildUUID, getInheritanceEvent, getSlot, useLocalModel, useLocalProps } from '@/utils';
@@ -18,10 +18,10 @@ import { BasicButton } from '@/components/BasicButton';
 import { watch } from 'vue';
 const props = withDefaults(defineProps<EditableTableProps<Data>>(), editableTableDefaultProps)
 const emit = defineEmits<EditableTableShortEvent<Data>>()
-const modelValue = defineModel<Data[]>()  
+const modelValue = defineModel<Data[]>()
 const { getProps, setProps, emitEvent } = useLocalProps(props, emit)
 const { localModelValue, setFieldsValue, setModelValue, getFieldsValue, getModelValue } = useLocalModel(modelValue, [])
-const slots = defineSlots() 
+const slots = defineSlots()
 const [TableVNode] = useTable(() => {
     return {
         columns: toValue(unref(getProps).columns).map((column) => {
@@ -80,7 +80,7 @@ const [TableVNode] = useTable(() => {
 
 async function add() {
     const { addBtnValue } = unref(getProps)
-    const value = isFunction(addBtnValue) ? await addBtnValue() : addBtnValue
+    const value = cloneDeep(isFunction(addBtnValue) ? await addBtnValue() : addBtnValue)
     const val = unref(localModelValue)
     if (isArray(val)) {
         val.push(value as any)
