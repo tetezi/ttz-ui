@@ -2,7 +2,7 @@ import { ref, unref } from "vue";
 import type {
   GetProps,
   EmitEvent,
-  Validate, 
+  Validate,
   SubmitFunction,
 } from "../../types";
 import type { GetModelValue } from "@/utils";
@@ -26,10 +26,11 @@ export function useSubmit(
       await validate();
       const formData = unref(getFormData);
       const { submitApi } = unref(getProps);
+      let submitResult;
       if (submitApi) {
-        await submitApi(formData);
+        submitResult = await submitApi(formData);
       }
-      emitEvent("submit", formData);
+      emitEvent("submit", formData,submitResult);
     }
   };
   return {

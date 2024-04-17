@@ -6,7 +6,7 @@ export type FormProps = {
   defaultValue?: Recordable;
   labelWidth?: number | string;
   // rowProps?: Partial<ELRowProps>;
-  submitApi?: (params: any) => MaybePromise<void>; //(params: Recordable)  => MaybePromise<void>;
+  submitApi?: (params: any) => MaybePromise<any>; //(params: Recordable)  => MaybePromise<void>;
   formSchemas?:
     | FormSchemas
     | ((params: {
@@ -23,7 +23,7 @@ export type FormItemProps = {
 
 export type FormShortEvent = {
   change: [formData: Recordable];
-  submit: [formData: Recordable];
+  submit: [formData: Recordable, submitResult: any];
   register: [formMethods: FormMethods];
 };
 
