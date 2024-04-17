@@ -1,12 +1,12 @@
 import type { VNode } from "vue";
-import type { FormSchemas } from "./formSchema";  
+import type { FormSchemas } from "./formSchema";
 import type { FormMethods } from ".";
 import type { SetModelValue, GetModelValue, SetFieldsValue } from "@/utils";
 export type FormProps = {
   defaultValue?: Recordable;
   labelWidth?: number | string;
-  // rowProps?: Partial<ELRowProps>; 
-  submitApi?: (params: Recordable) => MaybePromise<void>;
+  // rowProps?: Partial<ELRowProps>;
+  submitApi?: (params: any) => MaybePromise<void>; //(params: Recordable)  => MaybePromise<void>;
   formSchemas?:
     | FormSchemas
     | ((params: {
@@ -14,11 +14,10 @@ export type FormProps = {
         getModelValue: GetModelValue;
       }) => FormSchemas);
 };
-
 export type FormItemProps = {
   schema: Flatten<FormSchemas>;
   formModel: Recordable;
-  setFieldsValue: SetFieldsValue;  
+  setFieldsValue: SetFieldsValue;
   getSlot: (slotName: string, data: Recordable) => VNode[] | null;
 };
 
