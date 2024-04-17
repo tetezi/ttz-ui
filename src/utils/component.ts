@@ -9,11 +9,11 @@ import {
   type VNode,
 } from "vue";
 export function useComponentRegister<
-  Props,
-  Methods extends { setProps: (props: Props) => void }
+Bind,
+  Methods extends { setProps: (props: Bind) => void }
 >(
   component: DefineComponent,
-  props: MaybeRefOrGetter<Props>,
+  bind: MaybeRefOrGetter<Bind>,
   onRegister?: (methods: Methods) => void
 ) {
   const methodsProxy = new Proxy(
@@ -33,9 +33,9 @@ export function useComponentRegister<
     Object.entries(methods).forEach(([key, val]) => {
       methodsProxy[key] = val;
     });
-    if (props) {
+    if (bind) {
       watchEffect(() => {
-        methodsProxy.setProps(toValue(props));
+        methodsProxy.setProps(toValue(bind));
       });
     }
     onRegister?.(methodsProxy);

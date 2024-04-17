@@ -1,10 +1,10 @@
-import type { FormProps, FormMethods } from "@/components";
+import type { FormBind, FormMethods } from "@/components";
 import { BasicForm } from "@/components";
 import { useComponentRegister } from "@/utils";
 import { type DefineComponent, type MaybeRefOrGetter, type VNode } from "vue";
 
 export function useForm(
-  props: MaybeRefOrGetter<FormProps>,
+  props: MaybeRefOrGetter<FormBind>,
   onRegister?: (formMethods: FormMethods) => void
 ): [DefineComponent, FormMethods] {
   return useComponentRegister(
