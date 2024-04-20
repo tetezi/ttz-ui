@@ -3,11 +3,12 @@
 </template>
 <script lang="tsx" setup>
 import { computed, ref, unref, useSlots } from 'vue';
-import { isFunction, omit } from 'lodash'
+import { isFunction, isString, omit } from 'lodash'
 import type { Props, ShortEvent } from './types'
 import defaultProps from './defaultProps';
 import { getInheritanceEvent } from '@/utils';
 import { ElMessage } from 'element-plus';
+import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 const props = withDefaults(defineProps<Props>(), defaultProps)
 const emit = defineEmits<ShortEvent>()
 const slots = useSlots()
@@ -34,10 +35,11 @@ async function handlerClick(...e: any[]) {
 const Render = computed(() => {
     const { tip, isConfirm } = props
     const bind = {
-        ...omit(props, []),
+        ...omit(props, ['icon']),
         ...getInheritanceEvent(emit, []),
         loading: unref(loadingRef),
         onClick: isConfirm ? undefined : handlerClick,
+        icon: isString(props.icon)? ElementPlusIconsVue[props.icon]:props.icon
     }
     const btn = <el-button   {...bind} v-slots={slots}>
     </el-button>
