@@ -6,6 +6,7 @@ export type FormProps = {
   defaultValue?: Recordable;
   labelWidth?: number | string;
   // rowProps?: Partial<ELRowProps>;
+  beforeSubmit?: (params: any) => MaybePromise<any>;
   submitApi?: (params: any) => MaybePromise<any>; //(params: Recordable)  => MaybePromise<void>;
   formSchemas?:
     | FormSchemas

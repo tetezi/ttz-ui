@@ -24,13 +24,16 @@ export function useSubmit(
       return Promise.reject("表单提交中");
     } else {
       await validate();
-      const formData = unref(getFormData);
-      const { submitApi } = unref(getProps);
+      let formData = unref(getFormData);
+      const { submitApi, beforeSubmit } = unref(getProps);
       let submitResult;
       if (submitApi) {
+        if (beforeSubmit) {
+          formData = await beforeSubmit(formData);
+        }
         submitResult = await submitApi(formData);
       }
-      emitEvent("submit", formData,submitResult);
+      emitEvent("submit", formData, submitResult);
     }
   };
   return {
