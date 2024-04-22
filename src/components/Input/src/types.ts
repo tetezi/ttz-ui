@@ -1,3 +1,5 @@
+import type { ShortEventToOnEvent } from "@/global";
+
 export type Props = {
   type?: "text" | "password" | "textarea";
   maxlength?: number;

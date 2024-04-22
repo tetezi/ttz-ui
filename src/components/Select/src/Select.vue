@@ -8,6 +8,7 @@
 import { computed } from 'vue';
 import { get, isFunction, omit } from 'lodash'
 import type { Props, ShortEvent } from './types'
+import type { Recordable } from '@/global';
 import defaultProps from './defaultProps';
 const props = withDefaults(defineProps<Props<Option>>(), defaultProps)
 const emit = defineEmits<ShortEvent<Option>>()

@@ -1,3 +1,5 @@
+import type { Recordable, ShortEventToOnEvent } from "@/global";
+
 export type Props<Option extends Recordable> = {
   options?: Array<Option>;
   labelField?: string | ((item: Option) => string);
@@ -22,6 +24,9 @@ export type ShortEvent<Option extends Recordable> = {
   focus: [];
 };
 
-export type EventObject<O extends Recordable> = ShortEventToOnEvent<ShortEvent<O>>;
+export type EventObject<O extends Recordable> = ShortEventToOnEvent<
+  ShortEvent<O>
+>;
 
-export type Bind<Option extends Recordable> = Props<Option> & EventObject<Option>;
+export type Bind<Option extends Recordable> = Props<Option> &
+  EventObject<Option>;

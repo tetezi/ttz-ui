@@ -10,6 +10,19 @@ import type {
   SelectProps,
   SwitchProps,
 } from "@/components";
+import type { Recordable } from "@/global";
+
+type MutableRecord<
+  /**判断key */
+  K extends string,
+  /**判断类型限制枚举 */
+  U extends Recordable<Recordable>
+> = {
+  [SubType in keyof U]: {
+    [A in K]: SubType;
+  } & U[SubType];
+}[keyof U];
+
 export type CategoryEnums = "Container" | "Input" | "Display";
 // 动态渲染参数
 export type RenderParams<Category extends CategoryEnums> =

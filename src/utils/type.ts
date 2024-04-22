@@ -1,3 +1,5 @@
+import type { Narrow } from "@/global";
+
 /**
  * 声明数组数据收窄自动推断类型为元组
  */

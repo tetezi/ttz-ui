@@ -3,6 +3,7 @@ import type { GetElFormInstance, Validate, ValidateField } from "../../types";
 import type { FormInstance } from "element-plus";
 import { type PropertyPath } from "lodash";
 import type FormItem from "../../FormItem.vue";
+import type { Recordable } from "@/global";
 
 export function useElFormInstance() {
   /**

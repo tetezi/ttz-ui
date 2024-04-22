@@ -2,6 +2,7 @@ import type { VNode } from "vue";
 import type { FormSchemas } from "./formSchema";
 import type { FormMethods } from ".";
 import type { SetModelValue, GetModelValue, SetFieldsValue } from "@/utils";
+import type { Recordable, MaybePromise, Flatten, ShortEventToOnEvent } from "@/global";
 export type FormProps = {
   defaultValue?: Recordable;
   labelWidth?: number | string;

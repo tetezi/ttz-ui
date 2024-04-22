@@ -11,6 +11,7 @@ import { computed, onMounted, toValue, unref, type MaybeRefOrGetter } from 'vue'
 import type { Props, ShortEvent } from './types'
 import { omit, isArray } from 'lodash';
 import defaultProps from './defaultProps';
+import type { Recordable } from '@/global';
 const props = withDefaults(defineProps<Props<Params, Option>>(), defaultProps as any)
 const emit = defineEmits<ShortEvent<Option>>()
 const modelValue = defineModel<string | Option>()

@@ -1,3 +1,4 @@
+import type { ShortEventToOnEvent } from "@/global";
 import type { DefineComponent } from "vue";
 
 export type Props = {

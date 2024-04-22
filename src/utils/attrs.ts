@@ -1,3 +1,4 @@
+import type { Recordable, ShortEventToOnEvent } from "@/global";
 import {
   cloneDeep,
   get,

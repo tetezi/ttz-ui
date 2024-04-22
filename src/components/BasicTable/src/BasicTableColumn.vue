@@ -14,6 +14,7 @@ import { omit } from 'lodash';
 import { computed, unref } from 'vue';
 import type { TableColumnProps } from './types';
 import { defaultTableColumnProps } from './defaultProps';
+import type { Recordable } from '@/global';
 const props = withDefaults(defineProps<TableColumnProps<Data>>(), defaultTableColumnProps)
 const tableColumnBind = computed<any>(() => {
     return {

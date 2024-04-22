@@ -1,3 +1,4 @@
+import type { ShortEventToOnEvent } from "@/global";
 import dayjs from "dayjs";
 export type Props = {
   max?: dayjs.ConfigType;

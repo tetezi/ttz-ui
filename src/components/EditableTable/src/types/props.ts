@@ -1,5 +1,6 @@
 import type { TableColumn, TableProps } from "@/components";
 import type { FormSchema } from "@/components/BasicForm";
+import type { Recordable, MaybePromise, ShortEventToOnEvent } from "@/global";
 import type { MaybeRefOrGetter } from "vue";
 export type EditableTableRednerParams<Data extends Recordable> = {
   row: Partial<Data>;

@@ -1,3 +1,4 @@
+import type { ShortEventToOnEvent } from "@/global";
 import type { SwitchProps } from "element-plus";
 export type Props = {} & Pick<
   SwitchProps,

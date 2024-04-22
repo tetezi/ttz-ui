@@ -1,3 +1,5 @@
+import type { UUID } from "@/global";
+
 const hexList: string[] = Array.from(new Array(16), (_item, index) =>
   index.toString(16)
 );

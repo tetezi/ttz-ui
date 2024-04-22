@@ -15,6 +15,7 @@ import { useTable } from '@/components/BasicTable';
 import { toValue } from 'vue';
 import { FormItem, type FormSchema } from '@/components/BasicForm';
 import { BasicButton } from '@/components/BasicButton';
+import type { Recordable } from '@/global';
 import { watch } from 'vue';
 const props = withDefaults(defineProps<EditableTableProps<Data>>(), editableTableDefaultProps)
 const emit = defineEmits<EditableTableShortEvent<Data>>()

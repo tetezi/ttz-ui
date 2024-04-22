@@ -1,3 +1,4 @@
+import type { ShortEventToOnEvent } from "@/global";
 import type { CSSProperties } from "vue";
 
 export type Props<Range extends boolean> = {

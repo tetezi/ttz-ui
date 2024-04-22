@@ -1,3 +1,5 @@
+import type { ShortEventToOnEvent } from "@/global";
+
 export type Props = {
   min?: number;
   max?: number;

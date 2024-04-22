@@ -5,6 +5,7 @@
 <script lang="ts" setup>
 import { ref, } from 'vue'
 import { ApiSelect } from '@/components'
+import type { Recordable } from '@/global';
 const value = ref()
 const params = ref({ text: '' })
 async function api(params: Recordable) {

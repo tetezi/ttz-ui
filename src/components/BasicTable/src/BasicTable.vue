@@ -12,6 +12,7 @@ import { defaultTableProps } from './defaultProps';
 import { getInheritanceEvent, useLocalModel, useLocalProps } from '@/utils';
 import { computed, onMounted, toValue, unref } from 'vue';
 import { isFunction, omit } from 'lodash'; 
+import type { Recordable } from '@/global';
 const props = withDefaults(defineProps<TableProps<Data>>(), defaultTableProps)
 const modelValue = defineModel<Data[]>()
 const emit = defineEmits<TableShortEvent<Data>>()

@@ -18,6 +18,7 @@ import FormItem from './FormItem.vue'
 import { getSlot, useLocalModel, useLocalProps } from '@/utils';
 import { onMounted, unref, watch } from 'vue';
 import type { FormMethods } from './types';
+import type { Recordable } from '@/global';
 const props = withDefaults(defineProps<Partial<FormProps>>(), defaultProps)
 const emit = defineEmits<FormShortEvent>()
 const modelValue = defineModel<Recordable>()

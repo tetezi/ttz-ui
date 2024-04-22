@@ -7,6 +7,7 @@
   </el-config-provider>
 </template>
 <script lang="ts" setup>
+import type { Recordable } from '@/global';
 import { zhCn } from 'element-plus/es/locales.mjs';
 import { shallowRef,unref, type DefineComponent } from 'vue';
 const demoFiles: Recordable<{

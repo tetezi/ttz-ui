@@ -4,6 +4,7 @@ import type {
   TableProps as ElTableProps,
   TableColumnCtx as ElTableColumnProps,
 } from "element-plus";
+import type { Recordable, ShortEventToOnEvent } from "@/global";
 export type TableProps<Data extends Recordable> = {
   loading?: boolean;
   columns?: MaybeRefOrGetter<TableColumn<Data>[]>;

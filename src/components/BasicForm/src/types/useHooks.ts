@@ -4,6 +4,7 @@ import type { FormBind, FormShortEvent } from "./props";
 
 import type { PropertyPath } from "lodash";
 import type { ComputedRef } from "vue";
+import type { Flatten, MaybeArray } from "@/global";
 // useProps.ts
 export type GetProps = ComputedRef<FormBind>;
 export type SetProps = (props: Partial<FormBind>) => void;
