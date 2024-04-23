@@ -1,8 +1,8 @@
 import { narrow } from "@/utils";
 
 export const defaultTableProps = narrow({
-  pageConfigs:false,
-  immediate:false,
+  pageConfigs:()=>({}),
+  immediate:true,
   loading: false,
   border: true,
   fit: true,

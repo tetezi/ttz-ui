@@ -21,7 +21,7 @@ export function useTableApi<Data extends Recordable>(
   const isRunning = ref(false);
 
   async function fetch(params?: MaybeRefOrGetter<Recordable>) {
-    const { api, listField, totalField, pageConfigs, beforeFetch } =
+    const { api, listField, totalField, beforeFetch } =
       unref(getProps);
     if (!api || !isFunction(api)) return [];
     let apiParams = toValue(params);
@@ -87,6 +87,8 @@ export function useTableApi<Data extends Recordable>(
     (immediate) => {
       if (immediate) {
         reload();
+      }else{
+        isRunning.value = false;
       }
     },
     { immediate: true }

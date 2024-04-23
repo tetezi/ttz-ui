@@ -7,7 +7,7 @@ import dts from "vite-plugin-dts";
 import { resolve } from "path";
 import AutoImport from "unplugin-auto-import/vite";
 import Components from "unplugin-vue-components/vite";
-import { ElementPlusResolver } from "unplugin-vue-components/resolvers"; 
+import { ElementPlusResolver } from "unplugin-vue-components/resolvers";
 // https://vitejs.dev/config/
 export default defineConfig({
   server: {
@@ -15,20 +15,19 @@ export default defineConfig({
   },
   plugins: [
     dts({
-      tsconfigPath: "tsconfig.app.json", 
-      exclude: [
-        "src/client/**/*"
-      ],
+      tsconfigPath: "tsconfig.app.json",
+      exclude: ["src/client/**/*"],
       insertTypesEntry: true,
-      copyDtsFiles:true 
+      copyDtsFiles: true,
     }),
     vue(),
-    vueJsx(), 
+    vueJsx(),
     AutoImport({
       resolvers: [ElementPlusResolver()],
     }),
     Components({
       resolvers: [ElementPlusResolver()],
+      include: [/\.vue$/, /\.tsx?$/],
     }),
   ],
   resolve: {

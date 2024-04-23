@@ -77,7 +77,8 @@ const [TableVNode] = useTable(() => {
         }),
         actionColumn: (row, cellValue, index, column) => {
             return <BasicButton func={() => del(index)}>删除</BasicButton>
-        }
+        },
+        pageConfigs:false
     }
 })
 

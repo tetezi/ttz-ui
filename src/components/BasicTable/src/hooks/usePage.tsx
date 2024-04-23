@@ -1,7 +1,7 @@
 import type { Recordable } from "@/global";
 import { chunk, isUndefined } from "lodash";
 import { ref, unref, computed, watchEffect, type ComputedRef } from "vue";
-import type { GetTableProps } from "../types";
+import type { GetTableProps } from "../types"; 
 
 export function usePage<Data extends Recordable>(
   getProps: GetTableProps<Data>,
