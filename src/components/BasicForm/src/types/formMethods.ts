@@ -1,10 +1,10 @@
 import type { ComputedRef } from "vue";
-import type { SetProps, GetProps, Validate, SubmitFunction } from "./useHooks";
+import type { SetProps, GetFormProps, Validate, SubmitFunction } from "./useHooks";
 import type { PropertyPath } from "lodash";
 
 export type FormMethods = {
   setProps: SetProps;
-  getProps: GetProps;
+  getProps: GetFormProps;
   getModelValue: ComputedRef<any>;
   setModelValue: (val: any) => void;
   setFieldsValue: (key: PropertyPath, val: any) => void;

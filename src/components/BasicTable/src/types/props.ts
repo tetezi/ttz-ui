@@ -1,14 +1,29 @@
-import type { MaybeRefOrGetter, VNode } from "vue";
+import type { MaybeRef, MaybeRefOrGetter, VNode } from "vue";
 import type { TableMethods } from "./tableMethods";
 import type {
   TableProps as ElTableProps,
   TableColumnCtx as ElTableColumnProps,
 } from "element-plus";
-import type { Recordable, ShortEventToOnEvent } from "@/global";
+import type { MaybePromise, Recordable, ShortEventToOnEvent } from "@/global";
+import type { defaultTableProps } from "../..";
 export type TableProps<Data extends Recordable> = {
+  immediate?: boolean;
+  beforeFetch?: (params) => MaybePromise<Recordable>;
+  api?: (params) => MaybePromise<Recordable>;
+  params?: MaybeRef<Recordable>;
+  listField?: string;
+  totalField?: string;
+  pageConfigs?:
+    | false
+    | {
+        pageSizeField?: string;
+        currentPageField?: string;
+        pageLayout?: string;
+        pageSize?: number;
+      };
   loading?: boolean;
   columns?: MaybeRefOrGetter<TableColumn<Data>[]>;
-  actionColumn?:Partial<TableColumn<Data>>| TableColumn<Data>["formatter"]
+  actionColumn?: Partial<TableColumn<Data>> | TableColumn<Data>["formatter"];
 } & Partial<
   Pick<
     ElTableProps<Data>,
@@ -38,7 +53,7 @@ export type TableColumn<Data extends Recordable> = {
     row: any,
     cellValue: any,
     index: number,
-    column: any,
+    column: any
   ) => VNode | string;
 } & Partial<
   Pick<

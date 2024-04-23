@@ -1,9 +1,11 @@
 <template>
-    <el-form :model="localModelValue" label-width="0px">
-        <TableVNode v-model="localModelValue">
-        </TableVNode>
-        <BasicButton type="success" :func="() => add()" style="width:100%">添加记录</BasicButton>
-    </el-form>
+    <div style="height: 100%; display: flex;flex-direction: column;">
+        <el-form :model="localModelValue" label-width="0px"  style="flex:1;min-height: 0px">
+            <TableVNode v-model="localModelValue"  style="height: 100%;">
+            </TableVNode> 
+        </el-form>
+        <BasicButton type="success" :func="() => add()" style="width:100%;flex:0">添加记录</BasicButton>
+    </div>
 </template>
 <script lang="tsx" setup generic="Data extends Recordable">
 import { computed, ref, unref } from 'vue';

@@ -68,7 +68,7 @@ export function useContainerCategory(
     return {};
   });
   function getSchemaComponent() {
-    const { component, componentProps, componentSlot } = schema;
+    const { component, componentProps, componentStyle, componentSlot } = schema;
     if (!(component && containerComponentMap.has(component))) {
       console.error(`组件${component}未注册`);
       return undefined;
@@ -78,6 +78,7 @@ export function useContainerCategory(
     >;
     const compAttr = {
       ...getDynamicConfig(componentProps),
+      style: getDynamicConfig(componentStyle),
     };
     return componentSlot ? (
       <Comp {...compAttr}>{getDynamicConfig(componentSlot)}</Comp>
@@ -111,7 +112,8 @@ export function useInputCategory(
     };
   });
   function getSchemaComponent() {
-    const { component, field, componentProps, componentSlot } = schema;
+    const { component, field, componentProps, componentSlot, componentStyle } =
+      schema;
 
     if (!(component && inputComponentMap.has(component))) {
       console.error(`组件${component}未注册`);
@@ -125,6 +127,7 @@ export function useInputCategory(
       ...getDynamicConfig(componentProps),
       "style": {
         width: "99%",
+        ...getDynamicConfig(componentStyle),
       },
       "modelValue": get(props.formModel, field),
       "onUpdate:modelValue": (val: any) => {
@@ -162,7 +165,7 @@ export function useDisplayCategory(
     return {};
   });
   function getSchemaComponent() {
-    const { component, componentProps, componentSlot } = schema;
+    const { component, componentProps, componentStyle, componentSlot } = schema;
     if (!(component && displayComponentMap.has(component))) {
       console.error(`组件${component}未注册`);
       return undefined;
@@ -175,6 +178,7 @@ export function useDisplayCategory(
     >;
     const compAttr = {
       ...getDynamicConfig(componentProps),
+      style: getDynamicConfig(componentStyle),
     };
     return componentSlot ? (
       <Comp {...compAttr}>{getDynamicConfig(componentSlot)}</Comp>

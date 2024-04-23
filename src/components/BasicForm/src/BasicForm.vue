@@ -26,7 +26,7 @@ const slots = defineSlots()
 /**
  * 表单配置
  */
-const { getProps, setProps, emitEvent } = useLocalProps<FormProps, FormShortEvent>(props, emit)
+const { getProps, setProps, emitEvent } = useLocalProps<FormProps, FormShortEvent,typeof defaultProps>(props, emit)
 /**
  * 表单数据
  */

@@ -1,4 +1,8 @@
-import type { Recordable, ShortEventToOnEvent } from "@/global";
+import type {
+  GetProps, 
+  Recordable,
+  ShortEventToOnEvent,
+} from "@/global";
 import {
   cloneDeep,
   get,
@@ -12,10 +16,10 @@ import {
   ref,
   computed,
   unref,
-  getCurrentInstance, 
+  getCurrentInstance,
   toRaw,
   type Ref,
-  type ModelRef, 
+  type ModelRef,
   type ComputedRef,
 } from "vue";
 
@@ -38,7 +42,8 @@ export function getInheritanceEvent<T extends string>(
  */
 export function useLocalProps<
   Props extends Recordable,
-  ShortEvent extends Recordable
+  ShortEvent extends Recordable,
+  defaultProps extends Recordable
 >(props: Props, emit: Function) {
   type EventObject = ShortEventToOnEvent<ShortEvent>;
   type Bind = Props & EventObject;
@@ -46,12 +51,13 @@ export function useLocalProps<
   /**
    * 实际配置
    */
-  const getProps = computed(() => {
+
+  const getProps: GetProps<Props, defaultProps, EventObject> = computed(() => {
     return {
       ...(omit(props, ["modelValue", "modelModifiers"]) as Partial<Props>),
       ...(unref(propsRef) as Partial<Bind>),
     } as Bind;
-  });
+  }) as any;
   /**
    * 设置配置，叠加旧配置
    */
@@ -90,7 +96,7 @@ export type GetFieldsValue<T = any> = (key: PropertyPath) => T;
  * PS:vue的defineModel语法糖内部也会实现本地模式，但返回的是简单类型的customRefRef，无法监听深层修改，故作修改
  */
 export function useLocalModel<T>(modelValue: ModelRef<T>, defaultValue?: T) {
-  const rawProps = getCurrentInstance()!.vnode!.props; 
+  const rawProps = getCurrentInstance()!.vnode!.props;
   const localModelValue: ModelRef<T> | Ref<T> =
     rawProps && "modelValue" in rawProps
       ? modelValue

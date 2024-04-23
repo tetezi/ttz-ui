@@ -25,6 +25,9 @@ const [FormVNode, formMethods] = useForm({
     { field: 'No', label: 'No', component: 'Input' },
     {
         field: 'Cols', label: 'Cols', component: 'EditableTable', componentProps: {
+            style:{
+                height:'300px', 
+            },
             columns: [
                 { label: 'Id', prop: 'Id' },
                 {

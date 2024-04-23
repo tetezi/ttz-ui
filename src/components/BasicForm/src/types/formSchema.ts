@@ -1,5 +1,5 @@
 import type { PropertyPath } from "lodash";
-import type { VNodeChild, WritableComputedRef } from "vue";
+import type { CSSProperties, VNodeChild, WritableComputedRef } from "vue";
 import type { ComponentType } from "./componentType";
 import type {
   ApiSelectProps,
@@ -78,6 +78,7 @@ type FormSchemaOfPublic<Category extends CategoryEnums> = {
     Category,
     VNodeChild | Recordable<() => VNodeChild>
   >;
+  componentStyle?: DynamicConfig<Category, CSSProperties>;
 };
 type FormSchemaOfContainer = {
   category: "Container";

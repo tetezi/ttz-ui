@@ -9,19 +9,31 @@
 <script lang="ts" setup>
 import type { Recordable } from '@/global';
 import { zhCn } from 'element-plus/es/locales.mjs';
-import { shallowRef,unref, type DefineComponent } from 'vue';
+import { isArray } from 'lodash';
+import { shallowRef, unref, type DefineComponent } from 'vue';
 const demoFiles: Recordable<{
   default: DefineComponent;
-}> = import.meta.glob("@/client/src/*/index.vue", { eager: true });
+}> = import.meta.glob("@/client/src/*/index.*", { eager: true });
 const demoList = shallowRef<{ name: string, component: DefineComponent }[]>([])
 for (const key in demoFiles) {
   if (demoFiles[key].default) {
-    const name = key.match(/client\/(.*?)\/index\.vue$/)?.[1] || '';
-    demoList.value.push({
-      name,
-      component: demoFiles[key].default
-    })
+    const name = key.match(/client\/src\/(.*?)\/index(\.vue|\.ts|\.tsx)$/)?.[1] || '';
+    const component = demoFiles[key].default 
+
+    if (isArray(component)) {
+      component.forEach((item) => {
+        demoList.value.push({
+          name: `${name}/${item.__name}`,
+          component: item
+        })
+      })
+    } else {
+      demoList.value.push({
+        name,
+        component: component
+      })
+    }
+
   }
-}
-console.log(unref(demoList))
+} 
 </script>

@@ -1,12 +1,26 @@
 import type { FormInstance } from "element-plus";
 import type { FormSchemas } from "./formSchema";
-import type { FormBind, FormShortEvent } from "./props";
+import type {
+  FormBind,
+  FormProps,
+  FormEventObject,
+  FormShortEvent,
+} from "./props";
 
 import type { PropertyPath } from "lodash";
 import type { ComputedRef } from "vue";
-import type { Flatten, MaybeArray } from "@/global";
+import type {
+  Flatten,
+  GetProps,
+  MaybeArray, 
+} from "@/global";
+import type defaultProps from "../defaultProps";
 // useProps.ts
-export type GetProps = ComputedRef<FormBind>;
+export type GetFormProps = GetProps<
+  FormProps,
+  typeof defaultProps,
+  FormEventObject
+>;
 export type SetProps = (props: Partial<FormBind>) => void;
 
 export type EmitEvent = (key: keyof FormShortEvent, ...args: any[]) => void;
