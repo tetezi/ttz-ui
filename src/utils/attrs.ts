@@ -1,8 +1,4 @@
-import type {
-  GetProps, 
-  Recordable,
-  ShortEventToOnEvent,
-} from "@/global";
+import type { GetProps, Recordable, ShortEventToOnEvent } from "@/global";
 import {
   cloneDeep,
   get,
@@ -95,12 +91,15 @@ export type GetFieldsValue<T = any> = (key: PropertyPath) => T;
  * 本地模式modelValue，如有使用v-model则使用原modelValue，否则生成一个本地modelValue
  * PS:vue的defineModel语法糖内部也会实现本地模式，但返回的是简单类型的customRefRef，无法监听深层修改，故作修改
  */
-export function useLocalModel<T>(modelValue: ModelRef<T>, defaultValue?: T) {
+export function useLocalModel<T>(
+  modelValue: ModelRef<T>,
+  getDefaultValue?: () => T
+) {
   const rawProps = getCurrentInstance()!.vnode!.props;
   const localModelValue: ModelRef<T> | Ref<T> =
     rawProps && "modelValue" in rawProps
       ? modelValue
-      : (ref(cloneDeep(defaultValue ?? toRaw(unref(modelValue)))) as Ref<T>);
+      : (ref(getDefaultValue?.()) as Ref<T>);
   const setFieldsValue: SetFieldsValue = (key, val) => {
     const model = unref(localModelValue);
     if (isObject(model)) {

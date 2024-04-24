@@ -29,7 +29,7 @@ const { getProps, setProps, emitEvent } = useLocalProps<TableProps<Data>, TableS
 /**
  * 本地化双向绑定数据
  */
-const { localModelValue, setModelValue, getModelValue, getFieldsValue, setFieldsValue } = useLocalModel(modelValue, [])
+const { localModelValue, setModelValue, getModelValue, getFieldsValue, setFieldsValue } = useLocalModel(modelValue, ()=>[])
 /**
  * 分页
  */

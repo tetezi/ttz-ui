@@ -23,7 +23,7 @@ const props = withDefaults(defineProps<EditableTableProps<Data>>(), editableTabl
 const emit = defineEmits<EditableTableShortEvent<Data>>()
 const modelValue = defineModel<Data[]>()
 const { getProps, setProps, emitEvent } = useLocalProps(props, emit)
-const { localModelValue, setFieldsValue, setModelValue, getFieldsValue, getModelValue } = useLocalModel(modelValue, [])
+const { localModelValue, setFieldsValue, setModelValue, getFieldsValue, getModelValue } = useLocalModel(modelValue, ()=>[])
 const slots = defineSlots()
 const [TableVNode] = useTable(() => {
     return {
