@@ -1,5 +1,6 @@
 export  * from "./BasicForm";  
 export  * from "./BasicTable";  
+export  * from "./BasicDialog";  
 
 export * from "./Select";
 export * from "./ApiSelect";

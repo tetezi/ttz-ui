@@ -14,7 +14,7 @@ const emit = defineEmits<ShortEvent>()
 const slots = useSlots()
 const loadingRef = ref(false)
 
-async function handlerClick(...e: any[]) {
+async function handlerClick( ) {
     if (unref(loadingRef) === true) {
         return
     }
@@ -22,7 +22,7 @@ async function handlerClick(...e: any[]) {
     loadingRef.value = true
     try {
         if (isFunction(props.func)) {
-            await props.func(...e)
+            await props.func( )
         }
     } catch (err) {
         console.log(err)
