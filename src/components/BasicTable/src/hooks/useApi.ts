@@ -21,8 +21,7 @@ export function useTableApi<Data extends Recordable>(
   const isRunning = ref(false);
 
   async function fetch(params?: MaybeRefOrGetter<Recordable>) {
-    const { api, listField, totalField, beforeFetch } =
-      unref(getProps);
+    const { api, listField, totalField, beforeFetch } = unref(getProps);
     if (!api || !isFunction(api)) return [];
     let apiParams = toValue(params);
 
@@ -57,7 +56,7 @@ export function useTableApi<Data extends Recordable>(
     if (!isRunning.value) {
       isRunning.value = true;
     }
-    const { pageConfigs } = unref(getProps);
+    const { pageConfigs, api } = unref(getProps);
     let apiParams = param;
     if (pageConfigs) {
       const { pageSizeField = "pageSize", currentPageField = "pageIndex" } =
@@ -72,6 +71,7 @@ export function useTableApi<Data extends Recordable>(
       ...(unref(unref(getProps).params) || {}),
       ...apiParams,
     };
+    console.log("reload", apiParams, api);
     return fetch(apiParams);
   }
   watch(
@@ -83,11 +83,11 @@ export function useTableApi<Data extends Recordable>(
     }
   );
   watch(
-    () => unref(getProps).immediate,
-    (immediate) => {
-      if (immediate) {
+    [() => unref(getProps).immediate, () => unref(getProps).api],
+    () => {
+      if (unref(getProps).immediate && unref(getProps).api) {
         reload();
-      }else{
+      } else {
         isRunning.value = false;
       }
     },
