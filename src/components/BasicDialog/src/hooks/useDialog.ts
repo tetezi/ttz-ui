@@ -1,15 +1,13 @@
 import { useComponentRegister } from "@/utils";
-import type { MaybeRefOrGetter, DefineComponent } from "vue";
+import type {
+  MaybeRefOrGetter, 
+} from "vue";
 import type { DialogBind, DialogMethods } from "../types";
-import { BasicDialog } from "../..";
+import { BasicDialog } from "../.."; 
 
 export function useDialog(
   props: MaybeRefOrGetter<DialogBind>,
   onRegister?: (dialogMethods: DialogMethods) => void
 ) {
-  return useComponentRegister(
-    BasicDialog as unknown as DefineComponent,
-    props,
-    onRegister
-  );
+  return useComponentRegister(BasicDialog, props, onRegister);
 }

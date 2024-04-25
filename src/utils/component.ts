@@ -1,18 +1,21 @@
+import type { Recordable } from "@/global";
 import { isEmpty } from "lodash";
 import {
   defineComponent,
   h,
   toValue,
   watchEffect,
-  type DefineComponent,
+  type Component,
+  type DefineSetupFnComponent,
+  type EmitsOptions,
   type MaybeRefOrGetter,
-  type VNode,
+  type SlotsType,
 } from "vue";
 export function useComponentRegister<
-  Bind,
+  Bind extends Recordable,
   Methods extends { setProps: (props: Bind) => void }
 >(
-  component: DefineComponent,
+  component: Component,
   bind: MaybeRefOrGetter<Bind>,
   onRegister?: (methods: Methods) => void
 ) {
@@ -21,7 +24,9 @@ export function useComponentRegister<
     {
       get(target, prop, receiver) {
         if (isEmpty(target)) {
-          console.warn(`${component.__name}实例未完成。无法获取${String(prop)}`);
+          console.warn(
+            `${(<any>component).__name}实例未完成。无法获取${String(prop)}`
+          );
           throw new Error("实例未完成。");
         } else {
           return Reflect.get(target, prop, receiver);
@@ -30,7 +35,6 @@ export function useComponentRegister<
     }
   ) as Methods;
   const register = (methods) => {
-    console.log("初始化", methods, methodsProxy);
     Object.entries(methods).forEach(([key, val]) => {
       methodsProxy[key] = val;
     });
@@ -41,11 +45,10 @@ export function useComponentRegister<
     }
     onRegister?.(methodsProxy);
   };
-
   return [
-    defineComponent(() => {
-      return () => h(component, { onRegister: register });
+    defineComponent((_props, { slots }) => {
+      return () => h(component, { onRegister: register }, slots);
     }),
     methodsProxy,
-  ] as [DefineComponent, Methods];
+  ] as [DefineSetupFnComponent<Bind>, Methods];
 }
