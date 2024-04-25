@@ -60,8 +60,9 @@ function setData(data: any) {
     setProps({ data: data })
 }
 const getData = computed(() => unref(getProps).data)
-async function open(checkBeforeOpen: boolean = true) {
+async function open(data?: any, checkBeforeOpen: boolean = true) {
     const { beforeOpen } = unref(getProps)
+    setData(data)
     if (checkBeforeOpen && beforeOpen) {
         await beforeOpen()
     }
