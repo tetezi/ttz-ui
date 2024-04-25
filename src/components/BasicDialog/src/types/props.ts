@@ -8,7 +8,13 @@ export type DialogProps = {
   headerRender?: (dialogMethods: DialogMethods) => VNodeChild;
   bodyRender?: (dialogMethods: DialogMethods) => VNodeChild;
   footerRender?: (dialogMethods: DialogMethods) => VNodeChild;
-  beforeClose?: () => Promise<void>;
+  beforeOpen?: () => MaybePromise<void>;
+  beforeClose?: () => MaybePromise<void>;
+  submitApi?: () => MaybePromise<void>;
+  submitCheckBeforeClose?: boolean;
+  showActionBtns?:boolean
+  showSubmitBtn?:boolean
+  showCancelBtn?:boolean
 } & Pick<
   Partial<ElDialogProps>,
   | "title"

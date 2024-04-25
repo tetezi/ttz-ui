@@ -8,15 +8,18 @@
         </template>
         <template #footer>
             <component :is="()=>getDialogSlot('footer')"></component>
-            <BasicButton :func="close">关闭</BasicButton> 
+            <template v-if="getProps.showActionBtns">
+                <BasicButton v-if="getProps.showCancelBtn" icon="CloseBold" :func="close">关闭</BasicButton>
+                <BasicButton v-if="getProps.showSubmitBtn" icon="Select" :func="submit" type="primary">提交</BasicButton>
+            </template>
         </template>
     </el-dialog>
 </template>
 <script lang="ts" setup>
 import { defaultDialogProps } from './defaultProps';
-import type { DialogProps, DialogShortEvent } from './types';
+import type { DialogMethods, DialogProps, DialogShortEvent } from './types';
 import { useLocalProps, useLocalModel, getInheritanceEvent, getSlot } from '@/utils';
-import { computed, unref } from 'vue';
+import { computed, onMounted, unref } from 'vue';
 import { omit } from 'lodash';
 
 const props = withDefaults(defineProps<DialogProps>(), defaultDialogProps)
@@ -35,29 +38,29 @@ const { localModelValue, setModelValue } = useLocalModel(modelValue, () => false
 const bind = computed(() => {
     return {
         beforeClose: (done) => close(true),
-        ...omit(unref(getProps), ['headerRender', 'bodyRender', 'footerRender', 'beforeClose']),
+        ...omit(unref(getProps), ['headerRender', 'bodyRender', 'footerRender', 'beforeClose', 'beforeOpen', 'submitApi', 'submitCheckBeforeClose', 'showActionBtns', 'showSubmitBtn', 'showCancelBtn']),
         ...getInheritanceEvent(emitEvent, ['open', 'opened', 'close', 'closed']),
     }
 })
-const dialogMethods = computed(() => {
-    return {
-        open, close
-    }
-})
+
 function getDialogSlot(name: 'header' | 'body' | 'footer') {
     const { headerRender, bodyRender, footerRender } = unref(getProps)
     console.log(slots)
     if (name === 'header') {
-        return headerRender ? headerRender(unref(dialogMethods)) : getSlot(slots, name, unref(dialogMethods))
+        return headerRender ? headerRender((dialogMethods)) : getSlot(slots, name, (dialogMethods))
     } else if (name === 'body') {
-        return bodyRender ? bodyRender(unref(dialogMethods)) : getSlot(slots, 'default', unref(dialogMethods))
+        return bodyRender ? bodyRender((dialogMethods)) : getSlot(slots, 'default', (dialogMethods))
 
     } else if (name === 'footer') {
-        return footerRender ? footerRender(unref(dialogMethods)) : getSlot(slots, name, unref(dialogMethods))
+        return footerRender ? footerRender((dialogMethods)) : getSlot(slots, name, (dialogMethods))
 
     }
 }
-function open() {
+async function open(checkBeforeOpen: boolean = true) {
+    const { beforeOpen } = unref(getProps)
+    if (checkBeforeOpen && beforeOpen) {
+        await beforeOpen()
+    }
     setModelValue(true)
 }
 async function close(checkBeforeClose: boolean = true) {
@@ -67,4 +70,17 @@ async function close(checkBeforeClose: boolean = true) {
     }
     setModelValue(false)
 }
+async function submit() {
+    const { submitApi, submitCheckBeforeClose } = unref(getProps)
+    if (submitApi) {
+        await submitApi()
+    }
+    await close(submitCheckBeforeClose)
+}
+const dialogMethods = {
+    open, close, setProps, getProps, submit
+}
+onMounted(() => {
+    emitEvent('register', dialogMethods)
+})  
 </script>

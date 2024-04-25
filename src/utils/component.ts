@@ -9,7 +9,7 @@ import {
   type VNode,
 } from "vue";
 export function useComponentRegister<
-Bind,
+  Bind,
   Methods extends { setProps: (props: Bind) => void }
 >(
   component: DefineComponent,
@@ -21,7 +21,7 @@ Bind,
     {
       get(target, prop, receiver) {
         if (isEmpty(target)) {
-          console.warn(`${component.__name}实例未完成。`);
+          console.warn(`${component.__name}实例未完成。无法获取${String(prop)}`);
           throw new Error("实例未完成。");
         } else {
           return Reflect.get(target, prop, receiver);
@@ -30,6 +30,7 @@ Bind,
     }
   ) as Methods;
   const register = (methods) => {
+    console.log("初始化", methods, methodsProxy);
     Object.entries(methods).forEach(([key, val]) => {
       methodsProxy[key] = val;
     });

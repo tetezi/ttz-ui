@@ -3,5 +3,9 @@ export const defaultDialogProps = {
   lockScroll: true,
   closeOnClickModal: true,
   closeOnPressEscape: true,
-  showClose: true, 
+  showClose: true,
+  submitCheckBeforeClose: true,
+  showActionBtns: true,
+  showSubmitBtn: true,
+  showCancelBtn: true,
 };
