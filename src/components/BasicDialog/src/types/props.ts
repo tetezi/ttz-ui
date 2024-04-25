@@ -5,6 +5,7 @@ import type { DialogProps as ElDialogProps } from "element-plus";
 import type { VNodeChild } from "vue";
 
 export type DialogProps = {
+  data?: any;
   headerRender?: (dialogMethods: DialogMethods) => VNodeChild;
   bodyRender?: (dialogMethods: DialogMethods) => VNodeChild;
   footerRender?: (dialogMethods: DialogMethods) => VNodeChild;
@@ -12,9 +13,9 @@ export type DialogProps = {
   beforeClose?: () => MaybePromise<void>;
   submitApi?: () => MaybePromise<void>;
   submitCheckBeforeClose?: boolean;
-  showActionBtns?:boolean
-  showSubmitBtn?:boolean
-  showCancelBtn?:boolean
+  showActionBtns?: boolean;
+  showSubmitBtn?: boolean;
+  showCancelBtn?: boolean;
 } & Pick<
   Partial<ElDialogProps>,
   | "title"
@@ -31,7 +32,7 @@ export type DialogProps = {
   | "openDelay"
   | "closeOnClickModal"
   | "closeOnPressEscape"
-  | "showClose" 
+  | "showClose"
   | "draggable"
   | "overflow"
   | "center"

@@ -4,6 +4,7 @@
             <component :is="()=>getDialogSlot('header')"></component>
         </template>
         <template #default>
+            {{ getProps }}
             <component :is="()=>getDialogSlot('body')"></component>
         </template>
         <template #footer>
@@ -38,16 +39,15 @@ const { localModelValue, setModelValue } = useLocalModel(modelValue, () => false
 const bind = computed(() => {
     return {
         beforeClose: (done) => close(true),
-        ...omit(unref(getProps), ['headerRender', 'bodyRender', 'footerRender', 'beforeClose', 'beforeOpen', 'submitApi', 'submitCheckBeforeClose', 'showActionBtns', 'showSubmitBtn', 'showCancelBtn']),
+        ...omit(unref(getProps), ['data', 'headerRender', 'bodyRender', 'footerRender', 'beforeClose', 'beforeOpen', 'submitApi', 'submitCheckBeforeClose', 'showActionBtns', 'showSubmitBtn', 'showCancelBtn']),
         ...getInheritanceEvent(emitEvent, ['open', 'opened', 'close', 'closed']),
     }
 })
 
 function getDialogSlot(name: 'header' | 'body' | 'footer') {
     const { headerRender, bodyRender, footerRender } = unref(getProps)
-    console.log(slots)
     if (name === 'header') {
-        return headerRender ? headerRender((dialogMethods)) : getSlot(slots, name, (dialogMethods))
+        return headerRender ? headerRender((dialogMethods)) : getSlot(slots, name, (dialogMethods)) || unref(getProps).title
     } else if (name === 'body') {
         return bodyRender ? bodyRender((dialogMethods)) : getSlot(slots, 'default', (dialogMethods))
 
@@ -56,6 +56,10 @@ function getDialogSlot(name: 'header' | 'body' | 'footer') {
 
     }
 }
+function setData(data: any) {
+    setProps({ data: data })
+}
+const getData = computed(() => unref(getProps).data)
 async function open(checkBeforeOpen: boolean = true) {
     const { beforeOpen } = unref(getProps)
     if (checkBeforeOpen && beforeOpen) {
@@ -78,7 +82,7 @@ async function submit() {
     await close(submitCheckBeforeClose)
 }
 const dialogMethods = {
-    open, close, setProps, getProps, submit
+    open, close, setProps, getProps, submit, setData, getData
 }
 onMounted(() => {
     emitEvent('register', dialogMethods)

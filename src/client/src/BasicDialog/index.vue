@@ -6,11 +6,16 @@
 
         </template>
 </BasicDialog> -->
-    <dialogComp></dialogComp>
+    <dialogComp>
+        <template #default>
+            asd
+        </template>
+    </dialogComp>
+    <fwa @g="(a) => { }"></fwa>
 </template>
 <script lang="tsx" setup>
-import { ref } from 'vue'
-import { BasicDialog, useDialog } from '@/components'
+import { ref, type Component, type DefineSetupFnComponent, type DefineComponent, type PropType } from 'vue'
+import { BasicDialog, useDialog, } from '@/components'
 const v = ref(false)
 function aa(a) {
     console.log(a, 'aa')
@@ -22,8 +27,8 @@ function www() {
 function bef(done) {
     return new Promise(() => { })
 }
-function close() {
+function closea() {
     console.log('关闭')
 }
-const [dialogComp, dialogMethods] = useDialog({ title: 'asd', bodyRender: aa })
+const [dialogComp, dialogMethods] = useDialog({}) 
 </script>
