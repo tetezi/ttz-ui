@@ -3,8 +3,7 @@
         <template #header>
             <component :is="()=>getDialogSlot('header')"></component>
         </template>
-        <template #default>
-            {{ getProps }}
+        <template #default>  
             <component :is="()=>getDialogSlot('body')"></component>
         </template>
         <template #footer>
@@ -16,21 +15,21 @@
         </template>
     </el-dialog>
 </template>
-<script lang="ts" setup>
+<script lang="ts" setup generic="Data">
 import { defaultDialogProps } from './defaultProps';
-import type { DialogMethods, DialogProps, DialogShortEvent } from './types';
+import type { DialogProps, DialogShortEvent } from './types';
 import { useLocalProps, useLocalModel, getInheritanceEvent, getSlot } from '@/utils';
 import { computed, onMounted, unref } from 'vue';
 import { omit } from 'lodash';
 
-const props = withDefaults(defineProps<DialogProps>(), defaultDialogProps)
-const emit = defineEmits<DialogShortEvent>()
+const props = withDefaults(defineProps<DialogProps<Data>>(), defaultDialogProps)
+const emit = defineEmits<DialogShortEvent<Data>>()
 const modelValue = defineModel<boolean>()
 const slots = defineSlots()
 /**
 * 本地化组件道具数据
 */
-const { getProps, setProps, emitEvent } = useLocalProps<DialogProps, DialogShortEvent, typeof defaultDialogProps>(props, emit)
+const { getProps, setProps, emitEvent } = useLocalProps<DialogProps<Data>, DialogShortEvent<Data>, typeof defaultDialogProps>(props, emit)
 /**
  * 本地化双向绑定数据
  */

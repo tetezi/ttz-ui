@@ -4,11 +4,11 @@ import type { defaultDialogProps } from "../defaultProps";
 import type { DialogProps as ElDialogProps } from "element-plus";
 import type { VNodeChild } from "vue";
 
-export type DialogProps = {
-  data?: any;
-  headerRender?: (dialogMethods: DialogMethods) => VNodeChild;
-  bodyRender?: (dialogMethods: DialogMethods) => VNodeChild;
-  footerRender?: (dialogMethods: DialogMethods) => VNodeChild;
+export type DialogProps<Data> = {
+  data?: Data;
+  headerRender?: (dialogMethods: DialogMethods<Data>) => VNodeChild;
+  bodyRender?: (dialogMethods: DialogMethods<Data>) => VNodeChild;
+  footerRender?: (dialogMethods: DialogMethods<Data>) => VNodeChild;
   beforeOpen?: () => MaybePromise<void>;
   beforeClose?: () => MaybePromise<void>;
   submitApi?: () => MaybePromise<void>;
@@ -40,20 +40,20 @@ export type DialogProps = {
   | "alignCenter"
   | "destroyOnClose"
 >;
-export type DialogShortEvent = {
-  register: [DialogMethods: DialogMethods];
+export type DialogShortEvent<Data> = {
+  register: [DialogMethods: DialogMethods<Data>];
   open: [];
   opened: [];
   close: [];
   closed: [];
 };
 
-export type DialogEventObject = ShortEventToOnEvent<DialogShortEvent>;
+export type DialogEventObject<Data> = ShortEventToOnEvent<DialogShortEvent<Data>>;
 
-export type DialogBind = DialogProps & DialogEventObject;
+export type DialogBind<Data> = DialogProps<Data> & DialogEventObject<Data>;
 
-export type GetDialogProps = GetProps<
-  DialogProps,
+export type GetDialogProps<Data> = GetProps<
+  DialogProps<Data>,
   typeof defaultDialogProps,
-  DialogEventObject
+  DialogEventObject<Data>
 >;

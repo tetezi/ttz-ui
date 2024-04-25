@@ -1,17 +1,10 @@
 <template>
-    <el-button @click="() => www()"></el-button>
-    <!-- <BasicDialog v-model="v" title="asd" :bodyRender="aa" :before-close="bef" @close="close">asd
-        <template #footer>
-            <BasicButton>asasfd</BasicButton>
-
-        </template>
-</BasicDialog> -->
+    <el-button @click="() => www()"></el-button> 
     <dialogComp>
-        <template #default>
-            asd
+        <template #default="row">
+            --{{ row }}--
         </template>
     </dialogComp>
-    <fwa @g="(a) => { }"></fwa>
 </template>
 <script lang="tsx" setup>
 import { ref, type Component, type DefineSetupFnComponent, type DefineComponent, type PropType } from 'vue'
@@ -22,7 +15,7 @@ function aa(a) {
     return <div style='color:red' onClick={() => a.close(false)}>wg</div>
 }
 function www() {
-    dialogMethods.open()
+    dialogMethods.open('11')
 }
 function bef(done) {
     return new Promise(() => { })
@@ -30,5 +23,6 @@ function bef(done) {
 function closea() {
     console.log('关闭')
 }
-const [dialogComp, dialogMethods] = useDialog({}) 
+const [dialogComp, dialogMethods] = useDialog({})
+
 </script>

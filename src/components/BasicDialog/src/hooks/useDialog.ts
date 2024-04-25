@@ -5,9 +5,9 @@ import type {
 import type { DialogBind, DialogMethods } from "../types";
 import { BasicDialog } from "../.."; 
 
-export function useDialog(
-  props: MaybeRefOrGetter<DialogBind>,
-  onRegister?: (dialogMethods: DialogMethods) => void
-) {
+export function useDialog<Data>(
+  props: MaybeRefOrGetter<DialogBind<Data>>,
+  onRegister?: (dialogMethods: DialogMethods<Data>) => void
+) { 
   return useComponentRegister(BasicDialog, props, onRegister);
-}
+} 

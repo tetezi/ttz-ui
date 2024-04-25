@@ -6,10 +6,14 @@ import {
   toValue,
   watchEffect,
   type Component,
+  type ComputedOptions,
   type DefineSetupFnComponent,
-  type EmitsOptions,
+  type ObjectEmitsOptions,
   type MaybeRefOrGetter,
+  type MethodOptions,
   type SlotsType,
+  type DefineComponent,
+  type ConcreteComponent,
 } from "vue";
 export function useComponentRegister<
   Bind extends Recordable,
