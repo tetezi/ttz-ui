@@ -6,9 +6,9 @@ import type { VNodeChild } from "vue";
 
 export type DialogProps<Data> = {
   data?: Data;
-  headerRender?: (data: Data | undefined) => VNodeChild;
-  bodyRender?: (data: Data | undefined) => VNodeChild;
-  footerRender?: (data: Data | undefined) => VNodeChild;
+  headerRender?: (data: Data) => VNodeChild;
+  bodyRender?: (data: Data) => VNodeChild;
+  footerRender?: (data: Data) => VNodeChild;
   beforeOpen?: () => MaybePromise<void>;
   beforeClose?: () => MaybePromise<void>;
   submitApi?: () => MaybePromise<void>;

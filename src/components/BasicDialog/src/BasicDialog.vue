@@ -21,7 +21,6 @@ import type { DialogMethods, DialogProps, DialogShortEvent } from './types';
 import { useLocalProps, useLocalModel, getInheritanceEvent, getSlot } from '@/utils';
 import { computed, onMounted, unref } from 'vue';
 import { omit } from 'lodash';
-import { defineComponent } from 'vue';
 const props = withDefaults(defineProps<DialogProps<Data>>(), defaultDialogProps)
 const emit = defineEmits<DialogShortEvent<Data>>()
 const modelValue = defineModel<boolean>()
@@ -45,20 +44,20 @@ const bind = computed(() => {
 function getDialogSlot(name: 'header' | 'body' | 'footer') {
     const { bodyRender, headerRender, footerRender, data } = unref(getProps)
     if (name === 'header') {
-        return headerRender ? headerRender((data)) : getSlot(slots, name, (data)) || unref(getProps).title
+        return headerRender ? headerRender((data as Data)) : getSlot(slots, name, (data as Data)) || unref(getProps).title
     } else if (name === 'body') {
-        return bodyRender ? bodyRender((data)) : getSlot(slots, 'default', (data))
+        return bodyRender ? bodyRender((data as Data)) : getSlot(slots, 'default', (data as Data))
     } else if (name === 'footer') {
-        return footerRender ? footerRender((data)) : getSlot(slots, name, (data))
+        return footerRender ? footerRender((data as Data)) : getSlot(slots, name, (data as Data))
 
     }
 }
 
-function setData(data: any) {
+function setData(data: Data) {
     setProps({ data: data })
 }
 const getData = computed(() => unref(getProps).data)
-async function open(data?: any, checkBeforeOpen: boolean = true) {
+async function open(data: Data, checkBeforeOpen: boolean = true) {
     const { beforeOpen } = unref(getProps)
     setData(data)
     if (checkBeforeOpen && beforeOpen) {
