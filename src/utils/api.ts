@@ -57,7 +57,7 @@ export function useApi<Params extends Recordable, Data = any>(
     loadingRef.value = true;
     isRunningRef.value = true;
     const actualParams = beforeFetch ? await beforeFetch(params) : params;
-    const res = await api(actualParams)
+    const res = await Promise.resolve(api(actualParams))
       .catch((err: any) => {
         setData(defaultData);
         return Promise.reject(err);
