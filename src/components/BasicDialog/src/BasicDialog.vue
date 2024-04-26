@@ -1,13 +1,13 @@
 <template>
     <el-dialog v-model="localModelValue" v-bind="bind">
         <template #header>
-            <component :is="()=>getDialogSlot('header')"></component>
+            <component :is="getDialogSlot('header')"></component>
         </template>
-        <template #default>  
-            <component :is="()=>getDialogSlot('body')"></component>
+        <template #default>
+            <component :is="getDialogSlot('body')"></component>
         </template>
         <template #footer>
-            <component :is="()=>getDialogSlot('footer')"></component>
+            <component :is="getDialogSlot('footer')"></component>
             <template v-if="getProps.showActionBtns">
                 <BasicButton v-if="getProps.showCancelBtn" icon="CloseBold" :func="close">关闭</BasicButton>
                 <BasicButton v-if="getProps.showSubmitBtn" icon="Select" :func="submit" type="primary">提交</BasicButton>
@@ -15,13 +15,13 @@
         </template>
     </el-dialog>
 </template>
-<script lang="ts" setup generic="Data">
+<script lang="tsx" setup generic="Data">
 import { defaultDialogProps } from './defaultProps';
-import type { DialogProps, DialogShortEvent } from './types';
+import type { DialogMethods, DialogProps, DialogShortEvent } from './types';
 import { useLocalProps, useLocalModel, getInheritanceEvent, getSlot } from '@/utils';
 import { computed, onMounted, unref } from 'vue';
 import { omit } from 'lodash';
-
+import { defineComponent } from 'vue';
 const props = withDefaults(defineProps<DialogProps<Data>>(), defaultDialogProps)
 const emit = defineEmits<DialogShortEvent<Data>>()
 const modelValue = defineModel<boolean>()
@@ -42,19 +42,18 @@ const bind = computed(() => {
         ...getInheritanceEvent(emitEvent, ['open', 'opened', 'close', 'closed']),
     }
 })
-
 function getDialogSlot(name: 'header' | 'body' | 'footer') {
-    const { headerRender, bodyRender, footerRender } = unref(getProps)
+    const { bodyRender, headerRender, footerRender, data } = unref(getProps)
     if (name === 'header') {
-        return headerRender ? headerRender((dialogMethods)) : getSlot(slots, name, (dialogMethods)) || unref(getProps).title
+        return headerRender ? headerRender((data)) : getSlot(slots, name, (data)) || unref(getProps).title
     } else if (name === 'body') {
-        return bodyRender ? bodyRender((dialogMethods)) : getSlot(slots, 'default', (dialogMethods))
-
+        return bodyRender ? bodyRender((data)) : getSlot(slots, 'default', (data))
     } else if (name === 'footer') {
-        return footerRender ? footerRender((dialogMethods)) : getSlot(slots, name, (dialogMethods))
+        return footerRender ? footerRender((data)) : getSlot(slots, name, (data))
 
     }
 }
+
 function setData(data: any) {
     setProps({ data: data })
 }
@@ -81,7 +80,7 @@ async function submit() {
     }
     await close(submitCheckBeforeClose)
 }
-const dialogMethods = {
+const dialogMethods: DialogMethods<Data> = {
     open, close, setProps, getProps, submit, setData, getData
 }
 onMounted(() => {

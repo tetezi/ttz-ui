@@ -1,3 +1,4 @@
+import type { ComputedRef } from "vue";
 import type { GetDialogProps, DialogBind } from "./props";
 
 export type DialogMethods<Data> = {
@@ -6,4 +7,6 @@ export type DialogMethods<Data> = {
   submit: () => Promise<void>;
   setProps: (props: Partial<DialogBind<Data>>) => void;
   getProps: GetDialogProps<Data>;
+  setData: (data: any) => void
+  getData:ComputedRef<Data | undefined> 
 };

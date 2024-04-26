@@ -6,9 +6,9 @@ import type { VNodeChild } from "vue";
 
 export type DialogProps<Data> = {
   data?: Data;
-  headerRender?: (dialogMethods: DialogMethods<Data>) => VNodeChild;
-  bodyRender?: (dialogMethods: DialogMethods<Data>) => VNodeChild;
-  footerRender?: (dialogMethods: DialogMethods<Data>) => VNodeChild;
+  headerRender?: (data: Data | undefined) => VNodeChild;
+  bodyRender?: (data: Data | undefined) => VNodeChild;
+  footerRender?: (data: Data | undefined) => VNodeChild;
   beforeOpen?: () => MaybePromise<void>;
   beforeClose?: () => MaybePromise<void>;
   submitApi?: () => MaybePromise<void>;
@@ -48,7 +48,9 @@ export type DialogShortEvent<Data> = {
   closed: [];
 };
 
-export type DialogEventObject<Data> = ShortEventToOnEvent<DialogShortEvent<Data>>;
+export type DialogEventObject<Data> = ShortEventToOnEvent<
+  DialogShortEvent<Data>
+>;
 
 export type DialogBind<Data> = DialogProps<Data> & DialogEventObject<Data>;
 
