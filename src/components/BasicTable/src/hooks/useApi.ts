@@ -20,7 +20,7 @@ export function useTableApi<Data extends Recordable>(
 ) {
   const isRunning = ref(false);
 
-  async function fetch(params?: MaybeRefOrGetter<Recordable>) {
+  async function fetch(params?: MaybeRefOrGetter<Recordable>,pageParams?:Recordable) {
     const { api, listField, totalField, beforeFetch } = unref(getProps);
     if (!api || !isFunction(api)) return [];
     let apiParams = toValue(params);
@@ -30,7 +30,7 @@ export function useTableApi<Data extends Recordable>(
     }
     setProps({ loading: true });
     try {
-      const res = await api(apiParams);
+      const res = await api(apiParams,pageParams);
       let data;
       let total;
       if (listField === "") {
@@ -56,23 +56,25 @@ export function useTableApi<Data extends Recordable>(
     if (!isRunning.value) {
       isRunning.value = true;
     }
-    const { pageConfigs, api } = unref(getProps);
-    let apiParams = param;
+    const { pageConfigs } = unref(getProps);
+    let pageParams;
     if (pageConfigs) {
       const { pageSizeField = "pageSize", currentPageField = "pageIndex" } =
         pageConfigs;
-      apiParams = {
+
+      pageParams = {
         [pageSizeField]: unref(pageSizeRef),
         [currentPageField]: unref(currentPageRef),
-        ...apiParams,
       };
     }
-    apiParams = {
-      ...(unref(unref(getProps).params) || {}),
-      ...apiParams,
-    };
-    console.log("reload", apiParams, api);
-    return fetch(apiParams);
+    return fetch(
+      {
+        ...(unref(unref(getProps).params) || {}),
+        ...(pageParams || {}),
+        ...param,
+      },
+      pageParams
+    );
   }
   watch(
     [() => unref(unref(getProps).params), currentPageRef, pageSizeRef],

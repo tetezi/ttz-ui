@@ -1,4 +1,4 @@
-import type { MaybeRef, MaybeRefOrGetter, VNode } from "vue";
+import type { MaybeRef, MaybeRefOrGetter, VNode, VNodeChild } from "vue";
 import type { TableMethods } from "./tableMethods";
 import type {
   TableProps as ElTableProps,
@@ -9,7 +9,8 @@ import type { defaultTableProps } from "../..";
 export type TableProps<Data extends Recordable> = {
   immediate?: boolean;
   beforeFetch?: (params) => MaybePromise<Recordable>;
-  api?: (params) => MaybePromise<Recordable>;
+  title?: MaybeRefOrGetter<VNodeChild>;
+  api?: (params, pageParams) => MaybePromise<Recordable>;
   params?: MaybeRef<Recordable>;
   listField?: string;
   totalField?: string;
@@ -24,6 +25,7 @@ export type TableProps<Data extends Recordable> = {
   loading?: boolean;
   columns?: MaybeRefOrGetter<TableColumn<Data>[]>;
   actionColumn?: Partial<TableColumn<Data>> | TableColumn<Data>["formatter"];
+  headerActionRender?: MaybeRefOrGetter<VNodeChild>;
 } & Partial<
   Pick<
     ElTableProps<Data>,

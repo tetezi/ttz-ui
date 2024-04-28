@@ -14,7 +14,7 @@ const emit = defineEmits<ShortEvent>()
 const slots = useSlots()
 const loadingRef = ref(false)
 
-async function handlerClick( ) {
+async function handlerClick() {
     if (unref(loadingRef) === true) {
         return
     }
@@ -22,7 +22,7 @@ async function handlerClick( ) {
     loadingRef.value = true
     try {
         if (isFunction(props.func)) {
-            await props.func( )
+            await props.func()
         }
     } catch (err) {
         console.log(err)
@@ -39,7 +39,7 @@ const Render = computed(() => {
         ...getInheritanceEvent(emit, []),
         loading: unref(loadingRef),
         onClick: isConfirm ? undefined : handlerClick,
-        icon: isString(props.icon)? ElementPlusIconsVue[props.icon]:props.icon
+        icon: isString(props.icon) ? ElementPlusIconsVue[props.icon] : props.icon
     }
     const btn = <el-button   {...bind} v-slots={slots}>
     </el-button>

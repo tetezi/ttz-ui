@@ -1,5 +1,7 @@
 <template>
-    <div style="height: 100%; display: flex;flex-direction: column;">
+    <div style="height: 100%; display: flex;flex-direction: column;background-color: #FFFFFF;">
+
+        <component :is="getHeaderVNode"></component>
         <el-table style="flex:1" v-bind="tableBind" v-loading="loadingRef">
             <BasicTableColumn v-for="item of  toValue(getProps.columns)" :key="item.columnKey ?? item.prop"
                 v-bind="item">
@@ -18,7 +20,8 @@ import { getInheritanceEvent, useLocalModel, useLocalProps } from '@/utils';
 import { computed, onMounted, toValue, unref } from 'vue';
 import { isFunction, omit } from 'lodash';
 import type { Recordable } from '@/global';
-import { usePage, useTableApi } from './hooks';
+import { usePage, useTableApi, useTableHeader } from './hooks';
+const slots = defineSlots()
 const props = withDefaults(defineProps<TableProps<Data>>(), defaultTableProps)
 const modelValue = defineModel<Data[]>()
 const emit = defineEmits<TableShortEvent<Data>>()
@@ -29,17 +32,15 @@ const { getProps, setProps, emitEvent } = useLocalProps<TableProps<Data>, TableS
 /**
  * 本地化双向绑定数据
  */
-const { localModelValue, setModelValue, getModelValue, getFieldsValue, setFieldsValue } = useLocalModel(modelValue, ()=>[])
+const { localModelValue, setModelValue, getModelValue, getFieldsValue, setFieldsValue } = useLocalModel(modelValue, () => [])
 /**
  * 分页
  */
 const { GetPaginationVNode, getPageData, pageSizeRef, totalRef, currentPageRef, } = usePage(getProps, getModelValue)
 
-const { fetch, reload } = useTableApi(getProps, setProps, setModelValue, {
-    pageSizeRef, currentPageRef, totalRef,
-},
-)
-const slots = defineSlots()
+const { fetch, reload } = useTableApi(getProps, setProps, setModelValue, { pageSizeRef, currentPageRef, totalRef })
+
+const { getHeaderVNode } = useTableHeader(getProps, reload)
 const loadingRef = computed(() => unref(getProps).loading ?? false)
 const tableBind = computed(() => {
     return {

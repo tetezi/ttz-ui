@@ -4,7 +4,7 @@
 </template>
 <script lang="tsx" setup>
 import { defineComponent, reactive, ref, unref } from 'vue'
-import { BasicTable, useTable, } from '@/components'
+import { BasicButton, BasicTable, useTable, } from '@/components'
 import { buildUUID, getInheritanceEvent, getSlot, useLocalModel, useLocalProps } from '@/utils';
 import { omit, set } from 'lodash';
 const columns = [
@@ -15,6 +15,7 @@ const columns = [
     }, { prop: 'bb', label: 'bb' }
 ]
 const [TableComponent] = useTable({
+    headerActionRender: <BasicButton>asd</BasicButton>,
     columns,
     api: (params) => {
         return new Promise((resolve) => {

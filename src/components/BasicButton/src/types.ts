@@ -10,6 +10,7 @@ export type Props = {
   round?: boolean;
   circle?: boolean;
   disabled?: boolean;
+  plain?: boolean;
   icon?: string | DefineComponent;
   autoInsertSpace?: boolean;
 

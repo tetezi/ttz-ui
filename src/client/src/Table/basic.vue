@@ -8,6 +8,7 @@ import { defineComponent, reactive, ref, unref } from 'vue'
 import { BasicTable, useTable, } from '@/components'
 import { buildUUID, getInheritanceEvent, getSlot, useLocalModel, useLocalProps } from '@/utils';
 import { omit, set } from 'lodash';
+import BasicButton from '@/components/BasicButton/src/BasicButton.vue';
 const columns = [
     {
         label: 'aa',
@@ -18,10 +19,12 @@ const columns = [
     }, { prop: 'bb', label: 'bb' }
 ]
 const [TableComponent] = useTable({
+    title: () => '测试',
     columns, pageConfigs: {
         // pageLayout?: string | undefined;
         pageSize: 10
-    }
+    },
+    headerActionRender:<BasicButton>asd</BasicButton>
 })
 const modelValue = ref([{ aa: 11 }, { aa: 114 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 },])
 function www() {
