@@ -1,8 +1,8 @@
 <template>
     <div style="height: 100%; display: flex;flex-direction: column;">
-        <el-form :model="localModelValue" label-width="0px"  style="flex:1;min-height: 0px">
-            <TableVNode v-model="localModelValue"  style="height: 100%;">
-            </TableVNode> 
+        <el-form :model="localModelValue" label-width="0px" style="flex:1;min-height: 0px">
+            <TableVNode v-model="localModelValue" style="height: 100%;">
+            </TableVNode>
         </el-form>
         <BasicButton type="success" :func="() => add()" style="width:100%;flex:0">添加记录</BasicButton>
     </div>
@@ -22,8 +22,8 @@ import { watch } from 'vue';
 const props = withDefaults(defineProps<EditableTableProps<Data>>(), editableTableDefaultProps)
 const emit = defineEmits<EditableTableShortEvent<Data>>()
 const modelValue = defineModel<Data[]>()
-const { getProps, setProps, emitEvent } = useLocalProps(props, emit)
-const { localModelValue, setFieldsValue, setModelValue, getFieldsValue, getModelValue } = useLocalModel(modelValue, ()=>[])
+const { getProps, setProps, emitEvent } = useLocalProps(props, emit as any)
+const { localModelValue, setFieldsValue, setModelValue, getFieldsValue, getModelValue } = useLocalModel(modelValue, () => [])
 const slots = defineSlots()
 const [TableVNode] = useTable(() => {
     return {
@@ -78,7 +78,7 @@ const [TableVNode] = useTable(() => {
         actionColumn: (row, cellValue, index, column) => {
             return <BasicButton func={() => del(index)}>删除</BasicButton>
         },
-        pageConfigs:false
+        pageConfigs: false
     }
 })
 

@@ -6,12 +6,13 @@ export type Props = {
   step?: number;
   precision?: number;
   disabled?: boolean;
+  size?: "large" | "default" | "small";
 };
 
 export type ShortEvent = {
-  change:[val:number]
-  blur:[]
-  focus:[]
+  change: [val: number];
+  blur: [];
+  focus: [];
 };
 
 export type EventObject = ShortEventToOnEvent<ShortEvent>;

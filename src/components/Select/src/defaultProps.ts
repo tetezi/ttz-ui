@@ -8,4 +8,5 @@ export default narrow({
   isObject: false,
   filterable: true,
   remote: false,
+  size: "default",
 });

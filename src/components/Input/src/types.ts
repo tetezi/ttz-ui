@@ -14,6 +14,7 @@ export type Props = {
         maxRows?: number;
       };
   disabled?: boolean;
+  size?: "large" | "default" | "small";
 };
 
 export type ShortEvent = {

@@ -1,2 +1,4 @@
 
-export default {}
+export default {
+    size: "default",
+}

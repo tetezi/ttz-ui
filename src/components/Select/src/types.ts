@@ -12,6 +12,7 @@ export type Props<Option extends Recordable> = {
   remoteMethod?: (query: string) => void;
   disabled?: boolean;
   multiple?: boolean;
+  size?: "large" | "default" | "small";
 };
 
 export type ShortEvent<Option extends Recordable> = {

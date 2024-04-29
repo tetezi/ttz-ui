@@ -4,8 +4,7 @@ import type {
   TableProps as ElTableProps,
   TableColumnCtx as ElTableColumnProps,
 } from "element-plus";
-import type { MaybePromise, Recordable, ShortEventToOnEvent } from "@/global";
-import type { defaultTableProps } from "../..";
+import type { MaybePromise, Recordable, ShortEventToOnEvent } from "@/global"; 
 export type TableProps<Data extends Recordable> = {
   immediate?: boolean;
   beforeFetch?: (params) => MaybePromise<Recordable>;
