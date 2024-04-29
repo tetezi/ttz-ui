@@ -1,4 +1,5 @@
+import { narrow } from "@/utils";
 
-export default {
-    size: "default",
-}
+export default narrow({
+  size: "default",
+});
