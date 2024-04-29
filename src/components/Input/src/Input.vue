@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-input v-bind="getBind" v-model="modelValue">
+        <el-input v-bind="getBind" v-model="modelValue" @keyup="a">
             <template v-for="slot in Object.keys(slots)" #[slot] :key="slot">
                 <component :is="slots[slot]"></component>
             </template>
@@ -9,7 +9,7 @@
 
 </template>
 <script lang="tsx" setup>
-import { computed } from 'vue';
+import { computed, withKeys, } from 'vue';
 import { omit } from 'lodash'
 import type { Props, ShortEvent } from './types'
 import defaultProps from './defaultProps';
@@ -19,8 +19,11 @@ const emit = defineEmits<ShortEvent>()
 const modelValue = defineModel<string>()
 const getBind = computed(() => {
     return {
-        ...omit(props,['modelValue']),
+        ...omit(props, ['modelValue']),
         ...getInheritanceEvent(emit, ['blur', 'focus', 'change', 'input', 'clear']),
+        onKeyup: withKeys(() => {
+            emit('keyupEnter')
+        }, ['enter'])
     }
 })
 const slots = defineSlots() 

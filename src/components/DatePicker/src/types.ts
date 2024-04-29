@@ -33,7 +33,7 @@ export type Props = {
   startPlaceholder?: string;
   endPlaceholder?: string;
   unlinkPanels?: boolean;
-  size: "default",
+  size?: "default",
 };
 
 export type ShortEvent = {

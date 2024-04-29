@@ -23,6 +23,7 @@ export type ShortEvent = {
   change: [value: string];
   input: [value: string];
   clear: [];
+  keyupEnter: [ ];
 };
 
 export type EventObject = ShortEventToOnEvent<ShortEvent>;
