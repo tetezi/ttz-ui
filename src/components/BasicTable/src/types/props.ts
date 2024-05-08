@@ -4,15 +4,16 @@ import type {
   TableProps as ElTableProps,
   TableColumnCtx as ElTableColumnProps,
 } from "element-plus";
-import type { MaybePromise, Recordable, ShortEventToOnEvent } from "@/global"; 
+import type { MaybePromise, Recordable, ShortEventToOnEvent } from "@/global";
+import type { PropertyPath } from "lodash";
 export type TableProps<Data extends Recordable> = {
   immediate?: boolean;
   beforeFetch?: (params) => MaybePromise<Recordable>;
   title?: MaybeRefOrGetter<VNodeChild>;
   api?: (params, pageParams) => MaybePromise<Recordable>;
   params?: MaybeRef<Recordable>;
-  listField?: string;
-  totalField?: string;
+  listField?: PropertyPath;
+  totalField?: PropertyPath;
   pageConfigs?:
     | false
     | {
@@ -44,6 +45,7 @@ export type TableProps<Data extends Recordable> = {
     | "lazy"
     | "load"
     | "treeProps"
+    | "rowClassName"
   >
 >;
 
@@ -76,6 +78,7 @@ export type TableColumn<Data extends Recordable> = {
 export type TableColumnProps<Data extends Recordable> = TableColumn<Data> & {};
 export type TableShortEvent<Data extends Recordable> = {
   register: [tableMethods: TableMethods<Data>];
+  rowClick: [row: Data, column: any, event: Event];
 };
 
 export type TableEventObject<Data extends Recordable> = ShortEventToOnEvent<

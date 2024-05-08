@@ -46,8 +46,8 @@ const tableBind = computed(() => {
     return {
         data: unref(getPageData),
         highlightCurrentRow: false,
-        ...omit(unref(getProps), ['loading', 'columns', 'actionColumn']),
-        ...getInheritanceEvent(emitEvent, []),
+        ...omit(unref(getProps), ['loading', 'columns', 'actionColumn', 'title', 'listField', 'totalField']),
+        ...getInheritanceEvent(emitEvent, ['rowClick']),
     }
 })
 const actionColumn = computed<undefined | TableColumn<Data>>(() => {
@@ -58,6 +58,7 @@ const actionColumn = computed<undefined | TableColumn<Data>>(() => {
     }) : undefined
 })
 const tableMethods: TableMethods<Data> = {
+    getPageData,
     getProps,
     setProps, setModelValue, getModelValue, getFieldsValue, setFieldsValue, fetch, reload
 }

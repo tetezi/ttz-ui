@@ -15,6 +15,7 @@ export type GetTableProps<Data extends Recordable> = GetProps<
 >;
 
 export type TableMethods<Data extends Recordable> = {
+  getPageData: ComputedRef<Data[]>;
   setProps: (props: Partial<TableBind<Data>>) => void;
   getProps: GetTableProps<Data>;
   setModelValue: (val: Data[]) => void;
