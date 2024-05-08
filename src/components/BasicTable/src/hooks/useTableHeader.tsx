@@ -12,7 +12,7 @@ export function useTableHeader<Data extends Recordable>(
     const { api, title, headerActionRender } = unref(getProps);
     const titleVNode = toValue(title);
     return (
-      <div style="display: flex;margin:5px">
+      <div style="display: flex;margin:5px 10px">
         <div
           style={{
             flex: 1,

@@ -6,6 +6,7 @@ import {
   type VNodeChild,
   defineComponent,
   type VNode,
+  readonly,
 } from "vue";
 import type {
   FormSchema,
@@ -65,7 +66,9 @@ export function useContainerCategory(
   props: FormItemProps
 ) {
   const renderParams = computed<RenderParams<"Container">>(() => {
-    return {};
+    return {
+      formValue: readonly(props.formModel),
+    };
   });
   function getSchemaComponent() {
     const { component, componentProps, componentStyle, componentSlot } = schema;
@@ -109,6 +112,7 @@ export function useInputCategory(
           props.setFieldsValue(schema.field, val);
         },
       }),
+      formValue: readonly(props.formModel),
     };
   });
   function getSchemaComponent() {
@@ -162,7 +166,9 @@ export function useDisplayCategory(
   props: FormItemProps
 ) {
   const renderParams = computed<RenderParams<"Display">>(() => {
-    return {};
+    return {
+      formValue: readonly(props.formModel),
+    };
   });
   function getSchemaComponent() {
     const { component, componentProps, componentStyle, componentSlot } = schema;

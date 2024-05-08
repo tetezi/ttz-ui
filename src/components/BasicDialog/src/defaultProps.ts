@@ -8,4 +8,5 @@ export const defaultDialogProps = {
   showActionBtns: true,
   showSubmitBtn: true,
   showCancelBtn: true,
+  alignCenter: true,
 };

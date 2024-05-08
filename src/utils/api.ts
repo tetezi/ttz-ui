@@ -33,6 +33,10 @@ export function useApi<Params extends Recordable, Data = any>(
    */
   const loadingRef = ref(false);
   /**
+   * 是否获取数据失败
+   */
+  const errorRef = ref(false);
+  /**
    * 是否运行中
    */
   const isRunningRef = ref(false);
@@ -60,11 +64,13 @@ export function useApi<Params extends Recordable, Data = any>(
     const res = await Promise.resolve(api(actualParams))
       .catch((err: any) => {
         setData(defaultData);
+        errorRef.value = true;
         return Promise.reject(err);
       })
       .finally(() => {
         loadingRef.value = false;
       });
+    errorRef.value = false;
     let data = resultField ? get(res, resultField) : res;
     data = afterFetch ? await afterFetch(data) : data;
     setData(data);
@@ -104,6 +110,7 @@ export function useApi<Params extends Recordable, Data = any>(
     fetch,
     setData,
     dataRef: readonly(dataRef) as Ref<Data | undefined>,
+    errorRef: readonly(errorRef) as Ref<boolean>,
     loadingRef: readonly(loadingRef) as Ref<boolean>,
     isRunningRef: readonly(isRunningRef) as Ref<boolean>,
   };

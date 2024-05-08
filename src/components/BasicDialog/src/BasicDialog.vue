@@ -1,13 +1,13 @@
 <template>
     <el-dialog v-model="localModelValue" v-bind="bind">
         <template #header>
-            <component :is="getDialogSlot('header')"></component>
+            <component :is="headerSlotVNode"></component>
         </template>
         <template #default>
-            <component :is="getDialogSlot('body')"></component>
+            <component :is="defaultSlotVNode"></component>
         </template>
         <template #footer>
-            <component :is="getDialogSlot('footer')"></component>
+            <component :is="footerSlotVNode"></component>
             <template v-if="getProps.showActionBtns">
                 <BasicButton v-if="getProps.showCancelBtn" icon="CloseBold" :func="close">关闭</BasicButton>
                 <BasicButton v-if="getProps.showSubmitBtn" icon="Select" :func="submit" type="primary">提交</BasicButton>
@@ -20,7 +20,8 @@ import { defaultDialogProps } from './defaultProps';
 import type { DialogMethods, DialogProps, DialogShortEvent } from './types';
 import { useLocalProps, useLocalModel, getInheritanceEvent, getSlot } from '@/utils';
 import { computed, onMounted, unref } from 'vue';
-import { omit } from 'lodash';
+import { isUndefined, omit } from 'lodash';
+import { useDialogSlots } from './hooks';
 const props = withDefaults(defineProps<DialogProps<Data>>(), defaultDialogProps)
 const emit = defineEmits<DialogShortEvent<Data>>()
 const modelValue = defineModel<boolean>()
@@ -41,25 +42,17 @@ const bind = computed(() => {
         ...getInheritanceEvent(emitEvent, ['open', 'opened', 'close', 'closed']),
     }
 })
-function getDialogSlot(name: 'header' | 'body' | 'footer') {
-    const { bodyRender, headerRender, footerRender, data } = unref(getProps)
-    if (name === 'header') {
-        return headerRender ? headerRender((data as Data)) : getSlot(slots, name, (data as Data)) || unref(getProps).title
-    } else if (name === 'body') {
-        return bodyRender ? bodyRender((data as Data)) : getSlot(slots, 'default', (data as Data))
-    } else if (name === 'footer') {
-        return footerRender ? footerRender((data as Data)) : getSlot(slots, name, (data as Data))
-
-    }
-}
+const { footerSlotVNode, headerSlotVNode, defaultSlotVNode } = useDialogSlots(getProps, slots)
 
 function setData(data: Data) {
     setProps({ data: data })
 }
 const getData = computed(() => unref(getProps).data)
-async function open(data: Data, checkBeforeOpen: boolean = true) {
+async function open(data?: Data, checkBeforeOpen: boolean = true) {
     const { beforeOpen } = unref(getProps)
-    setData(data)
+    if (!isUndefined(data)) {
+        setData(data)
+    }
     if (checkBeforeOpen && beforeOpen) {
         await beforeOpen()
     }

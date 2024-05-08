@@ -36,8 +36,7 @@ export type DialogProps<Data> = {
   | "draggable"
   | "overflow"
   | "center"
-  | "alignCenter"
-  | "alignCenter"
+  | "alignCenter" 
   | "destroyOnClose"
 >;
 export type DialogShortEvent<Data> = {

@@ -4,13 +4,13 @@
       <div>{{ name }}</div>
       <component :is="component"></component>
     </div>
-  </el-config-provider>
+  </el-config-provider> 
 </template>
 <script lang="ts" setup>
 import type { Recordable } from '@/global';
 import { zhCn } from 'element-plus/es/locales.mjs';
 import { isArray } from 'lodash';
-import { shallowRef, unref, type DefineComponent } from 'vue';
+import { shallowRef,  type DefineComponent } from 'vue'; 
 const demoFiles: Recordable<{
   default: DefineComponent;
 }> = import.meta.glob("@/client/src/*/index.*", { eager: true });

@@ -6,7 +6,7 @@ import type {
   DatePickerProps,
   EditableTableProps,
   InputNumberProps,
-  InputProps,
+  InputBind,
   SelectProps,
   SwitchProps,
 } from "@/components";
@@ -25,13 +25,14 @@ type MutableRecord<
 
 export type CategoryEnums = "Container" | "Input" | "Display";
 // 动态渲染参数
-export type RenderParams<Category extends CategoryEnums> =
-  {} & (Category extends "Input"
-    ? {
-        // 可写组件值
-        compValue: WritableComputedRef<any>;
-      }
-    : {});
+export type RenderParams<Category extends CategoryEnums> = {
+  formValue: Readonly<Recordable>;
+} & (Category extends "Input"
+  ? {
+      // 可写组件值
+      compValue: WritableComputedRef<any>;
+    }
+  : {});
 // 动态配置
 export type DynamicConfig<Category extends CategoryEnums, T> =
   | T
@@ -40,7 +41,7 @@ export type DynamicConfig<Category extends CategoryEnums, T> =
 export type InputComponentMutableProps = MutableRecord<
   "component",
   {
-    Input: { componentProps?: DynamicConfig<"Input", InputProps> };
+    Input: { componentProps?: DynamicConfig<"Input", InputBind> };
     Select: {
       componentProps?: DynamicConfig<"Input", SelectProps<Recordable>>;
     };
