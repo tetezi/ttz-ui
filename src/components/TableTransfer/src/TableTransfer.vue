@@ -1,7 +1,10 @@
 <template>
     <div style="display: flex;height: 100%;">
         <TableComp style="flex:3;height:100%"></TableComp>
-        <!-- {{ t }} -->
+        <div style="display: flex;flex-direction: column;justify-content: center;align-items: center;">
+            <BasicButton :func="add" icon="ArrowRightBold"></BasicButton>
+            <BasicButton :func="remove" icon="ArrowLeftBold" style="margin-left:0"></BasicButton>
+        </div>
         <TableCompOfSelect style="flex:2;height:100%" v-model="localModelValue"></TableCompOfSelect>
     </div>
 </template>
@@ -24,62 +27,58 @@ const { getProps, setProps, emitEvent } = useLocalProps<TableTransferProps<Data>
  * 本地化双向绑定数据
  */
 const { localModelValue, setModelValue, getModelValue, getFieldsValue, setFieldsValue } = useLocalModel(modelValue, () => [])
-const getBind = computed(() => {
-    return {
-        ...omit(unref(getProps), []),
-        ...getInheritanceEvent(emitEvent, []),
-    }
-})
+
 const [TableComp, tableMethods] = useTable({
+    rowKey:props.rowKey,
     title: unref(getProps).title,
     api: unref(getProps).api,
-    headerActionRender: () => <BasicButton func={() => {
-        const pageRows = unref(tableMethods.getPageData)
-        pageRows.forEach(select)
-    }}>全选当前页</BasicButton>,
+    selectType: 'Check',
     columns: unref(getProps).columns,
-    rowClassName: ({ row }) => {
-        console.log(row, getSelectRowIndex(row) !== -1)
-        return getSelectRowIndex(row) !== -1 ? 'selectRow' : ''
-    },
-    onRowClick: (row) => {
-        select(row)
-    }
 })
 function getSelectRowIndex(row) {
-    return unref(getModelValue).findIndex((val) => (!isUndefined(get(val, props.idField))) && get(val, props.idField) === get(row, props.idField))
+    return unref(getModelValue).findIndex((val) => {
+        const { rowKey } = unref(getProps)
+        if (rowKey) {
+            return get(val, rowKey) === get(row, rowKey)
+        } else {
+            return val === row
+        }
+    })
 }
 const [TableCompOfSelect, tableOfSelectMethods] = useTable({
+    selectType: 'Check',
     title: () => `当前已选择${unref(getModelValue).length}条记录`,
-    headerActionRender: () => <BasicButton func={() => setModelValue([])}>清空选择</BasicButton>,
+    rowKey:props.rowKey,
+    // headerActionRender: () => <BasicButton func={() => setModelValue([])}>清空选择</BasicButton>,
     columns: unref(getProps).columns,
-    onRowClick: (row) => {
-        unSelect(row)
-    }
+    pageConfigs: false,
 })
-function select(row) {
-    if (getSelectRowIndex(row) !== -1) {
-    } else {
-        // setModelValue([row, ...unref(getModelValue)])
-        unref(getModelValue).unshift(row)
-    }
+function add() {
+    const rows = unref(tableMethods.getSelectRows)
+    rows.forEach((row) => {
+        const index = getSelectRowIndex(row)
+        if (index === -1) {
+            localModelValue.value?.unshift(row)
+        }
+    })
+    tableMethods.clearSelectRows()
 }
-function unSelect(row) {
-    const index = getSelectRowIndex(row)
-    if (index !== -1) {
-        (unref(getModelValue).splice(index, 1))
-    } else {
-
-    }
+function remove() {
+    const rows = unref(tableOfSelectMethods.getSelectRows)
+    rows.forEach((row) => {
+        const index = getSelectRowIndex(row)
+        localModelValue.value?.splice(index, 1)
+    })
+    tableOfSelectMethods.clearSelectRows()
 }
 </script>
 <style>
-.el-table .selectRow {
+/* .el-table .selectRow {
     background-color: #CDCDCD !important;
 }
  
 .el-table--enable-row-hover .el-table__body tr.selectRow:hover > td.el-table__cell {
 
     background-color: #CDCDCD  !important;
-}
+} */
 </style>

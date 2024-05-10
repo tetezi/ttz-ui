@@ -1,5 +1,5 @@
 <template>
-    <TableTransfer v-model="value" :columns :api idField="userId"></TableTransfer>
+    <TableTransfer v-model="value" :columns :api rowKey="userId" ></TableTransfer>
 </template>
 <script lang="ts" setup>
 import { ref } from 'vue'
