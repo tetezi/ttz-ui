@@ -1,8 +1,9 @@
 <template>
     <div style="height: 100%; display: flex;flex-direction: column;background-color: #FFFFFF;">
-
         <component :is="getHeaderVNode"></component>
         <el-table style="flex:1" v-bind="tableBind" v-loading="loadingRef">
+            <BasicTableColumn v-bind="selectColumn">
+            </BasicTableColumn>
             <BasicTableColumn v-for="item of  toValue(getProps.columns)" :key="item.columnKey ?? item.prop"
                 v-bind="item">
             </BasicTableColumn>
@@ -20,7 +21,7 @@ import { getInheritanceEvent, useLocalModel, useLocalProps } from '@/utils';
 import { computed, onMounted, toValue, unref } from 'vue';
 import { isFunction, omit } from 'lodash';
 import type { Recordable } from '@/global';
-import { usePage, useTableApi, useTableHeader } from './hooks';
+import { usePage, useTableApi, useTableHeader, useTableSelect } from './hooks';
 const slots = defineSlots()
 const props = withDefaults(defineProps<TableProps<Data>>(), defaultTableProps)
 const modelValue = defineModel<Data[]>()
@@ -41,12 +42,13 @@ const { GetPaginationVNode, getPageData, pageSizeRef, totalRef, currentPageRef, 
 const { fetch, reload } = useTableApi(getProps, setProps, setModelValue, { pageSizeRef, currentPageRef, totalRef })
 
 const { getHeaderVNode } = useTableHeader(getProps, reload)
+
+const { getSelectRows, selectAllRow, selectRow, selectColumn, clearSelectRows } = useTableSelect(getProps, getModelValue, emitEvent)
 const loadingRef = computed(() => unref(getProps).loading ?? false)
 const tableBind = computed(() => {
     return {
         data: unref(getPageData),
-        highlightCurrentRow: false,
-        ...omit(unref(getProps), ['loading', 'columns', 'actionColumn', 'title', 'listField', 'totalField']),
+        ...omit(unref(getProps), ['loading', 'columns', 'actionColumn', 'title', 'listField', 'totalField', 'rowKey']),
         ...getInheritanceEvent(emitEvent, ['rowClick']),
     }
 })
@@ -60,7 +62,7 @@ const actionColumn = computed<undefined | TableColumn<Data>>(() => {
 const tableMethods: TableMethods<Data> = {
     getPageData,
     getProps,
-    setProps, setModelValue, getModelValue, getFieldsValue, setFieldsValue, fetch, reload
+    setProps, setModelValue, getModelValue, getFieldsValue, setFieldsValue, fetch, reload, getSelectRows, selectRow, selectAllRow, clearSelectRows
 }
 onMounted(() => {
     emitEvent('register', tableMethods)

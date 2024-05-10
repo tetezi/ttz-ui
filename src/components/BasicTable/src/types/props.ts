@@ -26,10 +26,11 @@ export type TableProps<Data extends Recordable> = {
   columns?: MaybeRefOrGetter<TableColumn<Data>[]>;
   actionColumn?: Partial<TableColumn<Data>> | TableColumn<Data>["formatter"];
   headerActionRender?: MaybeRefOrGetter<VNodeChild>;
+  selectType?: MaybeRefOrGetter<"Select" | "Check">;
+  rowKey?: PropertyPath;
 } & Partial<
   Pick<
-    ElTableProps<Data>,
-    | "rowKey"
+    ElTableProps<Data>, 
     | "height"
     | "maxHeight"
     | "stripe"
@@ -79,6 +80,7 @@ export type TableColumnProps<Data extends Recordable> = TableColumn<Data> & {};
 export type TableShortEvent<Data extends Recordable> = {
   register: [tableMethods: TableMethods<Data>];
   rowClick: [row: Data, column: any, event: Event];
+  selectRow:[row:Data,rows:Data[]]
 };
 
 export type TableEventObject<Data extends Recordable> = ShortEventToOnEvent<

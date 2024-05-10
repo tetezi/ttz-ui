@@ -24,7 +24,8 @@ const [TableComponent] = useTable({
         // pageLayout?: string | undefined;
         pageSize: 10
     },
-    headerActionRender:<BasicButton>asd</BasicButton>
+    selectType: 'Select',
+    headerActionRender: <BasicButton>asd</BasicButton>
 })
 const modelValue = ref([{ aa: 11 }, { aa: 114 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 }, { aa: 11 },])
 function www() {

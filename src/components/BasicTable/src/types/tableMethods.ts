@@ -24,4 +24,8 @@ export type TableMethods<Data extends Recordable> = {
   setFieldsValue: (key: PropertyPath, val: any) => any;
   fetch: (params?: MaybeRefOrGetter<Recordable>) => Promise<any>;
   reload: (params?: MaybeRefOrGetter<Recordable>) => Promise<any>;
+  getSelectRows: ComputedRef<Data[]>;
+  selectRow: (row: Data) => void;
+  selectAllRow: () => void;
+  clearSelectRows: () => void;
 };
