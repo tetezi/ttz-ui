@@ -31,7 +31,7 @@ function ItemRender() {
             labelWidth: labelWidth,
             prop: field,
             key: schemaKey,
-        };
+        }; 
         return ifShowOfDynamic ? (
             <el-form-item {...elFormItemProps}>
                 {{

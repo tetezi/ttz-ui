@@ -1,6 +1,7 @@
 <template>
     <el-input v-model='params.text'> </el-input>
-    <ApiSelect v-model="value" :api="api" :params="params"></ApiSelect>
+    {{ value }}
+    <ApiSelect v-model="value" :api="api" :params="params" valueField="id" labelField="name"></ApiSelect>
 </template>
 <script lang="ts" setup>
 import { ref, } from 'vue'
@@ -10,6 +11,8 @@ const value = ref()
 const params = ref({ text: '' })
 async function api(params: Recordable) {
     console.log('请求参数', params)
-    return ''
+    return [
+        { name: '测试', id: 'cs' }
+    ]
 }
 </script>

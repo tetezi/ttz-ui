@@ -60,7 +60,7 @@ const [TableVNode] = useTable(() => {
                             field: [index, column.prop],
                             label: `第${Number(index) + 1}行的${column.label}`,
                             labelShow: false,
-                            labelWidth: 0,
+                            labelWidth: '0px',
                             category: actialEditConfig.category ?? "Input",
                             schemaKey: actialEditConfig.schemaKey ?? ([index, column.prop]).join('-') ?? buildUUID(),
                         } as FormSchema<any>
