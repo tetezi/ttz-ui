@@ -15,4 +15,5 @@ export type ComponentType<Category extends CategoryEnums> =
         | "Slider"
         | "DatePicker"
         | "EditableTable"
+        | "TableTransfer"
     : never;

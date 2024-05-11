@@ -1,7 +1,6 @@
 import { type PropertyPath } from "lodash";
 import { type SelectProps } from "@/components/Select";
 import type { MaybeRefOrGetter } from "vue";
-import { narrow } from "@/utils";
 import type { Recordable, MaybePromise, ShortEventToOnEvent } from "@/global";
 
 export type Props<Params extends Recordable, Option extends Recordable> = {

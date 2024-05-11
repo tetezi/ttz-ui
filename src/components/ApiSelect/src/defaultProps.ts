@@ -5,7 +5,6 @@ export default narrow({
   ...omit(defaultSelectProps, ["options", "loading"]),
   immediate: false,
   resultField: "",
-  params: { 
-  },
+  params: ()=>({}),
   queryField: "query",
 });

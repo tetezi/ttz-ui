@@ -7,7 +7,7 @@ import { Select, type SelectBind } from '@/components/Select'
 import { getInheritanceEvent, useApi } from '@/utils';
 
 
-import { computed, onMounted, toValue, unref, type MaybeRefOrGetter } from 'vue';
+import { computed, onMounted, toValue, unref } from 'vue';
 import type { Props, ShortEvent } from './types'
 import { omit, isArray } from 'lodash';
 import defaultProps from './defaultProps';

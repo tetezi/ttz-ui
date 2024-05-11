@@ -1,4 +1,4 @@
-import { isUndefined, isFunction, get } from "lodash";
+import { isUndefined, isFunction, get, isString } from "lodash";
 import {
   computed,
   unref,
@@ -7,6 +7,7 @@ import {
   defineComponent,
   type VNode,
   readonly,
+  type Component,
 } from "vue";
 import type {
   FormSchema,
@@ -118,14 +119,20 @@ export function useInputCategory(
   function getSchemaComponent() {
     const { component, field, componentProps, componentSlot, componentStyle } =
       schema;
-
-    if (!(component && inputComponentMap.has(component))) {
-      console.error(`组件${component}未注册`);
+    let Comp;
+    if (!component) {
+      console.error(`表单未选择组件`);
       return undefined;
     }
-    const Comp = inputComponentMap.get(component) as ReturnType<
-      typeof defineComponent
-    >;
+    if (isString(component)) {
+      if (!inputComponentMap.has(component)) {
+        console.error(`组件${component}未注册`);
+        return undefined;
+      }
+      Comp = inputComponentMap.get(component) as Component;
+    } else {
+      Comp = component;
+    }
 
     const compAttr = {
       ...getDynamicConfig(componentProps),

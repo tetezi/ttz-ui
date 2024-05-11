@@ -65,7 +65,7 @@ const formMethods: FormMethods = {
     getModelValue, setModelValue, setFieldsValue, getFieldsValue, validate, submitFunction, initDefaultValue
 }
 onMounted(() => {
-    emitEvent('register', formMethods)
     initDefaultValue()
+    emitEvent('register', formMethods)
 })  
 </script>

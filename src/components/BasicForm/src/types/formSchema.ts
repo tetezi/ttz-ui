@@ -1,5 +1,11 @@
 import type { PropertyPath } from "lodash";
-import type { CSSProperties, VNodeChild, WritableComputedRef } from "vue";
+import type {
+  CSSProperties,
+  Component,
+  Raw,
+  VNodeChild,
+  WritableComputedRef,
+} from "vue";
 import type { ComponentType } from "./componentType";
 import type {
   ApiSelectProps,
@@ -9,6 +15,7 @@ import type {
   InputBind,
   SelectProps,
   SwitchProps,
+  TableTransferProps,
 } from "@/components";
 import type { Recordable } from "@/global";
 
@@ -59,6 +66,9 @@ export type InputComponentMutableProps = MutableRecord<
     EditableTable: {
       componentProps?: DynamicConfig<"Input", EditableTableProps<Recordable>>;
     };
+    TableTransfer: {
+      componentProps?: DynamicConfig<"Input", TableTransferProps<Recordable>>;
+    };
   }
 >;
 type FormSchemaOfPublic<Category extends CategoryEnums> = {
@@ -97,7 +107,13 @@ type FormSchemaOfDisplay = {
   component?: ComponentType<"Display">;
   componentProps?: DynamicConfig<"Display", Recordable>;
 };
-type FormSchemaOfInput = InputComponentMutableProps & {
+type FormSchemaOfInput = (
+  | InputComponentMutableProps
+  | {
+      component: Raw<Component>;
+      componentProps?: DynamicConfig<"Input", any>;
+    }
+) & {
   category?: "Input";
   /**
    * 映射字段
