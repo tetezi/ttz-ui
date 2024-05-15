@@ -1,8 +1,7 @@
-import type { Component, DefineComponent } from "vue";
+import type { Component } from "vue";
 import type { ComponentType } from "./types/componentType";
-import type { CategoryEnums, FormSchema } from "./types";
-import { checkSchemaCategory } from "./hooks";
 
+import { Card } from "@/components/Card";
 import { Select } from "@/components/Select";
 import { InputNumber } from "@/components/InputNumber";
 import { Slider } from "@/components/Slider";
@@ -27,7 +26,7 @@ export const inputComponentMap = new Map<ComponentType<"Input">, Component>([
 export const containerComponentMap = new Map<
   ComponentType<"Container">,
   Component
->();
+>([["Card", Card]]);
 export const displayComponentMap = new Map<ComponentType<"Display">, Component>(
   [["BasicButton", BasicButton]]
 );

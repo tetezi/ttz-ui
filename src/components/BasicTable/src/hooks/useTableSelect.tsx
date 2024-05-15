@@ -85,7 +85,7 @@ export function useTableSelect<Data extends Recordable>(
           return <span> </span>;
         } else if (toValue(selectType) === "Check") {
           const selectCount = unref(getSelectRows).length;
-          const pageData = unref(getData);
+          const pageData = unref(getData)||[];
           return (
             <div>
               <el-tooltip placement="right">

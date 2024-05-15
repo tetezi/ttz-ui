@@ -1,5 +1,5 @@
 <template>
-    <ItemRender />
+    <ItemRender style="margin:8px"/>
 </template>
 <script lang="tsx" setup>
 import { unref, type VNodeChild, } from 'vue';
@@ -31,9 +31,9 @@ function ItemRender() {
             labelWidth: labelWidth,
             prop: field,
             key: schemaKey,
-        }; 
+        };
         return ifShowOfDynamic ? (
-            <el-form-item {...elFormItemProps}>
+            <el-form-item {...elFormItemProps} style='margin:0'>
                 {{
                     default: () => getContent(),
                     label: labelVnode,

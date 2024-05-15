@@ -1,5 +1,6 @@
 import { narrow } from "@/utils";
 
-export const defaultTableTransferProps = narrow({ 
-  title:'', 
+export const defaultTableTransferProps = narrow({
+  title: "",
+  unSelectedData: () => [],
 });

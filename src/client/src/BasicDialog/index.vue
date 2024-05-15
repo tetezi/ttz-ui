@@ -8,8 +8,7 @@
 </template>
 <script lang="tsx" setup>
 import { ref, type Component, type DefineSetupFnComponent, type DefineComponent, type PropType } from 'vue'
-import { BasicDialog, useDialog, } from '@/components'
-import TTT from './test.vue'
+import { BasicDialog, useDialog, } from '@/components' 
 const [dialogComp, dialogMethods] = useDialog({
     bodyRender: (row) => {
         return <div>

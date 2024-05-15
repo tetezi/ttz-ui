@@ -2,6 +2,7 @@ export  * from "./BasicForm";
 export  * from "./BasicTable";  
 export  * from "./BasicDialog";  
 
+export * from "./Card";
 export * from "./Select";
 export * from "./ApiSelect";
 export * from "./Input";

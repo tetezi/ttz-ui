@@ -21,6 +21,8 @@ import {
   displayComponentMap,
   inputComponentMap,
 } from "../../components";
+import { adjustFormSchemas } from "../form/useFormSchemas";
+import { FormItem } from "@/components/BasicForm";
 
 function useGetDynamicConfig<C extends CategoryEnums>(
   renderParams: ComputedRef<RenderParams<C>>
@@ -79,22 +81,40 @@ export function useContainerCategory(
       componentStyle,
       componentSlot,
     } = schema;
-    if (!(component && containerComponentMap.has(component))) {
-      console.error(`组件${component}未注册`);
+
+    let Comp;
+    if (!component) {
+      console.error(`表单未选择Container组件`);
       return undefined;
     }
-    const Comp = containerComponentMap.get(component) as ReturnType<
-      typeof defineComponent
-    >;
+    if (isString(component)) {
+      if (!containerComponentMap.has(component)) {
+        console.error(`组件${component}未注册`);
+        return undefined;
+      }
+      Comp = containerComponentMap.get(component);
+    } else {
+      Comp = component;
+    }
+     const childrenSchemas = adjustFormSchemas(children);
     const compAttr = {
       ...getDynamicConfig(componentProps),
       style: getDynamicConfig(componentStyle),
     };
-    return componentSlot ? (
-      <Comp {...compAttr}>{getDynamicConfig(componentSlot)}</Comp>
-    ) : (
-      <Comp {...compAttr}></Comp>
-    );
+    const slots = {
+      default: () => {
+        return childrenSchemas.map((schema) => {
+          return (
+            <FormItem
+              {...props}
+              schema={schema}
+            ></FormItem>
+          );
+        });
+      },
+      ...(componentSlot ? getDynamicConfig(componentSlot) : {}),
+    };
+    return <Comp {...compAttr}>{slots}</Comp>;
   }
   const getDynamicConfig = useGetDynamicConfig<"Container">(renderParams);
   const getContent = useContent<"Container">(
@@ -135,7 +155,7 @@ export function useInputCategory(
         console.error(`组件${component}未注册`);
         return undefined;
       }
-      Comp = inputComponentMap.get(component) as Component;
+      Comp = inputComponentMap.get(component);
     } else {
       Comp = component;
     }
@@ -185,16 +205,31 @@ export function useDisplayCategory(
   });
   function getSchemaComponent() {
     const { component, componentProps, componentStyle, componentSlot } = schema;
-    if (!(component && displayComponentMap.has(component))) {
-      console.error(`组件${component}未注册`);
+    let Comp;
+    if (!component) {
+      console.error(`表单未选择Display组件`);
       return undefined;
     }
-    if (!displayComponentMap.has(component)) {
-      throw new Error(`组件${component}未注册`);
+    if (isString(component)) {
+      if (!displayComponentMap.has(component)) {
+        console.error(`组件${component}未注册`);
+        return undefined;
+      }
+      Comp = displayComponentMap.get(component);
+    } else {
+      Comp = component;
     }
-    const Comp = displayComponentMap.get(component) as ReturnType<
-      typeof defineComponent
-    >;
+
+    // if (!(component && displayComponentMap.has(component))) {
+    //   console.error(`组件${component}未注册`);
+    //   return undefined;
+    // }
+    // if (!displayComponentMap.has(component)) {
+    //   throw new Error(`组件${component}未注册`);
+    // }
+    // const Comp = displayComponentMap.get(component) as ReturnType<
+    //   typeof defineComponent
+    // >;
     const compAttr = {
       ...getDynamicConfig(componentProps),
       style: getDynamicConfig(componentStyle),

@@ -1,4 +1,5 @@
 <template>
+    {{ a }}
     <FormVNode v-model="a">
         <template #slotTest>
             slot
@@ -16,6 +17,10 @@ const a = ref({
 const [FormVNode, formMethods] = useForm({
     defaultValue: { TableName: 'wf' },
     formSchemas: [{
+        category: 'Container', component: 'Card', componentProps: { title: 'asd' }, children: [{ field: 'TableName', label: '测试', component: 'Input' },]
+    }, {
+        category: 'Container', component: 'Card', children: [{ field: 'TableName', label: '测试', component: 'Input' },]
+    }, {
         field: 'input', component: 'Input', componentSlot: <div>test</div>
     }, {
         category: 'Display', component: 'BasicButton', componentSlot: <div>test</div>
@@ -24,10 +29,10 @@ const [FormVNode, formMethods] = useForm({
     { field: 'Name', label: 'Name', component: 'Input' },
     { field: 'No', label: 'No', component: 'Input' },
     {
-        field: 'Cols', label: 'Cols', component: 'EditableTable', componentProps: {
-            style:{
-                height:'300px', 
-            },
+        field: 'Cols', label: 'Cols', component: 'EditableTable', componentStyle: {
+            height: '300px',
+        }, componentProps: {
+
             columns: [
                 { label: 'Id', prop: 'Id' },
                 {

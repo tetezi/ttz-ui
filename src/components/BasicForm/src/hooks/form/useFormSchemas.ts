@@ -1,10 +1,28 @@
 import { isFunction } from "lodash";
 import { computed, unref, type ComputedRef } from "vue";
 
-import type { GetFormSchemas, FormBind, FormSchema } from "../../types";
+import type {
+  GetFormSchemas,
+  FormBind,
+  FormSchema,
+  FormSchemas,
+} from "../../types";
 import { buildUUID } from "@/utils/uuid";
 import type { GetModelValue, SetModelValue } from "@/utils";
-
+export function adjustFormSchemas(
+  formSchemas: FormSchemas
+): GetFormSchemas["value"] {
+  return formSchemas.map((comp) => {
+    return {
+      ...comp,
+      category: comp.category ?? "Input",
+      schemaKey:
+        comp.schemaKey ?? (<FormSchema<"Input">>comp).field
+          ? String((<FormSchema<"Input">>comp).field)
+          : buildUUID(),
+    };
+  }) as GetFormSchemas["value"];
+}
 export function useFormSchemas(
   getProps: ComputedRef<FormBind>,
   {
@@ -23,16 +41,7 @@ export function useFormSchemas(
           setModelValue,
         })
       : formSchemas;
-    return reuslt.map((comp) => {
-      return {
-        ...comp,
-        category: comp.category ?? "Input",
-        schemaKey:
-          comp.schemaKey ?? (<FormSchema<"Input">>comp).field
-            ? String((<FormSchema<"Input">>comp).field)
-            : buildUUID(),
-      };
-    }) as GetFormSchemas["value"];
+    return adjustFormSchemas(reuslt);
   });
   return {
     getFormSchemas,

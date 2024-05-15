@@ -5,7 +5,7 @@ export type TableTransferProps<Data extends Recordable> = {
   title?: string;
   columns: TableProps<Data>["columns"];
   rowKey: TableProps<Data>["rowKey"];
-  unSelectedData: Data[];
+  unSelectedData?: Data[];
 };
 
 export type TableTransferShortEvent<Data extends Recordable> = {};
