@@ -1,4 +1,4 @@
-import { ref, unref } from "vue";
+import { computed, ref, unref } from "vue";
 import type {
   GetFormProps,
   EmitEvent,
@@ -36,8 +36,9 @@ export function useSubmit(
       emitEvent("submit", formData, submitResult);
     }
   };
+  const getSubmitLoading = computed(() => unref(submitLoadingRef));
   return {
     submitFunction,
-    submitLoadingRef,
+    getSubmitLoading,
   };
 }

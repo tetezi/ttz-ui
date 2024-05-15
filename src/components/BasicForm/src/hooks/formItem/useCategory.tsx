@@ -72,7 +72,13 @@ export function useContainerCategory(
     };
   });
   function getSchemaComponent() {
-    const { component, componentProps, componentStyle, componentSlot } = schema;
+    const {
+      component,
+      componentProps,
+      children,
+      componentStyle,
+      componentSlot,
+    } = schema;
     if (!(component && containerComponentMap.has(component))) {
       console.error(`组件${component}未注册`);
       return undefined;

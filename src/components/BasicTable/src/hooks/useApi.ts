@@ -20,7 +20,10 @@ export function useTableApi<Data extends Recordable>(
 ) {
   const isRunning = ref(false);
 
-  async function fetch(params?: MaybeRefOrGetter<Recordable>,pageParams?:Recordable) {
+  async function fetch(
+    params?: MaybeRefOrGetter<Recordable>,
+    pageParams?: Recordable
+  ) {
     const { api, listField, totalField, beforeFetch } = unref(getProps);
     if (!api || !isFunction(api)) return [];
     let apiParams = toValue(params);
@@ -30,7 +33,7 @@ export function useTableApi<Data extends Recordable>(
     }
     setProps({ loading: true });
     try {
-      const res = await api(apiParams,pageParams);
+      const res = await api(apiParams, pageParams);
       let data;
       let total;
       if (listField === "") {
@@ -40,6 +43,7 @@ export function useTableApi<Data extends Recordable>(
         data = get(res, listField);
         total = get(res, totalField);
       }
+      console.log(data, total, isArray(data));
       data = isArray(data) ? data : [];
       totalRef.value = isNumber(total) ? total : 0;
       setModelValue(data);

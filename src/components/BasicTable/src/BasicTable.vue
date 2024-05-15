@@ -18,10 +18,10 @@
 import type { TableProps, TableShortEvent, TableMethods, TableColumn } from './types'
 import { defaultTableProps } from './defaultProps';
 import { getInheritanceEvent, useLocalModel, useLocalProps } from '@/utils';
-import { computed, onMounted, toValue, unref } from 'vue';
+import { computed, onMounted, toValue, unref, type Ref } from 'vue';
 import { isFunction, omit } from 'lodash';
 import type { Recordable } from '@/global';
-import { usePage, useTableApi, useTableHeader, useTableSelect } from './hooks';
+import { useDataManipulator, usePage, useTableApi, useTableHeader, useTableSelect } from './hooks';
 const slots = defineSlots()
 const props = withDefaults(defineProps<TableProps<Data>>(), defaultTableProps)
 const modelValue = defineModel<Data[]>()
@@ -34,6 +34,10 @@ const { getProps, setProps, emitEvent } = useLocalProps<TableProps<Data>, TableS
  * 本地化双向绑定数据
  */
 const { localModelValue, setModelValue, getModelValue, getFieldsValue, setFieldsValue } = useLocalModel(modelValue, () => [])
+/**
+ * 操作数据工具方法
+ */
+const { getTableRowIndex, pushTableRow, unshiftTableRow, deleteTableRow, updateTableRow } = useDataManipulator(getProps, localModelValue)
 /**
  * 分页
  */
@@ -62,7 +66,22 @@ const actionColumn = computed<undefined | TableColumn<Data>>(() => {
 const tableMethods: TableMethods<Data> = {
     getPageData,
     getProps,
-    setProps, setModelValue, getModelValue, getFieldsValue, setFieldsValue, fetch, reload, getSelectRows, selectRow, selectAllRow, clearSelectRows
+    setProps,
+    setModelValue,
+    getModelValue,
+    getFieldsValue,
+    setFieldsValue,
+    fetch,
+    reload,
+    getSelectRows,
+    selectRow,
+    selectAllRow,
+    clearSelectRows,
+    getTableRowIndex,
+    pushTableRow,
+    unshiftTableRow,
+    deleteTableRow,
+    updateTableRow
 }
 onMounted(() => {
     emitEvent('register', tableMethods)

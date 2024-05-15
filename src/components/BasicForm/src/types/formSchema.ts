@@ -98,6 +98,7 @@ type FormSchemaOfContainer = {
    */
   component?: ComponentType<"Container">;
   componentProps?: DynamicConfig<"Container", Recordable>;
+  children: FormSchemas;
 };
 type FormSchemaOfDisplay = {
   category: "Display";

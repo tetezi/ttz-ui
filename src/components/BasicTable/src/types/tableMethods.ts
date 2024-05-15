@@ -28,4 +28,9 @@ export type TableMethods<Data extends Recordable> = {
   selectRow: (row: Data) => void;
   selectAllRow: () => void;
   clearSelectRows: () => void;
+  getTableRowIndex: (row: string | Data) => number;
+  pushTableRow: (data: Data) => void;
+  unshiftTableRow: (data: Data) => void;
+  deleteTableRow: (row: string | Data) => void;
+  updateTableRow: (rowKey: string, newRow: Data) => void;
 };

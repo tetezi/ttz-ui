@@ -15,7 +15,7 @@ type UseApiConfig<Params, Data> = {
   api: (params: Params) => MaybePromise<any>;
   resultField?: PropertyPath;
   immediate?: boolean;
-  defaultData?: Data;
+  defaultData: Data;
   beforeFetch?: (params: unknown) => MaybePromise<Params>;
   afterFetch?: (data: unknown) => MaybePromise<Data>;
   onChangeData?: (data: Data | undefined) => void;
@@ -43,8 +43,8 @@ export function useApi<Params extends Recordable, Data = any>(
   /**
    * 响应性数据
    */
-  const dataRef = ref(unref(configRef).defaultData) as Ref<Data | undefined>;
-  function setData(data?: Data) {
+  const dataRef = ref(unref(configRef).defaultData) as Ref<Data>;
+  function setData(data: Data) {
     dataRef.value = data;
     unref(configRef)?.onChangeData?.(data);
   }
@@ -109,7 +109,7 @@ export function useApi<Params extends Recordable, Data = any>(
     init,
     fetch,
     setData,
-    dataRef: readonly(dataRef) as Ref<Data | undefined>,
+    dataRef:  (dataRef) as Ref<Data>,
     errorRef: readonly(errorRef) as Ref<boolean>,
     loadingRef: readonly(loadingRef) as Ref<boolean>,
     isRunningRef: readonly(isRunningRef) as Ref<boolean>,

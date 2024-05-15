@@ -9,11 +9,7 @@ import type {
 
 import type { PropertyPath } from "lodash";
 import type { ComputedRef } from "vue";
-import type {
-  Flatten,
-  GetProps,
-  MaybeArray, 
-} from "@/global";
+import type { Flatten, GetProps, MaybeArray } from "@/global";
 import type defaultProps from "../defaultProps";
 // useProps.ts
 export type GetFormProps = GetProps<
@@ -42,3 +38,4 @@ export type ValidateField = (props: MaybeArray<PropertyPath>) => Promise<void>;
 
 //useSubmit.ts
 export type SubmitFunction = () => Promise<void>;
+export type GetSubmitLoading = ComputedRef<boolean>;

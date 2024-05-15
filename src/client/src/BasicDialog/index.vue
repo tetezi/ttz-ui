@@ -13,10 +13,18 @@ import TTT from './test.vue'
 const [dialogComp, dialogMethods] = useDialog({
     bodyRender: (row) => {
         return <div>
-             { row.id }
+            {row.id}
             <TTT></TTT>
         </div>
-    }
+    },
+    submitApi: async () => {
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                resolve()
+            }, 3000);
+            // unref(formRef).submit()
+        })
+    },
 })
 
 </script>

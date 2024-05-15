@@ -26,11 +26,11 @@ const slots = defineSlots()
 /**
  * 表单配置
  */
-const { getProps, setProps, emitEvent } = useLocalProps<FormProps, FormShortEvent,typeof defaultProps>(props, emit)
+const { getProps, setProps, emitEvent } = useLocalProps<FormProps, FormShortEvent, typeof defaultProps>(props, emit)
 /**
  * 表单数据
  */
-const { setFieldsValue, getFieldsValue, getModelValue, setModelValue } = useLocalModel(modelValue, ()=>({}));
+const { setFieldsValue, getFieldsValue, getModelValue, setModelValue } = useLocalModel(modelValue, () => ({}));
 watch(
     getModelValue,
     (val) => {
@@ -55,17 +55,17 @@ const { elFormInstanceRef, getElFormInstance, validate, setFormItemInstanceRef, 
 /**
  * 表单提交
  */
-const { submitLoadingRef, submitFunction } = useSubmit(getProps, emitEvent, validate, getModelValue)
+const { getSubmitLoading, submitFunction } = useSubmit(getProps, emitEvent, validate, getModelValue)
 
 function initDefaultValue() {
     setModelValue(unref(getProps).defaultValue)
 }
 const formMethods: FormMethods = {
     setProps, getProps,
-    getModelValue, setModelValue, setFieldsValue, getFieldsValue, validate, submitFunction, initDefaultValue
+    getModelValue, setModelValue, setFieldsValue, getFieldsValue, validate, submitFunction, getSubmitLoading, initDefaultValue
 }
 onMounted(() => {
     emitEvent('register', formMethods)
     initDefaultValue()
-})  
+})   
 </script>

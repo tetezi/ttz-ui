@@ -1,13 +1,13 @@
 import type { Recordable } from "@/global";
 import type { GetTableProps, TableColumn, TableShortEvent } from "../types";
-import { unref, computed, toValue, ref, type ComputedRef } from "vue";
+import { unref, computed, toValue, ref, type ComputedRef, type Ref } from "vue";
 import { get } from "lodash";
 export function useTableSelect<Data extends Recordable>(
   getProps: GetTableProps<Data>,
-  getData: ComputedRef<Data>,
+  getData: ComputedRef<Data[]>,
   emitEvent: (key: keyof TableShortEvent<Data>, ...args: any[]) => void
 ) {
-  const selectRows = ref<Data[]>([]);
+  const selectRows:Ref<Data[]> = ref([]);
   function getSelectRowIndex(row: Data) {
     const { rowKey } = unref(getProps);
     return unref(selectRows).findIndex((val) => {

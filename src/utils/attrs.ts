@@ -92,13 +92,14 @@ export type GetFieldsValue<T = any> = (key: PropertyPath) => T;
  * PS:vue的defineModel语法糖内部也会实现本地模式，但返回的是简单类型的customRefRef，无法监听深层修改，故作修改
  */
 export function useLocalModel<T>(
-  modelValue: ModelRef<T>,
-  getDefaultValue?: () => T
+  modelValue: ModelRef<T|undefined>,
+  getDefaultValue?: () => T,
+  name: string = "modelValue"
 ) {
   const rawProps = getCurrentInstance()!.vnode!.props;
   const localModelValue: ModelRef<T> | Ref<T> =
-    rawProps && "modelValue" in rawProps
-      ? modelValue
+    rawProps && name in rawProps
+      ? modelValue as ModelRef<T>
       : (ref(getDefaultValue?.()) as Ref<T>);
   const setFieldsValue: SetFieldsValue = (key, val) => {
     const model = unref(localModelValue);
@@ -112,7 +113,7 @@ export function useLocalModel<T>(
   const setModelValue: SetModelValue<T> = (val) => {
     localModelValue.value = val;
   };
-  const getModelValue: GetModelValue = computed(() => unref(localModelValue));
+  const getModelValue: GetModelValue<T> = computed(() => unref(localModelValue));
   return {
     localModelValue,
     setModelValue,

@@ -16,6 +16,7 @@ import { defaultTableTransferProps } from './defaultProps';
 import { buildUUID, getInheritanceEvent, useLocalModel, useLocalProps } from '@/utils';
 import type { Recordable } from '@/global';
 import { BasicButton, useTable } from '@/components';
+import { watchEffect } from 'vue';
 const props = withDefaults(defineProps<TableTransferProps<Data>>(), defaultTableTransferProps)
 const emit = defineEmits<TableTransferShortEvent<Data>>()
 const modelValue = defineModel<Data[]>()
@@ -29,26 +30,19 @@ const { getProps, setProps, emitEvent } = useLocalProps<TableTransferProps<Data>
 const { localModelValue, setModelValue, getModelValue, getFieldsValue, setFieldsValue } = useLocalModel(modelValue, () => [])
 
 const [TableComp, tableMethods] = useTable({
-    rowKey:props.rowKey,
+    rowKey: props.rowKey,
     title: unref(getProps).title,
-    api: unref(getProps).api,
     selectType: 'Check',
     columns: unref(getProps).columns,
-})
-function getSelectRowIndex(row) {
-    return unref(getModelValue).findIndex((val) => {
-        const { rowKey } = unref(getProps)
-        if (rowKey) {
-            return get(val, rowKey) === get(row, rowKey)
-        } else {
-            return val === row
-        }
+}, () => {
+    watchEffect(() => {
+        tableMethods.setModelValue(props.unSelectedData)
     })
-}
+}) 
 const [TableCompOfSelect, tableOfSelectMethods] = useTable({
     selectType: 'Check',
     title: () => `当前已选择${unref(getModelValue).length}条记录`,
-    rowKey:props.rowKey,
+    rowKey: props.rowKey,
     // headerActionRender: () => <BasicButton func={() => setModelValue([])}>清空选择</BasicButton>,
     columns: unref(getProps).columns,
     pageConfigs: false,
@@ -56,18 +50,22 @@ const [TableCompOfSelect, tableOfSelectMethods] = useTable({
 function add() {
     const rows = unref(tableMethods.getSelectRows)
     rows.forEach((row) => {
-        const index = getSelectRowIndex(row)
-        if (index === -1) {
-            localModelValue.value?.unshift(row)
-        }
+        // const index = getSelectRowIndex(row)
+        // if (index === -1) {
+        //     localModelValue.value?.unshift(row)
+        // }
+        tableMethods.deleteTableRow(row)
+        tableOfSelectMethods.unshiftTableRow(row)
     })
     tableMethods.clearSelectRows()
 }
 function remove() {
     const rows = unref(tableOfSelectMethods.getSelectRows)
     rows.forEach((row) => {
-        const index = getSelectRowIndex(row)
-        localModelValue.value?.splice(index, 1)
+        // const index = getSelectRowIndex(row)
+        // localModelValue.value?.splice(index, 1)
+        tableMethods.unshiftTableRow(row)
+        tableOfSelectMethods.deleteTableRow(row)
     })
     tableOfSelectMethods.clearSelectRows()
 }

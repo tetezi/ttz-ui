@@ -10,6 +10,7 @@ import { get, isFunction, omit } from 'lodash'
 import type { Props, ShortEvent } from './types'
 import type { Recordable } from '@/global';
 import defaultProps from './defaultProps';
+import { getInheritanceEvent } from '@/utils/attrs';
 const props = withDefaults(defineProps<Props<Option>>(), defaultProps)
 const emit = defineEmits<ShortEvent<Option>>()
 const modelValue = defineModel<string | Option | Array<Option> | Array<string>>()
@@ -20,6 +21,7 @@ const getBind = computed(() => {
             width: '100%'
         },
         ...omit(props, ['modelValue','options', 'labelField', 'valueField', 'isObject']),
+        ...getInheritanceEvent(emit, ['focus']),
         onChange: (val: string | Option | Array<Option> | Array<string>) => {
             function getOption(val: string | Option) {
                 return props.options.find((opt) => {

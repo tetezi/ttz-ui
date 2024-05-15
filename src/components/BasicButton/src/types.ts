@@ -13,7 +13,7 @@ export type Props = {
   plain?: boolean;
   icon?: string | DefineComponent;
   autoInsertSpace?: boolean;
-
+  loading?: boolean;
   func?: (...args: any[]) => Promise<any> | void;
   isConfirm?: boolean;
   tip?: string;

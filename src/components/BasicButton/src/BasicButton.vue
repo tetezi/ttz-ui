@@ -33,11 +33,11 @@ async function handlerClick() {
     loadingRef.value = false
 }
 const Render = computed(() => {
-    const { tip, isConfirm } = props
+    const { tip, isConfirm } = props 
     const bind = {
-        ...omit(props, ['icon']),
+        ...omit(props, ['icon', 'loading', 'func', 'isConfirm', 'tip', 'errMsg']),
         ...getInheritanceEvent(emit, []),
-        loading: unref(loadingRef),
+        loading: props.loading || unref(loadingRef),
         onClick: isConfirm ? undefined : handlerClick,
         icon: isString(props.icon) ? ElementPlusIconsVue[props.icon] : props.icon
     }

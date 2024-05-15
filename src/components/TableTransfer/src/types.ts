@@ -1,11 +1,11 @@
 import type { TableProps } from "@/components/BasicTable";
-import type { Recordable, ShortEventToOnEvent } from "@/global"; 
+import type { Recordable, ShortEventToOnEvent } from "@/global";
 
 export type TableTransferProps<Data extends Recordable> = {
   title?: string;
   columns: TableProps<Data>["columns"];
-  api: TableProps<Data>["api"];
   rowKey: TableProps<Data>["rowKey"];
+  unSelectedData: Data[];
 };
 
 export type TableTransferShortEvent<Data extends Recordable> = {};
