@@ -8,7 +8,10 @@ export type TableTransferProps<Data extends Recordable> = {
   unSelectedData?: Data[];
 };
 
-export type TableTransferShortEvent<Data extends Recordable> = {};
+export type TableTransferShortEvent<Data extends Recordable> = {
+  add: [rows: Data[]];
+  remove: [rows: Data[]];
+};
 
 export type TableTransferEventObject<Data extends Recordable> =
   ShortEventToOnEvent<TableTransferShortEvent<Data>>;

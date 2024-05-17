@@ -2,7 +2,7 @@
     <div style="height: 100%; display: flex;flex-direction: column;background-color: #FFFFFF;">
         <component :is="getHeaderVNode"></component>
         <el-table style="flex:1" v-bind="tableBind" v-loading="loadingRef">
-            <BasicTableColumn v-bind="selectColumn">
+            <BasicTableColumn v-if='getProps.selectType' v-bind="selectColumn" >
             </BasicTableColumn>
             <BasicTableColumn v-for="item of  toValue(getProps.columns)" :key="item.columnKey ?? item.prop"
                 v-bind="item">

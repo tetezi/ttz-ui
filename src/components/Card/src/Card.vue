@@ -8,7 +8,7 @@
 <script lang="tsx" setup>
 import type { CardProps } from './types';
 import { defaultCardProps } from './defaultProps';
-import { pick } from 'lodash';
+import { isNumber, pick } from 'lodash';
 import { computed } from 'vue';
 
 const slots = defineSlots()
@@ -17,9 +17,8 @@ const getBind = computed(() => {
     return {
         header: props.title,
         bodyStyle: {
-            padding: 0,
+            padding: isNumber(props.bodyPadding) ? `${props.bodyPadding}px` : props.bodyPadding,
             ...props.bodyStyle,
-
         },
         ...pick(props, ['footer', 'shadow']),
     }

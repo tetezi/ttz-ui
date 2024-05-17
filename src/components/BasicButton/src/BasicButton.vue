@@ -9,6 +9,7 @@ import defaultProps from './defaultProps';
 import { getInheritanceEvent } from '@/utils';
 import { ElMessage } from 'element-plus';
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
+import { BasicIcon } from '@/components/BasicIcon';
 const props = withDefaults(defineProps<Props>(), defaultProps)
 const emit = defineEmits<ShortEvent>()
 const slots = useSlots()
@@ -33,15 +34,16 @@ async function handlerClick() {
     loadingRef.value = false
 }
 const Render = computed(() => {
-    const { tip, isConfirm } = props 
+    const { tip, isConfirm } = props
     const bind = {
         ...omit(props, ['icon', 'loading', 'func', 'isConfirm', 'tip', 'errMsg']),
         ...getInheritanceEvent(emit, []),
         loading: props.loading || unref(loadingRef),
         onClick: isConfirm ? undefined : handlerClick,
-        icon: isString(props.icon) ? ElementPlusIconsVue[props.icon] : props.icon
+        icon: props.icon ? <BasicIcon icon={props.icon}></BasicIcon> : undefined//isString(props.icon) ? ElementPlusIconsVue[props.icon] : props.icon
     }
-    const btn = <el-button   {...bind} v-slots={slots}>
+    const btn = <el-button   {...bind}  >
+        {{ ...slots, default: props.label ? () => props.label : slots.default }}
     </el-button>
     const confirm = isConfirm ? <el-popconfirm title="是否确认？"  {...bind} onConfirm={handlerClick}>
         {{ reference: () => btn }}

@@ -6,6 +6,7 @@ export type CardProps = {
   footer?: string;
   shadow?: "always" | "never" | "hover";
   bodyStyle?: CSSProperties;
+  bodyPadding?: string|number;
 };
 
 export type CardShortEvent = {};

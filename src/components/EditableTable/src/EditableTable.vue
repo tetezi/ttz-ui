@@ -4,7 +4,7 @@
             <TableVNode v-model="localModelValue" style="height: 100%;">
             </TableVNode>
         </el-form>
-        <BasicButton type="success" :func="() => add()" style="width:100%;flex:0">添加记录</BasicButton>
+        <BasicButton  v-if="getProps.addBtnText" type="success" :func="() => add()" style="width:100%;flex:0">{{ getProps.addBtnText }}</BasicButton>
     </div>
 </template>
 <script lang="tsx" setup generic="Data extends Recordable">

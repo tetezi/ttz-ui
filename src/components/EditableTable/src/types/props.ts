@@ -15,14 +15,14 @@ export type EditableTableColumn<Data extends Recordable> = {
   prop: string;
   editConfig?:
     | ((rednerParams: EditableTableRednerParams<Data>) => Omit<
-        FormSchema<"Input"> | FormSchema<"Container"> | FormSchema<"Display">,
+        FormSchema<"Input">,
         "field" | "label" | "labelWidth" | "labelShow"
         // | "component"
         // | "componentProps"
       >)
     | false
     | Omit<
-        FormSchema<"Input"> | FormSchema<"Container"> | FormSchema<"Display">,
+        FormSchema<"Input">,
         "field" | "label" | "labelWidth" | "labelShow"
         // | "component"
         // | "componentProps"
@@ -34,6 +34,7 @@ export type EditableTableProps<Data extends Recordable> = Omit<
   "columns"
 > & {
   addBtnValue?: Partial<Data> | (() => MaybePromise<Partial<Data>>);
+  addBtnText?: string | false;
   columns?: MaybeRefOrGetter<Array<EditableTableColumn<Data>>>;
 };
 

@@ -38,7 +38,7 @@ const [TableComp, tableMethods] = useTable({
     watchEffect(() => {
         tableMethods.setModelValue(props.unSelectedData)
     })
-}) 
+})
 const [TableCompOfSelect, tableOfSelectMethods] = useTable({
     selectType: 'Check',
     title: () => `当前已选择${unref(getModelValue).length}条记录`,
@@ -58,6 +58,7 @@ function add() {
         tableOfSelectMethods.unshiftTableRow(row)
     })
     tableMethods.clearSelectRows()
+    emitEvent('add', rows)
 }
 function remove() {
     const rows = unref(tableOfSelectMethods.getSelectRows)
@@ -67,6 +68,7 @@ function remove() {
         tableMethods.unshiftTableRow(row)
         tableOfSelectMethods.deleteTableRow(row)
     })
+    emitEvent('remove', rows)
     tableOfSelectMethods.clearSelectRows()
 }
 </script>

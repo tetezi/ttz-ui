@@ -1,5 +1,5 @@
 <template>
-    <ItemRender style="margin:8px"/>
+    <ItemRender />
 </template>
 <script lang="tsx" setup>
 import { unref, type VNodeChild, } from 'vue';
@@ -22,13 +22,14 @@ function ItemRender() {
     } else if (checkSchemaCategory(schema, 'Input')) {
         const { ifShowOfDynamic, getContent, getDynamicConfig } = useInputCategory(schema, props)
         const { labelWidth, field, labelShow = true, labelRender, label, schemaKey } = schema;
-        const labelVnode = getDynamicConfig(labelShow)
+        const actLabelShow = getDynamicConfig(labelShow)
+        const labelVnode = actLabelShow
             ? () => getDynamicConfig(labelRender || label)
             : undefined;
         const rules = useRules();
         const elFormItemProps = {
             rules: rules,
-            labelWidth: labelWidth,
+            labelWidth: actLabelShow ? labelWidth : '0px',
             prop: field,
             key: schemaKey,
         };
