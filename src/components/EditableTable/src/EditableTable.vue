@@ -4,7 +4,8 @@
             <TableVNode v-model="localModelValue" style="height: 100%;">
             </TableVNode>
         </el-form>
-        <BasicButton  v-if="getProps.addBtnText" type="success" :func="() => add()" style="width:100%;flex:0">{{ getProps.addBtnText }}</BasicButton>
+        <BasicButton v-if="getProps.addBtnText" type="success" :func="() => add()" style="width:100%;flex:0">{{
+            getProps.addBtnText }}</BasicButton>
     </div>
 </template>
 <script lang="tsx" setup generic="Data extends Recordable">
@@ -63,10 +64,11 @@ const [TableVNode] = useTable(() => {
                             labelWidth: '0px',
                             category: actialEditConfig.category ?? "Input",
                             schemaKey: actialEditConfig.schemaKey ?? ([index, column.prop]).join('-') ?? buildUUID(),
-                        } as FormSchema<any>
+                        } as FormSchema<any, {}>
 
 
-                        return <FormItem schema={schema} formModel={unref(getModelValue)} setFieldsValue={setFieldsValue}
+                        return  <FormItem schema={schema} formModel={unref(getModelValue)} setFieldsValue={setFieldsValue}
+
                             getSlot={(slot, data) => getSlot(slots, slot, data)}>
                         </FormItem>
                     } else {

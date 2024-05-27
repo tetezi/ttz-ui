@@ -14,6 +14,7 @@ import {
   type SlotsType,
   type DefineComponent,
   type ConcreteComponent,
+  watch,
 } from "vue";
 export function useComponentRegister<
   Bind extends Recordable,
@@ -43,9 +44,16 @@ export function useComponentRegister<
       methodsProxy[key] = val;
     });
     if (bind) {
-      watchEffect(() => {
-        methodsProxy.setProps(toValue(bind));
-      });
+      watch(
+        () => toValue(bind),
+        () => {
+          methodsProxy.setProps(toValue(bind));
+        },
+        {
+          immediate: true,
+          deep: true,
+        }
+      );
     }
     onRegister?.(methodsProxy);
   };

@@ -1,5 +1,10 @@
-import { unref, ref, type ComponentInstance } from "vue";
-import type { GetElFormInstance, Validate, ValidateField } from "../../types";
+import { unref, ref, type ComponentInstance, type ComponentPublicInstance } from "vue";
+import type {
+  GetElFormInstance,
+  GetFormItemInstance,
+  Validate,
+  ValidateField,
+} from "../../types";
 import type { FormInstance } from "element-plus";
 import { type PropertyPath } from "lodash";
 import type FormItem from "../../FormItem.vue";
@@ -45,27 +50,25 @@ export function useElFormInstance() {
   /**
    * formItem组件实例对象，键名为转string类型的子项field字段
    */
-  const formItemInstance = ref<
-    Recordable<undefined | ComponentInstance<typeof FormItem>>
-  >({});
+  const formItemInstance = ref<Recordable<undefined | Recordable>>({});
   /**
    * 装卸载formItem组件回调，使formItemInstance绑定于formItem组件实例对象
    */
   const setFormItemInstanceRef = function (
-    field: string,
-    el: ComponentInstance<typeof FormItem>
+    key: string,
+    el: ComponentPublicInstance
   ) {
     if (el) {
-      formItemInstance.value[String(field)] = el;
+      formItemInstance.value[key] = el;
     } else {
-      formItemInstance.value[String(field)] = undefined;
+      formItemInstance.value[key] = undefined;
     }
   };
   /**
    * 获取对应字段属性的formItem组件实例
    */
-  const getFormItemInstance = function (field: PropertyPath) {
-    return formItemInstance.value[String(field)];
+  const getFormItemInstance: GetFormItemInstance = function (key: string) { 
+    return formItemInstance.value[key];
   };
   return {
     getElFormInstance,

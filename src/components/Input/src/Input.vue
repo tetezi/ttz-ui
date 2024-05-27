@@ -26,5 +26,5 @@ const getBind = computed(() => {
         }, ['enter'])
     }
 })
-const slots = defineSlots() 
+const slots = defineSlots()  
 </script>

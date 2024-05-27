@@ -1,49 +1,97 @@
-import { isFunction } from "lodash";
-import { computed, unref, type ComputedRef } from "vue";
-
+import { getCurrentInstance, unref, watch, type Ref } from "vue";
 import type {
-  GetFormSchemas,
-  FormBind,
-  FormSchema,
+  DesignFormSchema,
   FormSchemas,
+  FormMethods,
+  GetFormProps,
+  UpdateSchema,
+  SetSchemas,
+  GetSchema,
 } from "../../types";
-import { buildUUID } from "@/utils/uuid";
-import type { GetModelValue, SetModelValue } from "@/utils";
-export function adjustFormSchemas(
-  formSchemas: FormSchemas
-): GetFormSchemas["value"] {
-  return formSchemas.map((comp) => {
-    return {
-      ...comp,
-      category: comp.category ?? "Input",
-      schemaKey:
-        comp.schemaKey ?? (<FormSchema<"Input">>comp).field
-          ? String((<FormSchema<"Input">>comp).field)
-          : buildUUID(),
-    };
-  }) as GetFormSchemas["value"];
-}
+import { cloneDeep } from "lodash";
+
 export function useFormSchemas(
-  getProps: ComputedRef<FormBind>,
-  {
-    setModelValue,
-    getModelValue,
-  }: {
-    setModelValue: SetModelValue;
-    getModelValue: GetModelValue;
-  }
+  formSchemasRef: Ref<DesignFormSchema[] | FormSchemas<FormMethods>>,
+  getProps: GetFormProps
 ) {
-  const getFormSchemas: GetFormSchemas = computed(() => {
-    const formSchemas = unref(getProps).formSchemas || [];
-    const reuslt = isFunction(formSchemas)
-      ? formSchemas({
-          getModelValue,
-          setModelValue,
-        })
-      : formSchemas;
-    return adjustFormSchemas(reuslt);
-  });
+  const updateSchema: UpdateSchema = (scheamKey, data, isRetain = false) => {
+    function update(schemas) {
+      for (const i in schemas) {
+        if (
+          /**
+           * DesignFormSchema[]
+           */
+          (schemas[i].id ||
+            /**
+             * FormSchemas<FormMethods>
+             */
+            schemas[i].scheamKey ||
+            String(schemas[i].field)) === scheamKey
+        ) {
+          if (isRetain) {
+            schemas[i] = {
+              ...schemas[i],
+              ...data,
+            };
+          } else {
+            schemas[i] = data;
+          }
+          return;
+        } else if (schemas[i].children) {
+          update(schemas[i].children);
+        }
+      }
+    }
+    update(unref(formSchemasRef));
+  };
+  const setSchemas: SetSchemas = (schemas, parentSchemaKey?: string) => {
+    if (!parentSchemaKey) {
+      formSchemasRef.value = schemas;
+    } else {
+      updateSchema(parentSchemaKey, { children: schemas } as any, true);
+    }
+  };
+  const getSchema: GetSchema = (scheamKey) => {
+    function find(schemas) {
+      for (const schema of schemas) {
+        if (
+          /**
+           * DesignFormSchema[]
+           */
+          (schema.id ||
+            /**
+             * FormSchemas<FormMethods>
+             */
+            schema.scheamKey ||
+            String(schema.field)) === scheamKey
+        ) {
+          return schema;
+        } else if (schema.children) {
+          find(schema.children);
+        }
+      }
+    }
+    return find(unref(formSchemasRef));
+  };
+  /**
+   * 修改setProps的本地props时同步设置localFormSchemas
+   */
+  const rawProps = getCurrentInstance()!.vnode!.props!;
+  if (!("formSchemas" in rawProps)) {
+    watch(
+      () => unref(getProps).formSchemas,
+      (val) => {
+        formSchemasRef.value = cloneDeep(val);
+      },
+      {
+        deep: true,
+        immediate: true,
+      }
+    );
+  }
   return {
-    getFormSchemas,
+    updateSchema,
+    setSchemas,
+    getSchema,
   };
 }

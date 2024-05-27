@@ -1,5 +1,5 @@
 <template>
-    <el-card v-bind='getBind'>
+    <el-card    style="margin:0 6px" v-bind='getBind' >
         <template v-for="slot in Object.keys(slots)" #[slot] :key="slot">
             <component :is="slots[slot]"></component>
         </template>

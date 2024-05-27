@@ -1,4 +1,13 @@
-import { isUndefined, isFunction, get, isString } from "lodash";
+import {
+  isUndefined,
+  isFunction,
+  get,
+  isString,
+  cloneDeep,
+  pick,
+  set,
+} from "lodash";
+import FormItemGroup from "../../FormItemGroup.vue";
 import {
   computed,
   unref,
@@ -8,6 +17,7 @@ import {
   type VNode,
   readonly,
   type Component,
+  type Ref,
 } from "vue";
 import type {
   FormSchema,
@@ -21,13 +31,16 @@ import {
   displayComponentMap,
   inputComponentMap,
 } from "../../components";
-import { adjustFormSchemas } from "../form/useFormSchemas";
 import { FormItem } from "@/components/BasicForm";
+import type { Recordable } from "@/global";
 
-function useGetDynamicConfig<C extends CategoryEnums>(
-  renderParams: ComputedRef<RenderParams<C>>
-) {
-  function getDynamicConfig<T>(config: DynamicConfig<C, T>): T {
+function useGetDynamicConfig<
+  C extends CategoryEnums,
+  ExtraRenderParams extends Recordable
+>(renderParams: ComputedRef<RenderParams<C, ExtraRenderParams>>) {
+  function getDynamicConfig<T>(
+    config: DynamicConfig<C, T, ExtraRenderParams>
+  ): T {
     if (isUndefined(config)) {
       return config;
     } else {
@@ -40,10 +53,13 @@ function useGetDynamicConfig<C extends CategoryEnums>(
   }
   return getDynamicConfig;
 }
-function useContent<C extends CategoryEnums>(
-  schema: FormSchema<C>,
-  props: FormItemProps,
-  renderParams: ComputedRef<RenderParams<C>>,
+function useContent<
+  C extends CategoryEnums,
+  ExtraRenderParams extends Recordable
+>(
+  schema: FormSchema<C, ExtraRenderParams>,
+  props: FormItemProps<ExtraRenderParams>,
+  renderParams: ComputedRef<RenderParams<C, ExtraRenderParams>>,
   getSchemaComponent: () => VNode | undefined
 ) {
   const { render, slot, component } = schema;
@@ -59,25 +75,31 @@ function useContent<C extends CategoryEnums>(
 }
 
 export function checkSchemaCategory<
-  T extends "Container" | "Display" | "Input"
->(schema: any, category: T): schema is FormSchema<T> {
+  T extends "Container" | "Display" | "Input",
+  ExtraRenderParams extends Recordable
+>(schema: any, category: T): schema is FormSchema<T, ExtraRenderParams> {
   return schema.category === category;
 }
 
-export function useContainerCategory(
-  schema: FormSchema<"Container">,
-  props: FormItemProps
+export function useContainerCategory<ExtraRenderParams extends Recordable>(
+  schema: FormSchema<"Container", ExtraRenderParams>,
+  props: FormItemProps<ExtraRenderParams>,
+  emit
 ) {
-  const renderParams = computed<RenderParams<"Container">>(() => {
-    return {
-      formValue: readonly(props.formModel),
-    };
-  });
+  const renderParams = computed<RenderParams<"Container", ExtraRenderParams>>(
+    () => {
+      return {
+        schema,
+        formValue: readonly(props.formModel),
+        ...(props.extraRenderParams as ExtraRenderParams),
+      };
+    }
+  );
   function getSchemaComponent() {
     const {
       component,
-      componentProps,
       children,
+      componentProps,
       componentStyle,
       componentSlot,
     } = schema;
@@ -96,28 +118,40 @@ export function useContainerCategory(
     } else {
       Comp = component;
     }
-     const childrenSchemas = adjustFormSchemas(children);
     const compAttr = {
       ...getDynamicConfig(componentProps),
       style: getDynamicConfig(componentStyle),
     };
+    const formItemGroupBind = {
+      modelValue: children,
+      parentSchema: schema,
+      ...pick(props, [
+        "formModel",
+        "setFieldsValue",
+        "getSlot",
+        "extraRenderParams",
+      ]),
+      ref: (el) => {
+        emit("formItemInstanceReady", schema.schemaKey, el);
+      },
+      onFormItemInstanceReady: (key, el) => {
+        emit("formItemInstanceReady", key, el);
+      },
+    };
     const slots = {
       default: () => {
-        return childrenSchemas.map((schema) => {
-          return (
-            <FormItem
-              {...props}
-              schema={schema}
-            ></FormItem>
-          );
-        });
+        return (
+          <FormItemGroup {...formItemGroupBind}></FormItemGroup> 
+        );
       },
       ...(componentSlot ? getDynamicConfig(componentSlot) : {}),
     };
     return <Comp {...compAttr}>{slots}</Comp>;
   }
-  const getDynamicConfig = useGetDynamicConfig<"Container">(renderParams);
-  const getContent = useContent<"Container">(
+  const getDynamicConfig = useGetDynamicConfig<"Container", ExtraRenderParams>(
+    renderParams
+  );
+  const getContent = useContent<"Container", ExtraRenderParams>(
     schema,
     props,
     renderParams,
@@ -127,21 +161,26 @@ export function useContainerCategory(
   return { getDynamicConfig, getContent, ifShowOfDynamic };
 }
 
-export function useInputCategory(
-  schema: FormSchema<"Input">,
-  props: FormItemProps
+export function useInputCategory<ExtraRenderParams extends Recordable>(
+  schema: FormSchema<"Input", ExtraRenderParams>,
+  props: FormItemProps<ExtraRenderParams>,
+  emit
 ) {
-  const renderParams = computed<RenderParams<"Input">>(() => {
-    return {
-      compValue: computed({
-        get: () => get(props.formModel, schema.field),
-        set: (val) => {
-          props.setFieldsValue(schema.field, val);
-        },
-      }),
-      formValue: readonly(props.formModel),
-    };
-  });
+  const renderParams = computed<RenderParams<"Input", ExtraRenderParams>>(
+    () => {
+      return {
+        schema,
+        compValue: computed({
+          get: () => get(props.formModel, schema.field),
+          set: (val) => {
+            props.setFieldsValue(schema.field, val);
+          },
+        }),
+        formValue: readonly(props.formModel),
+        ...(props.extraRenderParams as ExtraRenderParams),
+      };
+    }
+  );
   function getSchemaComponent() {
     const { component, field, componentProps, componentSlot, componentStyle } =
       schema;
@@ -161,14 +200,14 @@ export function useInputCategory(
     }
 
     const compAttr = {
-      ...getDynamicConfig(componentProps),
-      "style": {
-        width: "99%",
-        ...getDynamicConfig(componentStyle),
-      },
       "modelValue": get(props.formModel, field),
       "onUpdate:modelValue": (val: any) => {
         props.setFieldsValue(field, val);
+      },
+      ...getDynamicConfig(componentProps),
+      "style": getDynamicConfig(componentStyle),
+      "ref": (el) => {
+        emit("formItemInstanceReady", schema.schemaKey, el);
       },
     };
     return (
@@ -183,8 +222,10 @@ export function useInputCategory(
       </div>
     );
   }
-  const getDynamicConfig = useGetDynamicConfig<"Input">(renderParams);
-  const getContent = useContent<"Input">(
+  const getDynamicConfig = useGetDynamicConfig<"Input", ExtraRenderParams>(
+    renderParams
+  );
+  const getContent = useContent<"Input", ExtraRenderParams>(
     schema,
     props,
     renderParams,
@@ -194,15 +235,20 @@ export function useInputCategory(
   return { getDynamicConfig, getContent, ifShowOfDynamic };
 }
 
-export function useDisplayCategory(
-  schema: FormSchema<"Display">,
-  props: FormItemProps
+export function useDisplayCategory<ExtraRenderParams extends Recordable>(
+  schema: FormSchema<"Display", ExtraRenderParams>,
+  props: FormItemProps<ExtraRenderParams>,
+  emit
 ) {
-  const renderParams = computed<RenderParams<"Display">>(() => {
-    return {
-      formValue: readonly(props.formModel),
-    };
-  });
+  const renderParams = computed<RenderParams<"Display", ExtraRenderParams>>(
+    () => {
+      return {
+        schema,
+        formValue: readonly(props.formModel),
+        ...(props.extraRenderParams as ExtraRenderParams),
+      };
+    }
+  );
   function getSchemaComponent() {
     const { component, componentProps, componentStyle, componentSlot } = schema;
     let Comp;
@@ -219,20 +265,12 @@ export function useDisplayCategory(
     } else {
       Comp = component;
     }
-
-    // if (!(component && displayComponentMap.has(component))) {
-    //   console.error(`组件${component}未注册`);
-    //   return undefined;
-    // }
-    // if (!displayComponentMap.has(component)) {
-    //   throw new Error(`组件${component}未注册`);
-    // }
-    // const Comp = displayComponentMap.get(component) as ReturnType<
-    //   typeof defineComponent
-    // >;
     const compAttr = {
       ...getDynamicConfig(componentProps),
       style: getDynamicConfig(componentStyle),
+      ref: (el) => {
+        emit("formItemInstanceReady", schema.schemaKey, el);
+      },
     };
     return componentSlot ? (
       <Comp {...compAttr}>{getDynamicConfig(componentSlot)}</Comp>
@@ -240,8 +278,10 @@ export function useDisplayCategory(
       <Comp {...compAttr}></Comp>
     );
   }
-  const getDynamicConfig = useGetDynamicConfig<"Display">(renderParams);
-  const getContent = useContent<"Display">(
+  const getDynamicConfig = useGetDynamicConfig<"Display", ExtraRenderParams>(
+    renderParams
+  );
+  const getContent = useContent<"Display", ExtraRenderParams>(
     schema,
     props,
     renderParams,

@@ -1,5 +1,14 @@
 import type { ComputedRef } from "vue";
-import type { SetProps, GetFormProps, Validate, SubmitFunction, GetSubmitLoading } from "./useHooks";
+import type {
+  SetProps,
+  GetFormProps,
+  Validate,
+  SubmitFunction,
+  GetSubmitLoading,
+  UpdateSchema,
+  SetSchemas,
+  GetFormItemInstance,
+} from "./useHooks";
 import type { PropertyPath } from "lodash";
 
 export type FormMethods = {
@@ -13,4 +22,7 @@ export type FormMethods = {
   submitFunction: SubmitFunction;
   getSubmitLoading: GetSubmitLoading;
   initDefaultValue: () => void;
+  updateSchema: UpdateSchema;
+  setSchemas: SetSchemas;
+  getFormItemInstance: GetFormItemInstance;
 };

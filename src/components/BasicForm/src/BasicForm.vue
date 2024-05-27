@@ -1,36 +1,37 @@
 <template>
     <el-form ref="elFormInstanceRef" :model="getModelValue" :labelWidth="getProps.labelWidth">
-        <!-- <el-row v-bind="getProps.rowProps"> -->
-        <template v-for="schema of getFormSchemas" :key="schema.schemaKey">
-            <FormItem :schema="(schema)" :formModel="getModelValue" :setFieldsValue="setFieldsValue"
-                :getSlot="(slot, data) => getSlot(slots, slot, data)"
-                :ref="(el) => setFormItemInstanceRef(schema.schemaKey, el as any)">
-            </FormItem>
-        </template>
-        <!-- </el-row> -->
+        <FormItemGroup v-model="localFormSchemasModel" :isDesign :formModel="getModelValue"
+            :setFieldsValue="setFieldsValue" :getSlot="(slot, data) => getSlot(slots, slot, data)"
+            :extraRenderParams="formMethods" @formItemInstanceReady="setFormItemInstanceRef"> </FormItemGroup>
     </el-form>
 </template>
 <script lang="ts" setup>
 import type { FormProps, FormShortEvent } from './types'
 import defaultProps from './defaultProps';
-import { useFormSchemas, useElFormInstance, useSubmit } from './hooks';
-import FormItem from './FormItem.vue'
+import { useElFormInstance, useFormSchemas, useSubmit, } from './hooks'; 
+import FormItemGroup from './FormItemGroup.vue'
 import { getSlot, useLocalModel, useLocalProps } from '@/utils';
-import { onMounted, unref, watch } from 'vue';
+import { onMounted, unref, watch, provide, computed, } from 'vue';
 import type { FormMethods } from './types';
 import type { Recordable } from '@/global';
 const props = withDefaults(defineProps<Partial<FormProps>>(), defaultProps)
 const emit = defineEmits<FormShortEvent>()
 const modelValue = defineModel<Recordable>()
+const formSchemasModel = defineModel<FormProps['formSchemas']>('formSchemas')
 const slots = defineSlots()
+const isDesign = computed(() => unref(getProps).isDesign)
+const isDesignFormSchema = computed(() => unref(getProps).isDesignFormSchema)
+
 /**
  * 表单配置
  */
 const { getProps, setProps, emitEvent } = useLocalProps<FormProps, FormShortEvent, typeof defaultProps>(props, emit)
+
 /**
  * 表单数据
  */
 const { setFieldsValue, getFieldsValue, getModelValue, setModelValue } = useLocalModel(modelValue, () => ({}));
+const { localModelValue: localFormSchemasModel } = useLocalModel(formSchemasModel, () => ([]), 'formSchemas');
 watch(
     getModelValue,
     (val) => {
@@ -40,14 +41,12 @@ watch(
         deep: true,
     }
 );
-// const { getFieldsValue, setFieldsValue, setModelValue, getModelValue } = useData(getProps, emitEvent, modelValue)
+
 /**
  * 表单子项配置
  */
-const { getFormSchemas } = useFormSchemas(getProps, {
-    setModelValue,
-    getModelValue
-})
+
+const { updateSchema, setSchemas } = useFormSchemas(localFormSchemasModel, getProps)
 /**
  * 表单实例操作
 */
@@ -62,8 +61,12 @@ function initDefaultValue() {
 }
 const formMethods: FormMethods = {
     setProps, getProps,
-    getModelValue, setModelValue, setFieldsValue, getFieldsValue, validate, submitFunction, getSubmitLoading, initDefaultValue
+    getModelValue,
+    setModelValue, setFieldsValue, getFieldsValue, validate, submitFunction, getSubmitLoading, initDefaultValue,
+    updateSchema, setSchemas,getFormItemInstance
 }
+provide('isDesign', isDesign)
+provide('isDesignFormSchema', isDesignFormSchema) 
 onMounted(() => {
     emitEvent('register', formMethods)
     initDefaultValue()

@@ -1,26 +1,36 @@
 import type { VNode } from "vue";
-import type { FormSchemas } from "./formSchema";
+import type { DesignFormSchema, FormSchemas } from "./formSchema";
 import type { FormMethods } from ".";
-import type { SetModelValue, GetModelValue, SetFieldsValue } from "@/utils";
-import type { Recordable, MaybePromise, Flatten, ShortEventToOnEvent } from "@/global";
+import type { SetFieldsValue } from "@/utils";
+import type {
+  Recordable,
+  MaybePromise,
+  Flatten,
+  ShortEventToOnEvent,
+} from "@/global";
 export type FormProps = {
   defaultValue?: Recordable;
   labelWidth?: number | string;
-  // rowProps?: Partial<ELRowProps>;
   beforeSubmit?: (params: any) => MaybePromise<any>;
-  submitApi?: (params: any) => MaybePromise<any>; //(params: Recordable)  => MaybePromise<void>;
-  formSchemas?:
-    | FormSchemas
-    | ((params: {
-        setModelValue: SetModelValue;
-        getModelValue: GetModelValue;
-      }) => FormSchemas);
+  submitApi?: (params: any) => MaybePromise<any>;
+  isDesign?: boolean;
+  isDesignFormSchema?: boolean;
+  formSchemas?: DesignFormSchema[] | FormSchemas<FormMethods>;
 };
-export type FormItemProps = {
-  schema: Flatten<FormSchemas>;
+
+export type FormItemGroupProps<ExtraRenderParams extends Recordable> = {
+  parentSchema?: Recordable;
   formModel: Recordable;
   setFieldsValue: SetFieldsValue;
   getSlot: (slotName: string, data: Recordable) => VNode[] | null;
+  extraRenderParams?: ExtraRenderParams;
+};
+export type FormItemProps<ExtraRenderParams extends Recordable> = {
+  schema: Flatten<FormSchemas<ExtraRenderParams>>;
+  formModel: Recordable;
+  setFieldsValue: SetFieldsValue;
+  getSlot: (slotName: string, data: Recordable) => VNode[] | null;
+  extraRenderParams?: ExtraRenderParams;
 };
 
 export type FormShortEvent = {

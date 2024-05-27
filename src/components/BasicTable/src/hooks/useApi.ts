@@ -42,8 +42,7 @@ export function useTableApi<Data extends Recordable>(
       } else {
         data = get(res, listField);
         total = get(res, totalField);
-      }
-      console.log(data, total, isArray(data));
+      } 
       data = isArray(data) ? data : [];
       totalRef.value = isNumber(total) ? total : 0;
       setModelValue(data);

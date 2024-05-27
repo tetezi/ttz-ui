@@ -42,46 +42,78 @@ export type ComponentType<Category extends CategoryEnums> =
         | "TableTransfer"
     : never;
 
-export type InputComponentMutableProps = MutableRecord<
-  "component",
-  {
-    Input: { componentProps?: DynamicConfig<"Input", InputBind> };
-    Select: {
-      componentProps?: DynamicConfig<"Input", SelectProps<Recordable>>;
-    };
-    Switch: {
-      componentProps?: DynamicConfig<"Input", SwitchProps>;
-    };
-    ApiSelect: {
-      componentProps?: DynamicConfig<
-        "Input",
-        ApiSelectProps<Recordable, Recordable>
-      >;
-    };
-    InputNumber: { componentProps?: DynamicConfig<"Input", InputNumberProps> };
-    DatePicker: { componentProps?: DynamicConfig<"Input", DatePickerProps> };
-    EditableTable: {
-      componentProps?: DynamicConfig<"Input", EditableTableProps<Recordable>>;
-    };
-    TableTransfer: {
-      componentProps?: DynamicConfig<"Input", TableTransferProps<Recordable>>;
-    };
-  }
->;
+export type InputComponentMutableProps<ExtraRenderParams extends Recordable> =
+  MutableRecord<
+    "component",
+    {
+      Input: {
+        componentProps?: DynamicConfig<"Input", InputBind, ExtraRenderParams>;
+      };
+      Select: {
+        componentProps?: DynamicConfig<
+          "Input",
+          SelectProps<Recordable>,
+          ExtraRenderParams
+        >;
+      };
+      Switch: {
+        componentProps?: DynamicConfig<"Input", SwitchProps, ExtraRenderParams>;
+      };
+      ApiSelect: {
+        componentProps?: DynamicConfig<
+          "Input",
+          ApiSelectProps<Recordable, Recordable>,
+          ExtraRenderParams
+        >;
+      };
+      InputNumber: {
+        componentProps?: DynamicConfig<
+          "Input",
+          InputNumberProps,
+          ExtraRenderParams
+        >;
+      };
+      DatePicker: {
+        componentProps?: DynamicConfig<
+          "Input",
+          DatePickerProps,
+          ExtraRenderParams
+        >;
+      };
+      EditableTable: {
+        componentProps?: DynamicConfig<
+          "Input",
+          EditableTableProps<Recordable>,
+          ExtraRenderParams
+        >;
+      };
+      TableTransfer: {
+        componentProps?: DynamicConfig<
+          "Input",
+          TableTransferProps<Recordable>,
+          ExtraRenderParams
+        >;
+      };
+    }
+  >;
 
-export type DisplayComponentMutableProps = MutableRecord<
+export type DisplayComponentMutableProps<ExtraRenderParams extends Recordable> = MutableRecord<
   "component",
   {
     BasicButton: {
-      componentProps?: DynamicConfig<"Display", BasicButtonProps>;
+      componentProps?: DynamicConfig<
+        "Display",
+        BasicButtonProps,
+        ExtraRenderParams
+      >;
     };
   }
 >;
-export type ContainerComponentMutableProps = MutableRecord<
+export type ContainerComponentMutableProps<ExtraRenderParams extends Recordable> = MutableRecord<
   "component",
   {
     Card: {
-      componentProps?: DynamicConfig<"Container", CardProps>;
+      componentProps?: DynamicConfig<"Container", CardProps, ExtraRenderParams>;
     };
   }
 >;
