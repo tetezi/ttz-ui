@@ -47,49 +47,37 @@ export type InputComponentMutableProps<ExtraRenderParams extends Recordable> =
     "component",
     {
       Input: {
-        componentProps?: DynamicConfig<"Input", InputBind, ExtraRenderParams>;
+        componentProps?: DynamicConfig<InputBind, ExtraRenderParams>;
       };
       Select: {
         componentProps?: DynamicConfig<
-          "Input",
           SelectProps<Recordable>,
           ExtraRenderParams
         >;
       };
       Switch: {
-        componentProps?: DynamicConfig<"Input", SwitchProps, ExtraRenderParams>;
+        componentProps?: DynamicConfig<SwitchProps, ExtraRenderParams>;
       };
       ApiSelect: {
         componentProps?: DynamicConfig<
-          "Input",
           ApiSelectProps<Recordable, Recordable>,
           ExtraRenderParams
         >;
       };
       InputNumber: {
-        componentProps?: DynamicConfig<
-          "Input",
-          InputNumberProps,
-          ExtraRenderParams
-        >;
+        componentProps?: DynamicConfig<InputNumberProps, ExtraRenderParams>;
       };
       DatePicker: {
-        componentProps?: DynamicConfig<
-          "Input",
-          DatePickerProps,
-          ExtraRenderParams
-        >;
+        componentProps?: DynamicConfig<DatePickerProps, ExtraRenderParams>;
       };
       EditableTable: {
         componentProps?: DynamicConfig<
-          "Input",
           EditableTableProps<Recordable>,
           ExtraRenderParams
         >;
       };
       TableTransfer: {
         componentProps?: DynamicConfig<
-          "Input",
           TableTransferProps<Recordable>,
           ExtraRenderParams
         >;
@@ -97,23 +85,22 @@ export type InputComponentMutableProps<ExtraRenderParams extends Recordable> =
     }
   >;
 
-export type DisplayComponentMutableProps<ExtraRenderParams extends Recordable> = MutableRecord<
-  "component",
-  {
-    BasicButton: {
-      componentProps?: DynamicConfig<
-        "Display",
-        BasicButtonProps,
-        ExtraRenderParams
-      >;
-    };
-  }
->;
-export type ContainerComponentMutableProps<ExtraRenderParams extends Recordable> = MutableRecord<
+export type DisplayComponentMutableProps<ExtraRenderParams extends Recordable> =
+  MutableRecord<
+    "component",
+    {
+      BasicButton: {
+        componentProps?: DynamicConfig<BasicButtonProps, ExtraRenderParams>;
+      };
+    }
+  >;
+export type ContainerComponentMutableProps<
+  ExtraRenderParams extends Recordable
+> = MutableRecord<
   "component",
   {
     Card: {
-      componentProps?: DynamicConfig<"Container", CardProps, ExtraRenderParams>;
+      componentProps?: DynamicConfig<CardProps, ExtraRenderParams>;
     };
   }
 >;

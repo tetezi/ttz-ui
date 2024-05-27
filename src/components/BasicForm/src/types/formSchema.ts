@@ -17,61 +17,50 @@ export type JavaScriptCode<T> = { code?: string; value?: T };
 export type CategoryEnums = "Container" | "Input" | "Display";
 // 动态渲染参数
 
-export type RenderParams<
-  Category extends CategoryEnums,
-  ExtraRenderParams extends Recordable
-> = ExtraRenderParams & {
-  formValue: Readonly<Recordable>;
-  schema: FormSchema<Category, ExtraRenderParams>;
-} & (Category extends "Input"
-    ? {
-        // 可写组件值
-        compValue: WritableComputedRef<any>;
-      }
-    : {});
+export type RenderParams<ExtraRenderParams extends Recordable> =
+  ExtraRenderParams & {
+    formValue: Readonly<Recordable>;
+    schema:
+      | FormSchema<"Display", ExtraRenderParams>
+      | FormSchema<"Input", ExtraRenderParams>
+      | FormSchema<"Container", ExtraRenderParams>;
+    compValue: WritableComputedRef<any>;
+  };
 
 // 动态配置
-export type DynamicConfig<
-  Category extends CategoryEnums,
-  T,
-  ExtraRenderParams extends Recordable
-> = T | ((renderParams: RenderParams<Category, ExtraRenderParams>) => T);
+export type DynamicConfig<T, ExtraRenderParams extends Recordable> =
+  | T
+  | ((renderParams: RenderParams<ExtraRenderParams>) => T);
 
-type FormSchemaOfPublic<
-  Category extends CategoryEnums,
-  ExtraRenderParams extends Recordable
-> = {
+type FormSchemaOfPublic<ExtraRenderParams extends Recordable> = {
   /**
    * 组件的vueKey 变化后触发vue强制重构组件
    */
   schemaKey?: string;
-  ifShow?: DynamicConfig<Category, boolean, ExtraRenderParams>;
+  ifShow?: DynamicConfig<boolean, ExtraRenderParams>;
   /**
    * 组件自定义渲染函数
    */
-  render?: (
-    renderParams: RenderParams<Category, ExtraRenderParams>
-  ) => VNodeChild;
+  render?: (renderParams: RenderParams<ExtraRenderParams>) => VNodeChild;
   /**
    * 组件使用插槽
    */
   slot?: string;
 
-  componentStyle?: DynamicConfig<Category, CSSProperties, ExtraRenderParams>;
-  formItemStyle?: DynamicConfig<Category, CSSProperties, ExtraRenderParams>;
+  componentStyle?: DynamicConfig<CSSProperties, ExtraRenderParams>;
+  formItemStyle?: DynamicConfig<CSSProperties, ExtraRenderParams>;
   width?: string | number;
 };
 type FormSchemaOfContainer<ExtraRenderParams extends Recordable> = (
   | ContainerComponentMutableProps<ExtraRenderParams>
   | {
       component: Raw<Component>;
-      componentProps?: DynamicConfig<"Container", any, ExtraRenderParams>;
+      componentProps?: DynamicConfig<any, ExtraRenderParams>;
     }
 ) & {
   category: "Container";
   children: FormSchemas<ExtraRenderParams>;
   componentSlot?: DynamicConfig<
-    "Container",
     Recordable<() => VNodeChild>,
     ExtraRenderParams
   >;
@@ -80,13 +69,12 @@ type FormSchemaOfDisplay<ExtraRenderParams extends Recordable> = (
   | DisplayComponentMutableProps<ExtraRenderParams>
   | {
       component: Raw<Component>;
-      componentProps?: DynamicConfig<"Display", any, ExtraRenderParams>;
+      componentProps?: DynamicConfig<any, ExtraRenderParams>;
     }
 ) & {
   category: "Display";
   componentSlot?: DynamicConfig<
-    "Display",
-    VNodeChild | Recordable<() => VNodeChild>,
+    Recordable<() => VNodeChild>,
     ExtraRenderParams
   >;
 };
@@ -94,7 +82,7 @@ type FormSchemaOfInput<ExtraRenderParams extends Recordable> = (
   | InputComponentMutableProps<ExtraRenderParams>
   | {
       component: Raw<Component>;
-      componentProps?: DynamicConfig<"Input", any, ExtraRenderParams>;
+      componentProps?: DynamicConfig<any, ExtraRenderParams>;
     }
 ) & {
   category?: "Input";
@@ -105,24 +93,23 @@ type FormSchemaOfInput<ExtraRenderParams extends Recordable> = (
   /**
    * 对应标签文本
    */
-  label?: DynamicConfig<"Input", string, ExtraRenderParams>;
+  label?: DynamicConfig<string, ExtraRenderParams>;
 
   /**
    * 对应标签渲染函数
    */
-  labelRender?: DynamicConfig<"Input", VNodeChild, ExtraRenderParams>;
-  labelWidth?: DynamicConfig<"Input", string | number, ExtraRenderParams>;
-  labelShow?: DynamicConfig<"Input", boolean, ExtraRenderParams>;
+  labelRender?: DynamicConfig<VNodeChild, ExtraRenderParams>;
+  labelWidth?: DynamicConfig<string | number, ExtraRenderParams>;
+  labelShow?: DynamicConfig<boolean, ExtraRenderParams>;
   componentSlot?: DynamicConfig<
-    "Input",
-    VNodeChild | Recordable<() => VNodeChild>,
+    Recordable<() => VNodeChild>,
     ExtraRenderParams
   >;
 };
 export type FormSchema<
   Category extends CategoryEnums,
-  ExtraRenderParams extends Recordable
-> = FormSchemaOfPublic<Category, ExtraRenderParams> &
+  ExtraRenderParams extends Recordable = {}
+> = FormSchemaOfPublic<ExtraRenderParams> &
   (Category extends "Container"
     ? FormSchemaOfContainer<ExtraRenderParams>
     : Category extends "Display"
