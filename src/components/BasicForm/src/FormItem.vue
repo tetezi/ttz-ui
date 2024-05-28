@@ -1,5 +1,5 @@
 <template>
-    <div v-if="ifShowOfDynamic" :style="formItemStyleOfDynamic" :key="props.schema.schemaKey">
+    <div v-if="ifShowOfDynamic" :key="props.schema.schemaKey">
         <ItemRender />
     </div>
 </template>
@@ -19,7 +19,6 @@ const emit = defineEmits<{
 const { getDynamicConfig, getContent, } = useFormItem(props, emit)
 
 const ifShowOfDynamic = computed(() => getDynamicConfig(props.schema.ifShow ?? true))
-const formItemStyleOfDynamic = computed(() => getDynamicConfig(props.schema.formItemStyle))
 const ItemRender = computed(() => {
     if (props.schema.category === 'Input') {
         const { labelWidth, field, labelShow, labelRender, label, schemaKey } = props.schema;

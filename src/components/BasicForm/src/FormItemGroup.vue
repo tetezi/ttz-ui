@@ -7,7 +7,7 @@ import FormItem from './FormItem.vue'
 import type { DesignFormSchema, FormItemGroupProps, FormItemProps, FormSchemas, JavaScriptCode } from './types';
 import type { Recordable } from '@/global';
 import { get, isUndefined, pick } from 'lodash';
-import { computed, inject, unref, type ComponentInstance, type ComponentPublicInstance, } from 'vue';
+import { computed, inject, unref, withModifiers, type ComponentInstance, type ComponentPublicInstance, } from 'vue';
 import { buildUUID, getInheritanceEvent } from '@/utils';
 const props = defineProps<FormItemGroupProps<ExtraRenderParams>>()
 const emit = defineEmits<{
@@ -28,9 +28,9 @@ type GetJavaScriptCodeKey = WithoutUndefined<{
 function executeJSCode<K extends GetJavaScriptCodeKey>(schema: DesignFormSchema, configKey: K, defaultValue: ExecuteJSCode<DesignFormSchema[K]>, argObject: Recordable = {}): ExecuteJSCode<DesignFormSchema[K]> {
     const config = get(schema, configKey) as JavaScriptCode<any> | undefined
     if (config) {
-        if (config.value) {
+        if (config.type === 'value') {
             return config.value
-        } else if (config.code) {
+        } else if (config.type === 'code') {
             const JSCode = config.code
             if (isUndefined(JSCode)) {
                 return defaultValue
@@ -82,10 +82,7 @@ function transitionBaseFormSchema(schema): Schema {
     return {
         ...schema,
         category: schema.category ?? "Input",
-        schemaKey: schema.schemaKey ?? (
-            schema.field
-                ? String(schema.field)
-                : buildUUID())
+        schemaKey: schema.schemaKey ?? buildUUID()
     };
 }
 function getFormItem(raw) {
@@ -94,12 +91,15 @@ function getFormItem(raw) {
         schema = transitionDesignFormSchema(raw)
     } else {
         schema = transitionBaseFormSchema(raw)
-    } 
+    }
     const bind = {
         schema,
         style: {
-            marginTop: '6px',
+            padding: '5px'
         },
+        onClick: withModifiers(() => {
+            console.log(schema.schemaKey)
+        }, ['stop', 'prevent']),
         ...unref(formItemProps),
         ...getInheritanceEvent(emit, ['formItemInstanceReady']),
     }
@@ -113,11 +113,10 @@ const render = (() => {
             'onUpdate:modelValue': (v) => {
                 props.extraRenderParams?.setSchemas?.(v, props.parentSchema?.schemaKey)
             },
-            itemKey: 'schemaKey', group: 'formSchemas',
+            itemKey: 'schemaKey',
+            group: 'formSchemas',
             style: {
                 height: '100%',
-                padding: '5px',
-                boxSizing: 'border-box',
             }
         }
         return <Draggable  {...draggableBind}>

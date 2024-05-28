@@ -27,8 +27,10 @@ import Draggable from 'vuedraggable'
 const preinstallFormSchemas = ref<DesignFormSchema[]>([
     {
         field: '1', label: {
-            value: '11'
+            type: 'code',
+            code: 'return 11'
         }, component: 'Input', category: 'Input', componentProps: {
+            type: 'code',
             code: ` return {
                     onChange:(v)=>{
                         console.log('v',1,renderParams.getFormItemInstance(renderParams.schema.schemaKey))
@@ -39,6 +41,7 @@ const preinstallFormSchemas = ref<DesignFormSchema[]>([
         width: '500px',
         id: '1',
         componentStyle: {
+            type: 'code',
             code: ` 
                 return {
                     width: '100px'
@@ -48,12 +51,38 @@ const preinstallFormSchemas = ref<DesignFormSchema[]>([
 
     },
     {
+        label: {
+            type: 'value',
+            value: '按钮'
+        }, component: 'BasicButton', category: 'Display', componentProps: {
+            type: 'code',
+
+            code: ` return {
+                    func:()=>{
+                        console.log('按下按钮' )
+                    }, 
+                }
+             `
+        },
+        id: '1',
+        componentStyle: {
+            type: 'code',
+            code: ` 
+                return { 
+                }
+            `
+        }
+
+    },
+    {
         field: '2', label: {
+            type: 'value',
             value: '11'
         },
         component: 'Card',
         category: 'Container',
         componentProps: {
+            type: 'code',
             code: ` return {
                     onChange:(v)=>{
                         console.log('v',v,renderParams)
@@ -65,8 +94,10 @@ const preinstallFormSchemas = ref<DesignFormSchema[]>([
         children: [
             {
                 field: '21', label: {
+                    type: 'value',
                     value: '11'
                 }, component: 'Input', category: 'Input', componentProps: {
+                    type: 'code',
                     code: ` return {
                     onChange:(v)=>{
                         console.log('v',v,renderParams)
@@ -77,6 +108,7 @@ const preinstallFormSchemas = ref<DesignFormSchema[]>([
                 width: '500px',
                 id: '21',
                 componentStyle: {
+                    type: 'code',
                     code: ` 
                 return {
                     width: '100px'
@@ -86,8 +118,10 @@ const preinstallFormSchemas = ref<DesignFormSchema[]>([
 
             }, {
                 field: '22', label: {
+                    type: 'value',
                     value: '111'
                 }, component: 'Input', category: 'Input', componentProps: {
+                    type: 'code',
                     code: ` return {
                     onChange:(v)=>{
                         console.log('v',v,renderParams)
@@ -98,6 +132,7 @@ const preinstallFormSchemas = ref<DesignFormSchema[]>([
                 width: '500px',
                 id: '22',
                 componentStyle: {
+                    type: 'code',
                     code: ` 
                 return {
                     width: '100px'
@@ -119,7 +154,7 @@ function clone(raw) {
             d.children.forEach(cloneId)
         }
         return d
-    } 
+    }
     return cloneId(data)
 }
 </script>

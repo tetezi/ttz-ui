@@ -96,11 +96,7 @@ export function useFormItem<ExtraRenderParams extends Recordable>(
         props.setFieldsValue(field, val);
       };
     }
-    return slots ? (
-      <Comp {...compAttr}>{slots}</Comp>
-    ) : (
-      <Comp {...compAttr}></Comp>
-    );
+    return <Comp {...compAttr}>{slots}</Comp>;
   }
   const getContent = () => {
     const { render, slot, component } = props.schema;

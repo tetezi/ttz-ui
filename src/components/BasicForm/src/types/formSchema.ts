@@ -12,7 +12,9 @@ import type {
   InputComponentMutableProps,
 } from "./componentType";
 import type { Recordable } from "@/global";
-export type JavaScriptCode<T> = { code?: string; value?: T };
+export type JavaScriptCode<T> =
+  | { type: "code"; code?: string }
+  | { type: "value"; value?: T };
 
 export type CategoryEnums = "Container" | "Input" | "Display";
 // 动态渲染参数
@@ -48,7 +50,6 @@ type FormSchemaOfPublic<ExtraRenderParams extends Recordable> = {
   slot?: string;
 
   componentStyle?: DynamicConfig<CSSProperties, ExtraRenderParams>;
-  formItemStyle?: DynamicConfig<CSSProperties, ExtraRenderParams>;
   width?: string | number;
 };
 type FormSchemaOfContainer<ExtraRenderParams extends Recordable> = (

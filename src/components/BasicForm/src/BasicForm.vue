@@ -8,7 +8,7 @@
 <script lang="ts" setup>
 import type { FormProps, FormShortEvent } from './types'
 import defaultProps from './defaultProps';
-import { useElFormInstance, useFormSchemas, useSubmit, } from './hooks'; 
+import { useElFormInstance, useFormSchemas, useSubmit, } from './hooks';
 import FormItemGroup from './FormItemGroup.vue'
 import { getSlot, useLocalModel, useLocalProps } from '@/utils';
 import { onMounted, unref, watch, provide, computed, } from 'vue';
@@ -46,7 +46,7 @@ watch(
  * 表单子项配置
  */
 
-const { updateSchema, setSchemas } = useFormSchemas(localFormSchemasModel, getProps)
+const { updateSchema, getSchema, setSchemas } = useFormSchemas(localFormSchemasModel, getProps)
 /**
  * 表单实例操作
 */
@@ -63,10 +63,10 @@ const formMethods: FormMethods = {
     setProps, getProps,
     getModelValue,
     setModelValue, setFieldsValue, getFieldsValue, validate, submitFunction, getSubmitLoading, initDefaultValue,
-    updateSchema, setSchemas,getFormItemInstance
+    updateSchema, getSchema, setSchemas, getFormItemInstance
 }
 provide('isDesign', isDesign)
-provide('isDesignFormSchema', isDesignFormSchema) 
+provide('isDesignFormSchema', isDesignFormSchema)
 onMounted(() => {
     emitEvent('register', formMethods)
     initDefaultValue()

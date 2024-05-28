@@ -52,7 +52,8 @@ export function useFormSchemas(
     }
   };
   const getSchema: GetSchema = (scheamKey) => {
-    function find(schemas) {
+      console.log(unref(formSchemasRef),scheamKey)
+      function find(schemas) {
       for (const schema of schemas) {
         if (
           /**
@@ -71,7 +72,7 @@ export function useFormSchemas(
         }
       }
     }
-    return find(unref(formSchemasRef));
+    return cloneDeep(find(unref(formSchemasRef)));
   };
   /**
    * 修改setProps的本地props时同步设置localFormSchemas

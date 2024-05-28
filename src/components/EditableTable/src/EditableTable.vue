@@ -63,7 +63,7 @@ const [TableVNode] = useTable(() => {
                             labelShow: false,
                             labelWidth: '0px',
                             category: actialEditConfig.category ?? "Input",
-                            schemaKey: actialEditConfig.schemaKey ?? ([index, column.prop]).join('-') ?? buildUUID(),
+                            schemaKey: actialEditConfig.schemaKey ??  buildUUID(),
                         } as FormSchema<any, {}>
 
 
