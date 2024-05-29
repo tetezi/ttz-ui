@@ -19,6 +19,7 @@ export type FormProps = {
 };
 
 export type FormItemGroupProps<ExtraRenderParams extends Recordable> = {
+  formSchemas: FormSchemas<ExtraRenderParams>;
   parentSchema?: Recordable;
   formModel: Recordable;
   setFieldsValue: SetFieldsValue;

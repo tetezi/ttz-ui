@@ -7,12 +7,14 @@ import type {
   UpdateSchema,
   SetSchemas,
   GetSchema,
+  SetProps,
 } from "../../types";
 import { cloneDeep } from "lodash";
 
 export function useFormSchemas(
-  formSchemasRef: Ref<DesignFormSchema[] | FormSchemas<FormMethods>>,
-  getProps: GetFormProps
+  // formSchemasRef: Ref<DesignFormSchema[] | FormSchemas<FormMethods>>,
+  getProps: GetFormProps,
+  setProps: SetProps
 ) {
   const updateSchema: UpdateSchema = (scheamKey, data, isRetain = false) => {
     function update(schemas) {
@@ -42,18 +44,20 @@ export function useFormSchemas(
         }
       }
     }
-    update(unref(formSchemasRef));
+    update(unref(getProps).formSchemas);
   };
   const setSchemas: SetSchemas = (schemas, parentSchemaKey?: string) => {
     if (!parentSchemaKey) {
-      formSchemasRef.value = schemas;
+      // formSchemasRef.value = schemas;
+      setProps({
+        formSchemas: schemas,
+      });
     } else {
       updateSchema(parentSchemaKey, { children: schemas } as any, true);
     }
   };
   const getSchema: GetSchema = (scheamKey) => {
-      console.log(unref(formSchemasRef),scheamKey)
-      function find(schemas) {
+    function find(schemas) {
       for (const schema of schemas) {
         if (
           /**
@@ -72,24 +76,24 @@ export function useFormSchemas(
         }
       }
     }
-    return cloneDeep(find(unref(formSchemasRef)));
+    return find(unref(getProps).formSchemas);
   };
   /**
    * 修改setProps的本地props时同步设置localFormSchemas
    */
-  const rawProps = getCurrentInstance()!.vnode!.props!;
-  if (!("formSchemas" in rawProps)) {
-    watch(
-      () => unref(getProps).formSchemas,
-      (val) => {
-        formSchemasRef.value = cloneDeep(val);
-      },
-      {
-        deep: true,
-        immediate: true,
-      }
-    );
-  }
+  // const rawProps = getCurrentInstance()!.vnode!.props!;
+  // if (!("formSchemas" in rawProps)) {
+  //   watch(
+  //     () => unref(getProps).formSchemas,
+  //     (val) => {
+  //       formSchemasRef.value = cloneDeep(val);
+  //     },
+  //     {
+  //       deep: true,
+  //       immediate: true,
+  //     }
+  //   );
+  // }
   return {
     updateSchema,
     setSchemas,

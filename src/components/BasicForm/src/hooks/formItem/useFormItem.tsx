@@ -92,7 +92,7 @@ export function useFormItem<ExtraRenderParams extends Recordable>(
     let slots = componentSlot ? getDynamicConfig(componentSlot) : undefined;
     if (props.schema.category === "Container") {
       const formItemGroupBind = {
-        modelValue: props.schema.children,
+        formSchemas: props.schema.children,
         parentSchema: props.schema,
         ...pick(props, [
           "formModel",

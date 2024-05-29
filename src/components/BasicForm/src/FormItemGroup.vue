@@ -9,12 +9,12 @@ import type { Recordable } from '@/global';
 import { get, isUndefined, pick } from 'lodash';
 import { computed, inject, unref, withModifiers, type ComponentInstance, type ComponentPublicInstance, } from 'vue';
 import { buildUUID, getInheritanceEvent } from '@/utils';
-import { useDynamicConfig, useRenderParams } from './hooks';
+import { useDynamicConfig, } from './hooks';
 const props = defineProps<FormItemGroupProps<ExtraRenderParams>>()
 const emit = defineEmits<{
     formItemInstanceReady: [key: string, el: ComponentPublicInstance]
 }>()
-const modelValue = defineModel<FormSchemas<ExtraRenderParams>>({ required: true })
+// const modelValue = defineModel<FormSchemas<ExtraRenderParams>>({ required: true })
 const isDesign = inject("isDesign", false);
 const isDesignFormSchema = inject("isDesignFormSchema", false);
 type WithoutUndefined<T> = T extends undefined ? never : T;
@@ -105,7 +105,7 @@ function getFormItem(raw) {
 const render = (() => {
     if (unref(isDesign)) {
         const draggableBind = {
-            modelValue: unref(modelValue),
+            modelValue: props.formSchemas,
             'onUpdate:modelValue': (v) => {
                 props.extraRenderParams?.setSchemas?.(v, props.parentSchema?.schemaKey)
             },
@@ -123,7 +123,7 @@ const render = (() => {
             }}
         </Draggable>
     } else {
-        return (unref(modelValue) || []).map(getFormItem)
+        return (props.formSchemas || []).map(getFormItem)
     }
 }) 
 </script>

@@ -1,6 +1,6 @@
 <template>
     <el-form ref="elFormInstanceRef" :model="getModelValue" :labelWidth="getProps.labelWidth">
-        <FormItemGroup v-model="localFormSchemasModel" :isDesign :formModel="getModelValue"
+        <FormItemGroup :formSchemas="getProps.formSchemas" :isDesign :formModel="getModelValue"
             :setFieldsValue="setFieldsValue" :getSlot="(slot, data) => getSlot(slots, slot, data)"
             :extraRenderParams="formMethods" @formItemInstanceReady="setFormItemInstanceRef"> </FormItemGroup>
     </el-form>
@@ -17,7 +17,6 @@ import type { Recordable } from '@/global';
 const props = withDefaults(defineProps<Partial<FormProps>>(), defaultProps)
 const emit = defineEmits<FormShortEvent>()
 const modelValue = defineModel<Recordable>()
-const formSchemasModel = defineModel<FormProps['formSchemas']>('formSchemas')
 const slots = defineSlots()
 const isDesign = computed(() => unref(getProps).isDesign)
 const isDesignFormSchema = computed(() => unref(getProps).isDesignFormSchema)
@@ -31,7 +30,6 @@ const { getProps, setProps, emitEvent } = useLocalProps<FormProps, FormShortEven
  * 表单数据
  */
 const { setFieldsValue, getFieldsValue, getModelValue, setModelValue } = useLocalModel(modelValue, () => ({}));
-const { localModelValue: localFormSchemasModel } = useLocalModel(formSchemasModel, () => ([]), 'formSchemas');
 watch(
     getModelValue,
     (val) => {
@@ -46,7 +44,7 @@ watch(
  * 表单子项配置
  */
 
-const { updateSchema, getSchema, setSchemas } = useFormSchemas(localFormSchemasModel, getProps)
+const { updateSchema, getSchema, setSchemas } = useFormSchemas(getProps, setProps)
 /**
  * 表单实例操作
 */

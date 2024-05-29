@@ -5,7 +5,7 @@
                 <PreinstallFormSchemas> </PreinstallFormSchemas>
             </el-col>
             <el-col :span="12">
-                <FormComp :isDesign='true' :isDesignFormSchema="true" v-model:formSchemas="formSchemas"
+                <FormComp :isDesign='true' :isDesignFormSchema="true"  :formSchemas="formSchemas"
                     style="height: 100%;border: 1px solid black;">
                 </FormComp>
             </el-col>
