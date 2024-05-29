@@ -50,12 +50,12 @@ type FormSchemaOfPublic<ExtraRenderParams extends Recordable> = {
   slot?: string;
 
   componentStyle?: DynamicConfig<CSSProperties, ExtraRenderParams>;
-  width?: string | number;
+  // formItemProps
 };
 type FormSchemaOfContainer<ExtraRenderParams extends Recordable> = (
   | ContainerComponentMutableProps<ExtraRenderParams>
   | {
-      component: Raw<Component>;
+      component: () => Component;
       componentProps?: DynamicConfig<any, ExtraRenderParams>;
     }
 ) & {
@@ -69,7 +69,7 @@ type FormSchemaOfContainer<ExtraRenderParams extends Recordable> = (
 type FormSchemaOfDisplay<ExtraRenderParams extends Recordable> = (
   | DisplayComponentMutableProps<ExtraRenderParams>
   | {
-      component: Raw<Component>;
+      component: () => Component;
       componentProps?: DynamicConfig<any, ExtraRenderParams>;
     }
 ) & {
@@ -82,7 +82,7 @@ type FormSchemaOfDisplay<ExtraRenderParams extends Recordable> = (
 type FormSchemaOfInput<ExtraRenderParams extends Recordable> = (
   | InputComponentMutableProps<ExtraRenderParams>
   | {
-      component: Raw<Component>;
+      component: () => Component;
       componentProps?: DynamicConfig<any, ExtraRenderParams>;
     }
 ) & {
@@ -155,10 +155,6 @@ export type DesignFormSchema = {
    * 对应字段名称（中文）
    */
   label?: JavaScriptCode<string>;
-  /**
-   * 组件宽度
-   */
-  width?: string;
   /**
    * 子组件
    */

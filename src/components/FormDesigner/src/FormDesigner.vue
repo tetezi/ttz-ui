@@ -4,14 +4,14 @@
             <el-col :span="3">
                 <PreinstallFormSchemas> </PreinstallFormSchemas>
             </el-col>
-            <el-col :span="18">
+            <el-col :span="12">
                 <FormComp :isDesign='true' :isDesignFormSchema="true" v-model:formSchemas="formSchemas"
                     style="height: 100%;border: 1px solid black;">
                 </FormComp>
             </el-col>
-            <el-col :span="3">
-                <Input @change="handleSelectSchame" />
-                <FormSchemaConfig ref="FormSchemaConfigInstance" @submit="handleSubmit"></FormSchemaConfig>
+            <el-col :span="9">
+                <Input @change="handleSelectSchame" /> 
+                <FormSchemaConfig ref="FormSchemaConfigInstance" @submit="handleSubmit"></FormSchemaConfig>  
             </el-col>
         </el-row>
 
@@ -23,9 +23,11 @@ import { useLocalProps, } from '@/utils';
 import { useForm, } from '@/components';
 import { computed, ref, unref, } from 'vue';
 import type { DynamicFormDesignerProps, DynamicFormDesignerShortEvent } from './type';
-import PreinstallFormSchemas from './components/PreinstallFormSchemas.vue';
+import PreinstallFormSchemas from './components/PreinstallFormSchemas.vue' ;
 import FormSchemaConfig from './components/FormSchemaConfig.vue';
+import {CodeEdit} from '@/components';
 import type { DesignFormSchema, FormSchemas } from '@/components/BasicForm/src/types';
+const test = ref('www')
 const props = defineProps<DynamicFormDesignerProps>()
 const emit = defineEmits<DynamicFormDesignerShortEvent>()
 const FormSchemaConfigInstance = ref()
@@ -39,5 +41,5 @@ function handleSelectSchame(key) {
 }
 function handleSubmit(value) {
     formMethods.updateSchema(unref(selectedSchameKey), value)
-}
+} 
 </script>

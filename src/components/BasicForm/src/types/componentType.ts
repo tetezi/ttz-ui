@@ -11,6 +11,7 @@ import type {
   TableTransferProps,
   BasicButtonProps,
   CardProps,
+  RadioProps,
 } from "@/components";
 
 type MutableRecord<
@@ -31,6 +32,7 @@ export type ComponentType<Category extends CategoryEnums> =
     ? "BasicButton"
     : Category extends "Input"
     ?
+        | "Radio"
         | "Select"
         | "ApiSelect"
         | "Input"
@@ -48,6 +50,12 @@ export type InputComponentMutableProps<ExtraRenderParams extends Recordable> =
     {
       Input: {
         componentProps?: DynamicConfig<InputBind, ExtraRenderParams>;
+      };
+      Radio: {
+        componentProps?: DynamicConfig<
+          RadioProps<Recordable>,
+          ExtraRenderParams
+        >;
       };
       Select: {
         componentProps?: DynamicConfig<

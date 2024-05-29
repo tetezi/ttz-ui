@@ -2,6 +2,7 @@ import type { Component } from "vue";
 import type { ComponentType } from "./types/componentType";
 
 import { Card } from "@/components/Card";
+import { Radio } from "@/components/Radio";
 import { Select } from "@/components/Select";
 import { InputNumber } from "@/components/InputNumber";
 import { Slider } from "@/components/Slider";
@@ -13,6 +14,7 @@ import { BasicButton } from "@/components/BasicButton";
 import { EditableTable } from "@/components/EditableTable";
 import { TableTransfer } from "@/components/TableTransfer";
 export const inputComponentMap = new Map<ComponentType<"Input">, Component>([
+  ["Radio", Radio],
   ["Select", Select],
   ["ApiSelect", ApiSelect],
   ["Input", Input],

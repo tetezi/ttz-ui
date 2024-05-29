@@ -37,8 +37,7 @@ const preinstallFormSchemas = ref<DesignFormSchema[]>([
                     }
                 }
              `
-        },
-        width: '500px',
+        }, 
         id: '1',
         componentStyle: {
             type: 'code',
@@ -104,8 +103,7 @@ const preinstallFormSchemas = ref<DesignFormSchema[]>([
                     }
                 }
              `
-                },
-                width: '500px',
+                }, 
                 id: '21',
                 componentStyle: {
                     type: 'code',
@@ -128,8 +126,7 @@ const preinstallFormSchemas = ref<DesignFormSchema[]>([
                     }
                 }
              `
-                },
-                width: '500px',
+                }, 
                 id: '22',
                 componentStyle: {
                     type: 'code',
@@ -141,8 +138,7 @@ const preinstallFormSchemas = ref<DesignFormSchema[]>([
                 }
 
             },
-        ],
-        // width: '500px',
+        ], 
         id: '2',
     },
 ])

@@ -9,6 +9,7 @@ import type { Recordable } from '@/global';
 import { get, isUndefined, pick } from 'lodash';
 import { computed, inject, unref, withModifiers, type ComponentInstance, type ComponentPublicInstance, } from 'vue';
 import { buildUUID, getInheritanceEvent } from '@/utils';
+import { useDynamicConfig, useRenderParams } from './hooks';
 const props = defineProps<FormItemGroupProps<ExtraRenderParams>>()
 const emit = defineEmits<{
     formItemInstanceReady: [key: string, el: ComponentPublicInstance]
@@ -16,9 +17,6 @@ const emit = defineEmits<{
 const modelValue = defineModel<FormSchemas<ExtraRenderParams>>({ required: true })
 const isDesign = inject("isDesign", false);
 const isDesignFormSchema = inject("isDesignFormSchema", false);
-const formItemProps = computed(() => {
-    return pick(props, ['formModel', 'setFieldsValue', 'getSlot', 'extraRenderParams'])
-})
 type WithoutUndefined<T> = T extends undefined ? never : T;
 type ExecuteJSCode<T> = T extends JavaScriptCode<(infer R)> ? WithoutUndefined<R> : never
 type GetJavaScriptCodeKey = WithoutUndefined<{
@@ -66,7 +64,6 @@ function transitionDesignFormSchema(schema: DesignFormSchema): Schema {
         field: schema.field,
         category: schema.category,
         component: schema.component,
-        width: schema.width,
         children: (schema.children || []),
         componentProps: (renderParams) => {
             return executeJSCode(schema, 'componentProps', {}, { renderParams })
@@ -92,15 +89,14 @@ function getFormItem(raw) {
     } else {
         schema = transitionBaseFormSchema(raw)
     }
+    const formItemProps = { schema, ...pick(props, ['formModel', 'setFieldsValue', 'getSlot', 'extraRenderParams']) }
+    const { getDynamicConfig } = useDynamicConfig(formItemProps)
     const bind = {
-        schema,
         style: {
             padding: '5px'
         },
-        onClick: withModifiers(() => {
-            console.log(schema.schemaKey)
-        }, ['stop', 'prevent']),
-        ...unref(formItemProps),
+        ...getDynamicConfig(schema.formItemProps),
+        ...formItemProps,
         ...getInheritanceEvent(emit, ['formItemInstanceReady']),
     }
     return <FormItem  {...bind} >   </FormItem>

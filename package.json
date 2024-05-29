@@ -32,10 +32,12 @@
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore"
   },
   "dependencies": {
+    "ace-builds": "^1.34.2",
     "element-plus": "^2.6.3",
     "less": "^4.2.0",
     "less-loader": "^12.2.0",
     "lodash": "^4.17.21",
+    "monaco-editor": "^0.49.0",
     "vite-plugin-compression": "^0.5.1",
     "vue": "^3.4.21",
     "vuedraggable": "^4.1.0"

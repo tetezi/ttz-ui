@@ -1,12 +1,13 @@
 <template>
     <FormComp></FormComp>
 </template>
-<script lang="ts" setup>
+<script lang="tsx" setup>
 import { useForm } from '@/components/BasicForm';
- 
+import CodeValueInput from './CodeValueInput.vue'
+import { markRaw, ref, watch } from 'vue';
 const [FormComp, formMethods] = useForm({
     formSchemas: [
-        { field: ['label','code'], label: '标题', component: 'Input', componentProps: { placeholder: '请输入标题' } },
+        { field: 'label', label: '标题', component: () => CodeValueInput },
         {
             category: 'Display', component: 'BasicButton', componentSlot: { default: () => '提交' }, componentProps: {
                 func: () => {
@@ -18,8 +19,7 @@ const [FormComp, formMethods] = useForm({
 
 })
 defineExpose({
-    setValue:(val)=>{
-        console.log(val)
+    setValue: (val) => {
         formMethods.setModelValue(val)
     }
 })

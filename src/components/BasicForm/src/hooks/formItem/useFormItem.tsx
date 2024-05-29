@@ -1,33 +1,43 @@
 import { isUndefined, isFunction, get, isString, pick } from "lodash";
 import FormItemGroup from "../../FormItemGroup.vue";
-import { computed, unref, type VNodeChild, readonly } from "vue";
-import type { DynamicConfig, FormItemProps, RenderParams } from "../../types";
+import { computed, unref, type VNodeChild, readonly, type ComputedRef } from "vue";
+import type {
+  DynamicConfig,
+  FormItemProps,
+  FormSchema,
+  RenderParams,
+} from "../../types";
 import {
   containerComponentMap,
   displayComponentMap,
   inputComponentMap,
 } from "../../components";
 import type { Recordable } from "@/global";
-
-export function useFormItem<ExtraRenderParams extends Recordable>(
-  props: FormItemProps<ExtraRenderParams>,
-  emit
+export function useDynamicConfig<ExtraRenderParams extends Recordable>(
+  // schema:
+  //   | FormSchema<"Container", ExtraRenderParams>
+  //   | FormSchema<"Input", ExtraRenderParams>
+  //   | FormSchema<"Display", ExtraRenderParams>,
+  // formModel: Recordable,
+  // setFieldsValue: SetFieldsValue,
+  // extraRenderParams?: ExtraRenderParams
+  formItemProps: FormItemProps<ExtraRenderParams>
 ) {
-  const renderParams = computed<RenderParams<ExtraRenderParams>>(() => {
+  const renderParams :ComputedRef<RenderParams<ExtraRenderParams>>= computed(() => {
     return {
-      schema: props.schema,
-      formValue: readonly(props.formModel),
+      schema: formItemProps.schema,
+      formValue: readonly(formItemProps.formModel),
       compValue: computed({
         get: () =>
-          "field" in props.schema
-            ? get(props.formModel, props.schema.field)
+          "field" in formItemProps.schema
+            ? get(formItemProps.formModel, formItemProps.schema.field)
             : undefined,
         set: (val) => {
-          "field" in props.schema &&
-            props.setFieldsValue(props.schema.field, val);
+          "field" in formItemProps.schema &&
+            formItemProps.setFieldsValue(formItemProps.schema.field, val);
         },
       }),
-      ...(props.extraRenderParams as ExtraRenderParams),
+      ...(formItemProps.extraRenderParams as ExtraRenderParams),
     };
   });
   function getDynamicConfig<T>(config: DynamicConfig<T, ExtraRenderParams>): T {
@@ -41,13 +51,24 @@ export function useFormItem<ExtraRenderParams extends Recordable>(
       }
     }
   }
+  return {
+    renderParams,
+    getDynamicConfig,
+  };
+}
+export function useFormItem<ExtraRenderParams extends Recordable>(
+  props: FormItemProps<ExtraRenderParams>,
+  emit
+) {
+  const { renderParams, getDynamicConfig } = useDynamicConfig(props);
+
   function getSchemaComponent() {
     const { component, componentProps, componentStyle, componentSlot } =
       props.schema;
     let Comp;
-    if (component && !isString(component)) {
-      Comp = component;
-    } else {
+    if (isFunction(component)) {
+      Comp = component();
+    } else if (isString(component)) {
       if (props.schema.category === "Container") {
         Comp = containerComponentMap.get(component as any);
       } else if (props.schema.category === "Display") {
