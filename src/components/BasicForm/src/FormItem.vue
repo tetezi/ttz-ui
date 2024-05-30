@@ -8,7 +8,8 @@
 import type { FormItemProps, } from './types';
 import { useRules, useFormItem } from './hooks';
 import type { Recordable } from '@/global';
-import { computed, type ComponentPublicInstance, } from 'vue';
+import { computed, unref, type ComponentPublicInstance, } from 'vue';
+import { isFunction } from 'lodash';
 const props = withDefaults(defineProps<FormItemProps<ExtraRenderParams>>(), {
     extraRenderParams: () => ({} as ExtraRenderParams)
 })
@@ -16,27 +17,27 @@ const emit = defineEmits<{
     formItemInstanceReady: [key: string, el: ComponentPublicInstance]
 }>()
 
-const { getDynamicConfig, getContent, } = useFormItem(props, emit)
+const { ifShowOfDynamic, labelVNodeOfDynamic, labelShowOfDynamic, getContent, } = useFormItem(props, emit)
 
-const ifShowOfDynamic = computed(() => getDynamicConfig(props.schema.ifShow ?? true))
-const ItemRender = computed(() => {
+
+const ItemRender = (() => {
     if (props.schema.category === 'Input') {
-        const { labelWidth, field, labelShow, labelRender, label, schemaKey } = props.schema;
-        const actLabelShow = getDynamicConfig(labelShow ?? true)
-        const labelVnode = actLabelShow
-            ? () => getDynamicConfig(labelRender || label)
-            : undefined;
+        const { labelWidth, field, schemaKey } = props.schema;
         const rules = useRules();
         const elFormItemProps = {
             rules: rules,
-            labelWidth: actLabelShow ? labelWidth : '0px',
+            labelWidth: unref(labelShowOfDynamic) ? labelWidth : '0px',
             prop: field,
             key: schemaKey,
         };
         return <el-form-item {...elFormItemProps} style='margin: 0'>
             {{
-                default: () => (getContent)(),
-                label: labelVnode,
+                default: () => {
+                    return (getContent)()
+                },
+                label: () => {
+                    return unref(labelVNodeOfDynamic)
+                },
             }}
         </el-form-item>
     } else {

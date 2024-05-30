@@ -1,6 +1,12 @@
 import { isUndefined, isFunction, get, isString, pick } from "lodash";
 import FormItemGroup from "../../FormItemGroup.vue";
-import { computed, unref, type VNodeChild, readonly, type ComputedRef } from "vue";
+import {
+  computed,
+  unref,
+  type VNodeChild,
+  readonly,
+  type ComputedRef,
+} from "vue";
 import type {
   DynamicConfig,
   FormItemProps,
@@ -23,23 +29,25 @@ export function useDynamicConfig<ExtraRenderParams extends Recordable>(
   // extraRenderParams?: ExtraRenderParams
   formItemProps: FormItemProps<ExtraRenderParams>
 ) {
-  const renderParams :ComputedRef<RenderParams<ExtraRenderParams>>= computed(() => {
-    return {
-      schema: formItemProps.schema,
-      formValue: readonly(formItemProps.formModel),
-      compValue: computed({
-        get: () =>
-          "field" in formItemProps.schema
-            ? get(formItemProps.formModel, formItemProps.schema.field)
-            : undefined,
-        set: (val) => {
-          "field" in formItemProps.schema &&
-            formItemProps.setFieldsValue(formItemProps.schema.field, val);
-        },
-      }),
-      ...(formItemProps.extraRenderParams as ExtraRenderParams),
-    };
-  });
+  const renderParams: ComputedRef<RenderParams<ExtraRenderParams>> = computed(
+    () => {
+      return {
+        schema: formItemProps.schema,
+        formValue: readonly(formItemProps.formModel),
+        compValue: computed({
+          get: () =>
+            "field" in formItemProps.schema
+              ? get(formItemProps.formModel, formItemProps.schema.field)
+              : undefined,
+          set: (val) => {
+            "field" in formItemProps.schema &&
+              formItemProps.setFieldsValue(formItemProps.schema.field, val);
+          },
+        }),
+        ...(formItemProps.extraRenderParams as ExtraRenderParams),
+      };
+    }
+  );
   function getDynamicConfig<T>(config: DynamicConfig<T, ExtraRenderParams>): T {
     if (isUndefined(config)) {
       return config;
@@ -61,10 +69,47 @@ export function useFormItem<ExtraRenderParams extends Recordable>(
   emit
 ) {
   const { renderParams, getDynamicConfig } = useDynamicConfig(props);
-
+  const componentPropsOfDynamic = computed(() => {
+    return getDynamicConfig(props.schema.componentProps);
+  });
+  const componentStyleOfDynamic = computed(() => {
+    return getDynamicConfig(props.schema.componentStyle);
+  });
+  const componentSlotOfDynamic = computed(() => {
+    if (props.schema.componentSlot) {
+      return getDynamicConfig(props.schema.componentSlot);
+    } else {
+      return undefined;
+    }
+  });
+  const ifShowOfDynamic = computed(() =>
+    getDynamicConfig(props.schema.ifShow ?? true)
+  );
+  const labelShowOfDynamic = computed(() => {
+    if (props.schema.category === "Input") {
+      return getDynamicConfig(props.schema.labelShow ?? true);
+    } else {
+      return undefined;
+    }
+  });
+  const labelVNodeOfDynamic = computed(() => {
+    if (props.schema.category === "Input") {
+      const { labelRender, label } = props.schema;
+      if (unref(labelShowOfDynamic)) {
+        if (labelRender) {
+          return getDynamicConfig(labelRender);
+        } else {
+          return getDynamicConfig(label);
+        }
+      } else {
+        return undefined;
+      }
+    } else {
+      return undefined;
+    }
+  });
   function getSchemaComponent() {
-    const { component, componentProps, componentStyle, componentSlot } =
-      props.schema;
+    const { component } = props.schema;
     let Comp;
     if (isFunction(component)) {
       Comp = component();
@@ -83,13 +128,13 @@ export function useFormItem<ExtraRenderParams extends Recordable>(
     }
 
     const compAttr = {
-      ...getDynamicConfig(componentProps),
-      style: getDynamicConfig(componentStyle),
+      ...unref(componentPropsOfDynamic),
+      style: unref(componentStyleOfDynamic),
       ref: (el) => {
         emit("formItemInstanceReady", props.schema.schemaKey, el);
       },
     };
-    let slots = componentSlot ? getDynamicConfig(componentSlot) : undefined;
+    let slots = unref(componentSlotOfDynamic);
     if (props.schema.category === "Container") {
       const formItemGroupBind = {
         formSchemas: props.schema.children,
@@ -134,5 +179,8 @@ export function useFormItem<ExtraRenderParams extends Recordable>(
   return {
     getDynamicConfig,
     getContent,
+    ifShowOfDynamic,
+    labelVNodeOfDynamic,
+    labelShowOfDynamic,
   };
 }
