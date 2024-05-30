@@ -60,7 +60,7 @@ type FormSchemaOfContainer<ExtraRenderParams extends Recordable> = (
     }
 ) & {
   category: "Container";
-  children: FormSchemas<ExtraRenderParams>;
+  children: DesignFormSchema[] | FormSchemas<ExtraRenderParams>;
   componentSlot?: DynamicConfig<
     Recordable<() => VNodeChild>,
     ExtraRenderParams

@@ -1,12 +1,9 @@
 <template>
-    <div>
-        <el-input v-bind="getBind" v-model="modelValue" >
-            <template v-for="slot in Object.keys(slots)" #[slot] :key="slot">
-                <component :is="slots[slot]"></component>
-            </template>
-        </el-input>
-    </div>
-
+    <el-input style="width:100%" v-bind="getBind" v-model="modelValue">
+        <template v-for="slot in Object.keys(slots)" #[slot] :key="slot">
+            <component :is="slots[slot]"></component>
+        </template>
+    </el-input>
 </template>
 <script lang="tsx" setup>
 import { computed, withKeys, } from 'vue';

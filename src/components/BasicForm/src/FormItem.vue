@@ -35,9 +35,9 @@ const ItemRender = (() => {
                 default: () => {
                     return (getContent)()
                 },
-                label: () => {
+                label: unref(labelShowOfDynamic)?() => {
                     return unref(labelVNodeOfDynamic)
-                },
+                }:undefined,
             }}
         </el-form-item>
     } else {

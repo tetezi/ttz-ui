@@ -33,9 +33,9 @@ function executeJSCode<K extends GetJavaScriptCodeKey>(schema: DesignFormSchema,
             if (isUndefined(JSCode)) {
                 return defaultValue
             } else {
-                const func = new Function(...Object.keys(argObject), JSCode)
                 let result = defaultValue
                 try {
+                    const func = new Function(...Object.keys(argObject), JSCode)
                     result = func.call({}, ...Object.values(argObject))
                 } catch (error) {
                     console.error(`JSCode运行异常:${(error as ReferenceError).message}`, {
@@ -61,6 +61,9 @@ function transitionDesignFormSchema(schema: DesignFormSchema): Schema {
         label: (renderParams) => {
             return executeJSCode(schema, 'label', '', { renderParams })
         },
+        labelShow: (renderParams) => {
+            return executeJSCode(schema, 'label', true, { renderParams })
+        },
         field: schema.field,
         category: schema.category,
         component: schema.component,
@@ -75,26 +78,18 @@ function transitionDesignFormSchema(schema: DesignFormSchema): Schema {
     } as Schema
     return reulust
 }
-function transitionBaseFormSchema(schema): Schema {
-    return {
-        ...schema,
-        category: schema.category ?? "Input",
-        schemaKey: schema.schemaKey ?? buildUUID()
-    };
-}
 function getFormItem(raw) {
-    let schema
-    if (unref(isDesignFormSchema)) {
-        schema = transitionDesignFormSchema(raw)
-    } else {
-        schema = transitionBaseFormSchema(raw)
-    }
+    let schema = unref(isDesignFormSchema) ? transitionDesignFormSchema(raw) : raw
     const formItemProps = { schema, ...pick(props, ['formModel', 'setFieldsValue', 'getSlot', 'extraRenderParams']) }
     const { getDynamicConfig } = useDynamicConfig(formItemProps)
     const bind = {
         style: {
-            padding: '5px'
+            padding: '5px',
+            outline: props.extraRenderParams?.isSelectedSchema(schema.schemaKey) ? '1px dashed black' : ''
         },
+        onclick: unref(isDesign) ? withModifiers(() => {
+            props.extraRenderParams?.selectSchema?.(schema.schemaKey)
+        }, ['stop',]) : undefined,
         ...getDynamicConfig(schema.formItemProps),
         ...formItemProps,
         ...getInheritanceEvent(emit, ['formItemInstanceReady']),
@@ -102,10 +97,23 @@ function getFormItem(raw) {
     return <FormItem  {...bind} >   </FormItem>
 
 }
+const formSchemasRef = computed(() => {
+    if (!unref(isDesignFormSchema)) {
+        return (props.formSchemas || []).map((schema) => {
+            return {
+                ...schema,
+                category: schema.category ?? "Input",
+                schemaKey: schema.schemaKey ?? buildUUID()
+            }
+        })
+    } else {
+        return props.formSchemas || []
+    }
+})
 const render = (() => {
     if (unref(isDesign)) {
         const draggableBind = {
-            modelValue: props.formSchemas,
+            modelValue: unref(formSchemasRef),
             'onUpdate:modelValue': (v) => {
                 props.extraRenderParams?.setSchemas?.(v, props.parentSchema?.schemaKey)
             },
@@ -123,7 +131,7 @@ const render = (() => {
             }}
         </Draggable>
     } else {
-        return (props.formSchemas || []).map(getFormItem)
+        return unref(formSchemasRef).map(getFormItem)
     }
 }) 
 </script>

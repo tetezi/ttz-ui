@@ -1,4 +1,4 @@
-import { getCurrentInstance, unref, watch, type Ref } from "vue";
+import { getCurrentInstance, ref, unref, watch, type Ref } from "vue";
 import type {
   DesignFormSchema,
   FormSchemas,
@@ -8,14 +8,28 @@ import type {
   SetSchemas,
   GetSchema,
   SetProps,
+  EmitEvent,
 } from "../../types";
 import { cloneDeep } from "lodash";
 
 export function useFormSchemas(
   // formSchemasRef: Ref<DesignFormSchema[] | FormSchemas<FormMethods>>,
   getProps: GetFormProps,
-  setProps: SetProps
+  setProps: SetProps,
+  emitEvent: EmitEvent
 ) {
+  const selectedSchemaKey = ref<string | null>(null);
+  function selectSchema(schemaKey: string | false) {
+    console.log("选择", schemaKey);
+    selectedSchemaKey.value = schemaKey ? schemaKey : null;
+    emitEvent('selectSchema',schemaKey)
+  }
+  function unSelectSchema() {
+    selectedSchemaKey.value = null;
+  }
+  function isSelectedSchema(schemaKey) { 
+    return unref(selectedSchemaKey) === schemaKey;
+  }
   const updateSchema: UpdateSchema = (scheamKey, data, isRetain = false) => {
     function update(schemas) {
       for (const i in schemas) {
@@ -72,31 +86,18 @@ export function useFormSchemas(
         ) {
           return schema;
         } else if (schema.children) {
-          find(schema.children);
+          return find(schema.children);
         }
       }
     }
     return find(unref(getProps).formSchemas);
   };
-  /**
-   * 修改setProps的本地props时同步设置localFormSchemas
-   */
-  // const rawProps = getCurrentInstance()!.vnode!.props!;
-  // if (!("formSchemas" in rawProps)) {
-  //   watch(
-  //     () => unref(getProps).formSchemas,
-  //     (val) => {
-  //       formSchemasRef.value = cloneDeep(val);
-  //     },
-  //     {
-  //       deep: true,
-  //       immediate: true,
-  //     }
-  //   );
-  // }
   return {
     updateSchema,
     setSchemas,
     getSchema,
+    selectSchema,
+    unSelectSchema,
+    isSelectedSchema,
   };
 }

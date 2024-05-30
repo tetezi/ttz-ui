@@ -57,3 +57,7 @@ export type SetSchemas = (
 export type GetSchema = (
   schemaKey: string
 ) => DesignFormSchema[] | FormSchemas<FormMethods> | undefined;
+export type IsSelectedSchema = (
+  schema: DesignFormSchema[] | FormSchemas<FormMethods>
+) => boolean;
+export type SelectSchema = (schemaKey: string | false) => void;

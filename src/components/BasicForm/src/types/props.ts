@@ -19,7 +19,7 @@ export type FormProps = {
 };
 
 export type FormItemGroupProps<ExtraRenderParams extends Recordable> = {
-  formSchemas: FormSchemas<ExtraRenderParams>;
+  formSchemas: DesignFormSchema[] | FormSchemas<ExtraRenderParams>;
   parentSchema?: Recordable;
   formModel: Recordable;
   setFieldsValue: SetFieldsValue;
@@ -37,6 +37,7 @@ export type FormItemProps<ExtraRenderParams extends Recordable> = {
 export type FormShortEvent = {
   change: [formData: Recordable];
   submit: [formData: Recordable, submitResult: any];
+  selectSchema: [schemaKey: string];
   register: [formMethods: FormMethods];
 };
 

@@ -8,9 +8,11 @@ import {
   type ComputedRef,
 } from "vue";
 import type {
+  DesignFormSchema,
   DynamicConfig,
   FormItemProps,
   FormSchema,
+  FormSchemas,
   RenderParams,
 } from "../../types";
 import {
@@ -95,14 +97,10 @@ export function useFormItem<ExtraRenderParams extends Recordable>(
   const labelVNodeOfDynamic = computed(() => {
     if (props.schema.category === "Input") {
       const { labelRender, label } = props.schema;
-      if (unref(labelShowOfDynamic)) {
-        if (labelRender) {
-          return getDynamicConfig(labelRender);
-        } else {
-          return getDynamicConfig(label);
-        }
+      if (labelRender) {
+        return getDynamicConfig(labelRender);
       } else {
-        return undefined;
+        return getDynamicConfig(label);
       }
     } else {
       return undefined;
@@ -137,7 +135,9 @@ export function useFormItem<ExtraRenderParams extends Recordable>(
     let slots = unref(componentSlotOfDynamic);
     if (props.schema.category === "Container") {
       const formItemGroupBind = {
-        formSchemas: props.schema.children,
+        formSchemas: props.schema.children as
+          | DesignFormSchema[]
+          | FormSchemas<ExtraRenderParams>,
         parentSchema: props.schema,
         ...pick(props, [
           "formModel",

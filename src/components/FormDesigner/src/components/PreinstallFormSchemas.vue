@@ -39,14 +39,14 @@ const preinstallFormSchemas = ref<DesignFormSchema[]>([
              `
         }, 
         id: '1',
-        componentStyle: {
-            type: 'code',
-            code: ` 
-                return {
-                    width: '100px'
-                }
-            `
-        }
+        // componentStyle: {
+        //     type: 'code',
+        //     code: ` 
+        //         return {
+        //             width: '100px'
+        //         }
+        //     `
+        // }
 
     },
     {

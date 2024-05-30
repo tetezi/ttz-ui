@@ -7,6 +7,9 @@ import type {
   GetSubmitLoading,
   UpdateSchema,
   SetSchemas,
+  GetSchema,
+  IsSelectedSchema,
+  SelectSchema,
   GetFormItemInstance,
 } from "./useHooks";
 import type { PropertyPath } from "lodash";
@@ -24,5 +27,8 @@ export type FormMethods = {
   initDefaultValue: () => void;
   updateSchema: UpdateSchema;
   setSchemas: SetSchemas;
+  getSchema: GetSchema;
+  selectSchema:SelectSchema,
+  isSelectedSchema:IsSelectedSchema
   getFormItemInstance: GetFormItemInstance;
 };

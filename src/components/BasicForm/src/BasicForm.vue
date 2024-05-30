@@ -44,7 +44,7 @@ watch(
  * 表单子项配置
  */
 
-const { updateSchema, getSchema, setSchemas } = useFormSchemas(getProps, setProps)
+const { updateSchema, getSchema, setSchemas, isSelectedSchema, unSelectSchema, selectSchema } = useFormSchemas(getProps, setProps,emitEvent)
 /**
  * 表单实例操作
 */
@@ -61,7 +61,7 @@ const formMethods: FormMethods = {
     setProps, getProps,
     getModelValue,
     setModelValue, setFieldsValue, getFieldsValue, validate, submitFunction, getSubmitLoading, initDefaultValue,
-    updateSchema, getSchema, setSchemas, getFormItemInstance
+    updateSchema, getSchema, setSchemas,selectSchema, isSelectedSchema,   getFormItemInstance
 }
 provide('isDesign', isDesign)
 provide('isDesignFormSchema', isDesignFormSchema)
