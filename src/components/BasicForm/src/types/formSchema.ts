@@ -156,7 +156,27 @@ export type DesignFormSchema = {
    */
   label?: JavaScriptCode<string>;
   /**
+   * 对应字段名称显示
+   */
+  labelShow?: JavaScriptCode<boolean>;
+  /**
+   * 对应字段名称渲染函数
+   */
+  labelRender?: JavaScriptCode<VNodeChild>;
+  /**
+   * 对应字段名称宽度
+   */
+  labelWidth?: JavaScriptCode<string>;
+  /**
    * 子组件
    */
   children?: DesignFormSchema[];
+  /**
+   * 渲染函数
+   */
+  render?: JavaScriptCode<VNodeChild>;
+  /**
+   * 组件插槽
+   */
+  componentSlot?: JavaScriptCode<Recordable<() => VNodeChild>>;
 };

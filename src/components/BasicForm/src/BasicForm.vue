@@ -11,7 +11,7 @@ import defaultProps from './defaultProps';
 import { useElFormInstance, useFormSchemas, useSubmit, } from './hooks';
 import FormItemGroup from './FormItemGroup.vue'
 import { getSlot, useLocalModel, useLocalProps } from '@/utils';
-import { onMounted, unref, watch, provide, computed, } from 'vue';
+import { onMounted, unref, watch, provide, computed, getCurrentInstance, } from 'vue';
 import type { FormMethods } from './types';
 import type { Recordable } from '@/global';
 const props = withDefaults(defineProps<Partial<FormProps>>(), defaultProps)
@@ -44,7 +44,7 @@ watch(
  * 表单子项配置
  */
 
-const { updateSchema, getSchema, setSchemas, isSelectedSchema, unSelectSchema, selectSchema } = useFormSchemas(getProps, setProps,emitEvent)
+const { updateSchema, getSchema, setSchemas, isSelectedSchema, unSelectSchema, selectSchema } = useFormSchemas(getProps, setProps, emitEvent)
 /**
  * 表单实例操作
 */
@@ -61,12 +61,15 @@ const formMethods: FormMethods = {
     setProps, getProps,
     getModelValue,
     setModelValue, setFieldsValue, getFieldsValue, validate, submitFunction, getSubmitLoading, initDefaultValue,
-    updateSchema, getSchema, setSchemas,selectSchema, isSelectedSchema,   getFormItemInstance
+    updateSchema, getSchema, setSchemas, selectSchema, isSelectedSchema, getFormItemInstance
 }
 provide('isDesign', isDesign)
 provide('isDesignFormSchema', isDesignFormSchema)
 onMounted(() => {
     emitEvent('register', formMethods)
-    initDefaultValue()
+    const rawProps = getCurrentInstance()!.vnode!.props;
+    if (!(rawProps && 'modelValue' in rawProps)) {
+        initDefaultValue()
+    }
 })   
 </script>

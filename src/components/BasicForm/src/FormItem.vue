@@ -8,8 +8,7 @@
 import type { FormItemProps, } from './types';
 import { useRules, useFormItem } from './hooks';
 import type { Recordable } from '@/global';
-import { computed, unref, type ComponentPublicInstance, } from 'vue';
-import { isFunction } from 'lodash';
+import { computed, unref, type ComponentPublicInstance, } from 'vue'; 
 const props = withDefaults(defineProps<FormItemProps<ExtraRenderParams>>(), {
     extraRenderParams: () => ({} as ExtraRenderParams)
 })
@@ -17,16 +16,16 @@ const emit = defineEmits<{
     formItemInstanceReady: [key: string, el: ComponentPublicInstance]
 }>()
 
-const { ifShowOfDynamic, labelVNodeOfDynamic, labelShowOfDynamic, getContent, } = useFormItem(props, emit)
+const { ifShowOfDynamic, labelVNodeOfDynamic, labelShowOfDynamic, labelWidthOfDynamic, getContent, } = useFormItem(props, emit)
 
 
 const ItemRender = (() => {
     if (props.schema.category === 'Input') {
-        const { labelWidth, field, schemaKey } = props.schema;
+        const { field, schemaKey } = props.schema;
         const rules = useRules();
         const elFormItemProps = {
             rules: rules,
-            labelWidth: unref(labelShowOfDynamic) ? labelWidth : '0px',
+            labelWidth: unref(labelWidthOfDynamic),
             prop: field,
             key: schemaKey,
         };
@@ -35,9 +34,9 @@ const ItemRender = (() => {
                 default: () => {
                     return (getContent)()
                 },
-                label: unref(labelShowOfDynamic)?() => {
+                label: unref(labelShowOfDynamic) ? () => {
                     return unref(labelVNodeOfDynamic)
-                }:undefined,
+                } : undefined,
             }}
         </el-form-item>
     } else {

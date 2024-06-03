@@ -84,6 +84,15 @@ export function useFormItem<ExtraRenderParams extends Recordable>(
       return undefined;
     }
   });
+  const labelWidthOfDynamic = computed(() => {
+    if (props.schema.category === "Input") { 
+      return unref(labelShowOfDynamic)
+        ? getDynamicConfig(props.schema.labelWidth)
+        : "0px";
+    } else {
+      return undefined;
+    }
+  });
   const ifShowOfDynamic = computed(() =>
     getDynamicConfig(props.schema.ifShow ?? true)
   );
@@ -182,5 +191,6 @@ export function useFormItem<ExtraRenderParams extends Recordable>(
     ifShowOfDynamic,
     labelVNodeOfDynamic,
     labelShowOfDynamic,
+    labelWidthOfDynamic,
   };
 }

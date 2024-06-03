@@ -5,6 +5,7 @@ export { useForm } from "./src/hooks";
 export type {
   FormProps,
   FormSchema,
+  DesignFormSchema,
   FormEventObject,
   FormBind,
   FormShortEvent,

@@ -9,7 +9,7 @@ import AutoImport from "unplugin-auto-import/vite";
 import Components from "unplugin-vue-components/vite";
 import { ElementPlusResolver } from "unplugin-vue-components/resolvers";
 // https://vitejs.dev/config/
-export default defineConfig({
+export default defineConfig({ 
   server: {
     host: true,
   },
@@ -51,14 +51,31 @@ export default defineConfig({
     },
     rollupOptions: {
       // 确保外部化处理那些你不想打包进库的依赖
-      external: ["vue", "element-plus",'vuedraggable'],
+      external: [
+        "vue",
+        "element-plus",
+        "vuedraggable",
+        "monaco-editor",
+        "lodash",
+      ],
       // output: {
       //   // 在 UMD 构建模式下为这些外部化的依赖提供一个全局变量
       //   globals: {
       //     "vue": "Vue",
       //     "element-plus": "ElementPlus",
+      //     "vuedraggable": "Vuedraggable",
       //   },
       // },
     },
   },
+  // // 强制预构建插件包
+  // optimizeDeps: {
+  //   include: [
+  //     `monaco-editor/esm/vs/language/json/json.worker`,
+  //     `monaco-editor/esm/vs/language/css/css.worker`,
+  //     `monaco-editor/esm/vs/language/html/html.worker`,
+  //     `monaco-editor/esm/vs/language/typescript/ts.worker`,
+  //     `monaco-editor/esm/vs/editor/editor.worker`,
+  //   ],
+  // },
 });

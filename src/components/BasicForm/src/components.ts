@@ -12,7 +12,7 @@ import { DatePicker } from "@/components/DatePicker";
 import { Input } from "@/components/Input";
 import { BasicButton } from "@/components/BasicButton";
 import { EditableTable } from "@/components/EditableTable";
-import { TableTransfer } from "@/components/TableTransfer";
+import { TableTransfer } from "@/components/TableTransfer"; 
 export const inputComponentMap = new Map<ComponentType<"Input">, Component>([
   ["Radio", Radio],
   ["Select", Select],
@@ -23,7 +23,7 @@ export const inputComponentMap = new Map<ComponentType<"Input">, Component>([
   ["Switch", Switch],
   ["DatePicker", DatePicker],
   ["EditableTable", EditableTable],
-  ["TableTransfer", TableTransfer],
+  ["TableTransfer", TableTransfer], 
 ]);
 export const containerComponentMap = new Map<
   ComponentType<"Container">,

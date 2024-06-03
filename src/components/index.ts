@@ -14,7 +14,4 @@ export * from "./Switch";
 export * from "./DatePicker";
 export * from "./BasicButton"; 
 export * from "./EditableTable"; 
-export * from "./TableTransfer"; 
-export * from "./FormDesigner"; 
-export * from "./CodeEditor"; 
- 
+export * from "./TableTransfer";  

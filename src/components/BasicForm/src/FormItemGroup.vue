@@ -14,67 +14,60 @@ const props = defineProps<FormItemGroupProps<ExtraRenderParams>>()
 const emit = defineEmits<{
     formItemInstanceReady: [key: string, el: ComponentPublicInstance]
 }>()
-// const modelValue = defineModel<FormSchemas<ExtraRenderParams>>({ required: true })
 const isDesign = inject("isDesign", false);
 const isDesignFormSchema = inject("isDesignFormSchema", false);
 type WithoutUndefined<T> = T extends undefined ? never : T;
-type ExecuteJSCode<T> = T extends JavaScriptCode<(infer R)> ? WithoutUndefined<R> : never
 type GetJavaScriptCodeKey = WithoutUndefined<{
     [K in keyof DesignFormSchema]: DesignFormSchema[K] extends (JavaScriptCode<any> | undefined) ? K : never;
 }[keyof DesignFormSchema]>;
-// const { selectSchema, getSelectedSchema, isSelectedSchema } = useSelectedSchema()
-function executeJSCode<K extends GetJavaScriptCodeKey>(schema: DesignFormSchema, configKey: K, defaultValue: ExecuteJSCode<DesignFormSchema[K]>, argObject: Recordable = {}): ExecuteJSCode<DesignFormSchema[K]> {
-    const config = get(schema, configKey) as JavaScriptCode<any> | undefined
-    if (config) {
-        if (config.type === 'value') {
-            return config.value
-        } else if (config.type === 'code') {
-            const JSCode = config.code
-            if (isUndefined(JSCode)) {
-                return defaultValue
-            } else {
-                let result = defaultValue
-                try {
-                    const func = new Function(...Object.keys(argObject), JSCode)
-                    result = func.call({}, ...Object.values(argObject))
-                } catch (error) {
-                    console.error(`JSCode运行异常:${(error as ReferenceError).message}`, {
-                        rawError: error, config, schema, configKey
-                    })
-                }
-                return result
-            }
-        }
-    }
-    return defaultValue
-
-}
 type Schema = FormItemProps<ExtraRenderParams>['schema'] & {
     schemaKey: string
 }
+
 function transitionDesignFormSchema(schema: DesignFormSchema): Schema {
+    function getJSCodeToDynamicConfig<K extends GetJavaScriptCodeKey>(configKey: K, defaultValue) {
+        const config = schema[configKey]
+        if (config) {
+            if (config.type === 'value') {
+                return config.value ?? defaultValue
+            } else if (config.type === 'code') {
+                const JSCode = config.code
+                if (JSCode) {
+                    return (renderParams) => {
+                        let result = defaultValue
+                        try {
+                            const func = new Function('renderParams', JSCode)
+                            result = func.call({}, renderParams)
+                        } catch (error) {
+                            console.error(`JSCode运行异常:${(error as ReferenceError).message}`, {
+                                rawError: error, config, schema, configKey
+                            })
+                        }
+                        return result
+                    }
+                } else {
+                    return defaultValue
+                }
+            }
+        } else {
+            return defaultValue
+        }
+    }
     const reulust = {
         schemaKey: schema.id,
-        ifShow: (renderParams) => {
-            return executeJSCode(schema, 'ifShow', true, { renderParams })
-        },
-        label: (renderParams) => {
-            return executeJSCode(schema, 'label', '', { renderParams })
-        },
-        labelShow: (renderParams) => {
-            return executeJSCode(schema, 'label', true, { renderParams })
-        },
+        ifShow: getJSCodeToDynamicConfig('ifShow', true),
+        label: getJSCodeToDynamicConfig('label', ''),
+        labelRender: getJSCodeToDynamicConfig('labelRender', undefined),
+        labelShow: getJSCodeToDynamicConfig('labelShow', true),
+        labelWidth: getJSCodeToDynamicConfig('labelWidth', undefined),
         field: schema.field,
         category: schema.category,
         component: schema.component,
         children: (schema.children || []),
-        componentProps: (renderParams) => {
-            return executeJSCode(schema, 'componentProps', {}, { renderParams })
-
-        },
-        componentStyle: (renderParams) => {
-            return executeJSCode(schema, 'componentStyle', {}, { renderParams })
-        },
+        componentProps: getJSCodeToDynamicConfig('componentProps', {}),
+        componentStyle: getJSCodeToDynamicConfig('componentStyle', {}),
+        render: getJSCodeToDynamicConfig('render', undefined),
+        componentSlot: getJSCodeToDynamicConfig('componentSlot', undefined),
     } as Schema
     return reulust
 }

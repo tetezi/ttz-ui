@@ -41,7 +41,7 @@ export type ComponentType<Category extends CategoryEnums> =
         | "Slider"
         | "DatePicker"
         | "EditableTable"
-        | "TableTransfer"
+        | "TableTransfer" 
     : never;
 
 export type InputComponentMutableProps<ExtraRenderParams extends Recordable> =
@@ -89,7 +89,7 @@ export type InputComponentMutableProps<ExtraRenderParams extends Recordable> =
           TableTransferProps<Recordable>,
           ExtraRenderParams
         >;
-      };
+      }; 
     }
   >;
 
