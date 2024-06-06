@@ -1,4 +1,4 @@
-import type { VNode } from "vue";
+import type { Component, Raw, VNode } from "vue";
 import type { DesignFormSchema, FormSchemas } from "./formSchema";
 import type { FormMethods } from ".";
 import type { SetFieldsValue } from "@/utils";
@@ -9,6 +9,8 @@ import type {
   ShortEventToOnEvent,
 } from "@/global";
 export type FormProps = {
+  injectComponents?: Array<[string, Raw<Component>]>;
+  labelPosition?: "left" | "right" | "top";
   defaultValue?: Recordable;
   labelWidth?: number | string;
   beforeSubmit?: (params: any) => MaybePromise<any>;
@@ -20,11 +22,13 @@ export type FormProps = {
 
 export type FormItemGroupProps<ExtraRenderParams extends Recordable> = {
   formSchemas: DesignFormSchema[] | FormSchemas<ExtraRenderParams>;
-  parentSchema?: Recordable;
+  parentSchema?: Flatten<FormSchemas<ExtraRenderParams>>;
   formModel: Recordable;
   setFieldsValue: SetFieldsValue;
   getSlot: (slotName: string, data: Recordable) => VNode[] | null;
   extraRenderParams?: ExtraRenderParams;
+  isDesign?: boolean;
+  isDesignFormSchema?: boolean;
 };
 export type FormItemProps<ExtraRenderParams extends Recordable> = {
   schema: Flatten<FormSchemas<ExtraRenderParams>>;
@@ -32,6 +36,8 @@ export type FormItemProps<ExtraRenderParams extends Recordable> = {
   setFieldsValue: SetFieldsValue;
   getSlot: (slotName: string, data: Recordable) => VNode[] | null;
   extraRenderParams?: ExtraRenderParams;
+  isDesign?: boolean;
+  isDesignFormSchema?: boolean;
 };
 
 export type FormShortEvent = {

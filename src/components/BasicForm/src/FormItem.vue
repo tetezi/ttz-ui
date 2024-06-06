@@ -8,7 +8,7 @@
 import type { FormItemProps, } from './types';
 import { useRules, useFormItem } from './hooks';
 import type { Recordable } from '@/global';
-import { computed, unref, type ComponentPublicInstance, } from 'vue'; 
+import { computed, unref, type ComponentPublicInstance, } from 'vue';
 const props = withDefaults(defineProps<FormItemProps<ExtraRenderParams>>(), {
     extraRenderParams: () => ({} as ExtraRenderParams)
 })
@@ -17,11 +17,11 @@ const emit = defineEmits<{
 }>()
 
 const { ifShowOfDynamic, labelVNodeOfDynamic, labelShowOfDynamic, labelWidthOfDynamic, getContent, } = useFormItem(props, emit)
-
-
+ 
 const ItemRender = (() => {
+    const { schemaKey } = props.schema;
     if (props.schema.category === 'Input') {
-        const { field, schemaKey } = props.schema;
+        const { field, } = props.schema;
         const rules = useRules();
         const elFormItemProps = {
             rules: rules,
@@ -32,7 +32,7 @@ const ItemRender = (() => {
         return <el-form-item {...elFormItemProps} style='margin: 0'>
             {{
                 default: () => {
-                    return (getContent)()
+                    return   (getContent)()
                 },
                 label: unref(labelShowOfDynamic) ? () => {
                     return unref(labelVNodeOfDynamic)
@@ -40,8 +40,7 @@ const ItemRender = (() => {
             }}
         </el-form-item>
     } else {
-
-        return (getContent)()
+        return   (getContent)()
     }
 }) 
 </script>

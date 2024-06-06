@@ -15,6 +15,8 @@ import {
   type DefineComponent,
   type ConcreteComponent,
   watch,
+  ref,
+  type Ref,
 } from "vue";
 export function useComponentRegister<
   Bind extends Recordable,
@@ -24,6 +26,7 @@ export function useComponentRegister<
   bind: MaybeRefOrGetter<Bind>,
   onRegister?: (methods: Methods) => void
 ) {
+  const isOk = ref(false);
   const methodsProxy = new Proxy(
     {},
     {
@@ -56,11 +59,14 @@ export function useComponentRegister<
       );
     }
     onRegister?.(methodsProxy);
+    isOk.value = true;
   };
+
   return [
     defineComponent((_props, { slots }) => {
       return () => h(component, { onRegister: register }, slots);
     }),
     methodsProxy,
-  ] as [DefineSetupFnComponent<Bind>, Methods];
+    isOk,
+  ] as [DefineSetupFnComponent<Bind>, Methods, Ref<boolean>];
 }

@@ -1,4 +1,7 @@
-export default {
+import { narrow } from "@/utils";
+
+export default narrow({
+  labelPosition: "left",
   labelWidth: 100,
   defaultValue: () => ({}),
   formSchemas: () => [],
@@ -7,4 +10,4 @@ export default {
   // rowProps: () => ({
   //   gutter: 10,
   // }),
-};
+});

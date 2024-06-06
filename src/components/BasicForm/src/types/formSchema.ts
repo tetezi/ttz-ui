@@ -15,7 +15,7 @@ import type { Recordable } from "@/global";
 export type JavaScriptCode<T> =
   | { type: "code"; code?: string }
   | { type: "value"; value?: T };
-
+import type { ColProps as ElColProps } from "element-plus";
 export type CategoryEnums = "Container" | "Input" | "Display";
 // 动态渲染参数
 
@@ -50,7 +50,10 @@ type FormSchemaOfPublic<ExtraRenderParams extends Recordable> = {
   slot?: string;
 
   componentStyle?: DynamicConfig<CSSProperties, ExtraRenderParams>;
-  // formItemProps
+  /**
+   * 声明该属性将嵌套el-col，为undefined时表示不嵌套el-col
+   */
+  colProps?: Partial<ElColProps>;
 };
 type FormSchemaOfContainer<ExtraRenderParams extends Recordable> = (
   | ContainerComponentMutableProps<ExtraRenderParams>
@@ -65,6 +68,7 @@ type FormSchemaOfContainer<ExtraRenderParams extends Recordable> = (
     Recordable<() => VNodeChild>,
     ExtraRenderParams
   >;
+  draggableTag?: string;
 };
 type FormSchemaOfDisplay<ExtraRenderParams extends Recordable> = (
   | DisplayComponentMutableProps<ExtraRenderParams>
@@ -142,7 +146,7 @@ export type DesignFormSchema = {
   /**
    * 配置主键
    */
-  id?: string;
+  schemaKey: string;
   /**
    * 是否显示
    */
@@ -179,4 +183,13 @@ export type DesignFormSchema = {
    * 组件插槽
    */
   componentSlot?: JavaScriptCode<Recordable<() => VNodeChild>>;
+  /**
+   * 声明该属性将嵌套el-col，为undefined时表示不嵌套el-col
+   */
+  colProps?: Partial<ElColProps>;
+  /**
+   * 拖拽容器的标签，需要在vue
+   * 自行注册组件
+   */
+  draggableTag?: string;
 };

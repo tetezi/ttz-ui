@@ -1,5 +1,5 @@
 import type { Recordable } from "@/global";
-import type { CategoryEnums, DynamicConfig } from ".";
+import type { CategoryEnums, DynamicConfig } from "."; 
 import type {
   ApiSelectProps,
   DatePickerProps,
@@ -12,6 +12,7 @@ import type {
   BasicButtonProps,
   CardProps,
   RadioProps,
+  RowProps,
 } from "@/components";
 
 type MutableRecord<
@@ -27,7 +28,7 @@ type MutableRecord<
 
 export type ComponentType<Category extends CategoryEnums> =
   Category extends "Container"
-    ? "Card"
+    ? "Card" | "Row"
     : Category extends "Display"
     ? "BasicButton"
     : Category extends "Input"
@@ -41,7 +42,7 @@ export type ComponentType<Category extends CategoryEnums> =
         | "Slider"
         | "DatePicker"
         | "EditableTable"
-        | "TableTransfer" 
+        | "TableTransfer"
     : never;
 
 export type InputComponentMutableProps<ExtraRenderParams extends Recordable> =
@@ -89,7 +90,7 @@ export type InputComponentMutableProps<ExtraRenderParams extends Recordable> =
           TableTransferProps<Recordable>,
           ExtraRenderParams
         >;
-      }; 
+      };
     }
   >;
 
@@ -109,6 +110,9 @@ export type ContainerComponentMutableProps<
   {
     Card: {
       componentProps?: DynamicConfig<CardProps, ExtraRenderParams>;
+    };
+    Row: {
+      componentProps?: DynamicConfig<RowProps, ExtraRenderParams>;
     };
   }
 >;

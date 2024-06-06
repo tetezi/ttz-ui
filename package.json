@@ -37,6 +37,7 @@
     "less": "^4.2.0",
     "less-loader": "^12.2.0",
     "lodash": "^4.17.21",
+    "uuid": "^9.0.1",
     "vite-plugin-compression": "^0.5.1",
     "vue": "^3.4.21",
     "vuedraggable": "^4.1.0"

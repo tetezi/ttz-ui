@@ -1,8 +1,11 @@
 <template>
-    <el-form ref="elFormInstanceRef" :model="getModelValue" :labelWidth="getProps.labelWidth">
-        <FormItemGroup :formSchemas="getProps.formSchemas" :isDesign :formModel="getModelValue"
-            :setFieldsValue="setFieldsValue" :getSlot="(slot, data) => getSlot(slots, slot, data)"
-            :extraRenderParams="formMethods" @formItemInstanceReady="setFormItemInstanceRef"> </FormItemGroup>
+    <el-form ref="elFormInstanceRef" :model="getModelValue" :labelWidth="getProps.labelWidth"
+        :labelPosition="getProps.labelPosition">
+
+        <FormItemGroup :formSchemas="getSchemas" :formModel="getModelValue" :setFieldsValue="setFieldsValue"
+            :getSlot="(slot, data) => getSlot(slots, slot, data)" :extraRenderParams="formMethods"
+            @formItemInstanceReady="setFormItemInstanceRef" :isDesign :isDesignFormSchema> </FormItemGroup>
+
     </el-form>
 </template>
 <script lang="ts" setup>
@@ -11,9 +14,10 @@ import defaultProps from './defaultProps';
 import { useElFormInstance, useFormSchemas, useSubmit, } from './hooks';
 import FormItemGroup from './FormItemGroup.vue'
 import { getSlot, useLocalModel, useLocalProps } from '@/utils';
-import { onMounted, unref, watch, provide, computed, getCurrentInstance, } from 'vue';
+import { onMounted, unref, watch, provide, computed, getCurrentInstance, watchEffect,   } from 'vue';
 import type { FormMethods } from './types';
 import type { Recordable } from '@/global';
+import { injectComponentMap } from './components'; 
 const props = withDefaults(defineProps<Partial<FormProps>>(), defaultProps)
 const emit = defineEmits<FormShortEvent>()
 const modelValue = defineModel<Recordable>()
@@ -25,6 +29,17 @@ const isDesignFormSchema = computed(() => unref(getProps).isDesignFormSchema)
  * 表单配置
  */
 const { getProps, setProps, emitEvent } = useLocalProps<FormProps, FormShortEvent, typeof defaultProps>(props, emit)
+
+
+function injectComponent(name, component) {
+    unref(injectComponentMap).set(name,  (component))
+}
+watchEffect(() => {
+    (unref(getProps).injectComponents || []).forEach(([name, component]) => {
+
+        injectComponent(name,  (component))
+    })
+})
 
 /**
  * 表单数据
@@ -44,7 +59,7 @@ watch(
  * 表单子项配置
  */
 
-const { updateSchema, getSchema, setSchemas, isSelectedSchema, unSelectSchema, selectSchema } = useFormSchemas(getProps, setProps, emitEvent)
+const { updateSchema, removeSchema, getSchema, setSchemas, isSelectedSchema, selectedSchema, getSchemas, selectSchema, getParentSchema } = useFormSchemas(getProps, setProps, emitEvent)
 /**
  * 表单实例操作
 */
@@ -60,11 +75,12 @@ function initDefaultValue() {
 const formMethods: FormMethods = {
     setProps, getProps,
     getModelValue,
-    setModelValue, setFieldsValue, getFieldsValue, validate, submitFunction, getSubmitLoading, initDefaultValue,
-    updateSchema, getSchema, setSchemas, selectSchema, isSelectedSchema, getFormItemInstance
+    setModelValue, setFieldsValue, getFieldsValue, validate, submitFunction, getSubmitLoading, initDefaultValue, getSchemas,
+    updateSchema, removeSchema, getSchema, getParentSchema, setSchemas, selectSchema, isSelectedSchema, selectedSchema, getFormItemInstance,
+    injectComponent
 }
-provide('isDesign', isDesign)
-provide('isDesignFormSchema', isDesignFormSchema)
+// provide('isDesign', isDesign) 
+// provide('isDesignFormSchema', isDesignFormSchema)
 onMounted(() => {
     emitEvent('register', formMethods)
     const rawProps = getCurrentInstance()!.vnode!.props;

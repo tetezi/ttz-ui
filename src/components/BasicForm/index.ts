@@ -10,4 +10,5 @@ export type {
   FormBind,
   FormShortEvent,
   FormMethods,
+  ComponentType,
 } from "./src/types";

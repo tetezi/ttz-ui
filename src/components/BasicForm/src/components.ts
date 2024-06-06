@@ -1,4 +1,4 @@
-import type { Component } from "vue";
+import { ref, type Component } from "vue";
 import type { ComponentType } from "./types/componentType";
 
 import { Card } from "@/components/Card";
@@ -12,7 +12,8 @@ import { DatePicker } from "@/components/DatePicker";
 import { Input } from "@/components/Input";
 import { BasicButton } from "@/components/BasicButton";
 import { EditableTable } from "@/components/EditableTable";
-import { TableTransfer } from "@/components/TableTransfer"; 
+import { TableTransfer } from "@/components/TableTransfer";
+import { Row } from "@/components/Row";
 export const inputComponentMap = new Map<ComponentType<"Input">, Component>([
   ["Radio", Radio],
   ["Select", Select],
@@ -23,16 +24,19 @@ export const inputComponentMap = new Map<ComponentType<"Input">, Component>([
   ["Switch", Switch],
   ["DatePicker", DatePicker],
   ["EditableTable", EditableTable],
-  ["TableTransfer", TableTransfer], 
+  ["TableTransfer", TableTransfer],
 ]);
 export const containerComponentMap = new Map<
   ComponentType<"Container">,
   Component
->([["Card", Card]]);
+>([
+  ["Card", Card],
+  ["Row", Row],
+]);
 export const displayComponentMap = new Map<ComponentType<"Display">, Component>(
   [["BasicButton", BasicButton]]
 );
-
+export const injectComponentMap = ref(new Map())
 // export function getComponent<C extends CategoryEnums>(schema: FormSchema<C>) {
 //   if (checkSchemaCategory(schema, "Container")) {
 //     return schema.component

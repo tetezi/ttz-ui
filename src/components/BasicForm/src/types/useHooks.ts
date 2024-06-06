@@ -1,5 +1,5 @@
 import type { FormInstance } from "element-plus";
-import type { DesignFormSchema, FormSchemas } from "./formSchema";
+import type { DesignFormSchema, FormSchema, FormSchemas } from "./formSchema";
 import type {
   FormBind,
   FormProps,
@@ -47,17 +47,28 @@ export type GetSubmitLoading = ComputedRef<boolean>;
 //upFormSchemas.ts
 export type UpdateSchema = (
   schemaKey: string,
-  schema: DesignFormSchema[] | FormSchemas<FormMethods>,
+  schema: DesignFormSchema | Flatten<FormSchemas<FormMethods>>,
   isRetain?: boolean
 ) => void;
 export type SetSchemas = (
   schemas: DesignFormSchema[] | FormSchemas<FormMethods>,
   parentSchemaKey?: string
 ) => void;
+export type RemoveSchema = (schemaKey: string) => void;
+export type GetParentSchema = (
+  schemaKey: string
+) => DesignFormSchema | FormSchema<"Container", FormMethods> | undefined;
 export type GetSchema = (
   schemaKey: string
-) => DesignFormSchema[] | FormSchemas<FormMethods> | undefined;
+) => DesignFormSchema | Flatten<FormSchemas<FormMethods>> | undefined;
 export type IsSelectedSchema = (
-  schema: DesignFormSchema[] | FormSchemas<FormMethods>
+  schema: DesignFormSchema | Flatten<FormSchemas<FormMethods>>
 ) => boolean;
 export type SelectSchema = (schemaKey: string | false) => void;
+export type GetSchemas = ComputedRef<
+  DesignFormSchema[] | FormSchemas<FormMethods>
+>;
+
+export type SelectedSchema = ComputedRef<
+  DesignFormSchema | Flatten<FormSchemas<FormMethods>> | undefined
+>;

@@ -1,7 +1,12 @@
 <template>
-    <el-card    style="margin:0 6px" v-bind='getBind' >
+    <el-card style="margin:0 6px" v-bind='getBind'>
         <template v-for="slot in Object.keys(slots)" #[slot] :key="slot">
-            <component :is="slots[slot]"></component>
+            <template v-if="slot === 'default'">
+                <el-scrollbar :viewStyle="{ height: '100%', padding: '3px' }">
+                    <component :is="slots['default']"></component>
+                </el-scrollbar>
+            </template>
+            <component v-else :is="slots[slot]"></component>
         </template>
     </el-card>
 </template>
@@ -22,7 +27,7 @@ const getBind = computed(() => {
         },
         ...pick(props, ['footer', 'shadow']),
     }
-})
+}) 
 </script>
 <style scoped>
 :deep(.el-card__header) {

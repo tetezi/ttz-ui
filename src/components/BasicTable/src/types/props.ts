@@ -7,6 +7,7 @@ import type {
 import type { MaybePromise, Recordable, ShortEventToOnEvent } from "@/global";
 import type { PropertyPath } from "lodash";
 export type TableProps<Data extends Recordable> = {
+  disableSelect?: (row: Data) => boolean;
   immediate?: boolean;
   beforeFetch?: (params) => MaybePromise<Recordable>;
   title?: MaybeRefOrGetter<VNodeChild>;
@@ -30,7 +31,7 @@ export type TableProps<Data extends Recordable> = {
   rowKey?: PropertyPath;
 } & Partial<
   Pick<
-    ElTableProps<Data>, 
+    ElTableProps<Data>,
     | "height"
     | "maxHeight"
     | "stripe"
@@ -80,7 +81,7 @@ export type TableColumnProps<Data extends Recordable> = TableColumn<Data> & {};
 export type TableShortEvent<Data extends Recordable> = {
   register: [tableMethods: TableMethods<Data>];
   rowClick: [row: Data, column: any, event: Event];
-  selectRow:[row:Data,rows:Data[]]
+  selectRow: [row: Data, rows: Data[]];
 };
 
 export type TableEventObject<Data extends Recordable> = ShortEventToOnEvent<

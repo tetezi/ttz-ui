@@ -1,5 +1,5 @@
 <template>
-    <div style="height: 100%; display: flex;flex-direction: column;">
+    <div style="height: 100%; width:100%;display: flex;flex-direction: column;">
         <el-form :model="localModelValue" label-width="0px" style="flex:1;min-height: 0px">
             <TableVNode v-model="localModelValue" style="height: 100%;">
             </TableVNode>
@@ -63,11 +63,11 @@ const [TableVNode] = useTable(() => {
                             labelShow: false,
                             labelWidth: '0px',
                             category: actialEditConfig.category ?? "Input",
-                            schemaKey: actialEditConfig.schemaKey ??  buildUUID(),
+                            schemaKey: actialEditConfig.schemaKey ?? buildUUID(),
                         } as FormSchema<any, {}>
 
 
-                        return  <FormItem schema={schema} formModel={unref(getModelValue)} setFieldsValue={setFieldsValue}
+                        return <FormItem schema={schema} formModel={unref(getModelValue)} setFieldsValue={setFieldsValue}
 
                             getSlot={(slot, data) => getSlot(slots, slot, data)}>
                         </FormItem>

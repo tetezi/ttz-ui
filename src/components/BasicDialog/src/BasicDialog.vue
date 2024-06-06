@@ -67,11 +67,9 @@ async function close(checkBeforeClose: boolean = true) {
 }
 async function submit() {
     const { submitApi, submitCheckBeforeClose } = unref(getProps)
-    console.log(submitApi)
     if (submitApi) {
         await submitApi()
     }
-    console.log(submitApi)
     await close(submitCheckBeforeClose)
 }
 const dialogMethods: DialogMethods<Data> = {

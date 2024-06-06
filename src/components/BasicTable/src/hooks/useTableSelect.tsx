@@ -7,7 +7,7 @@ export function useTableSelect<Data extends Recordable>(
   getData: ComputedRef<Data[]>,
   emitEvent: (key: keyof TableShortEvent<Data>, ...args: any[]) => void
 ) {
-  const selectRows:Ref<Data[]> = ref([]);
+  const selectRows: Ref<Data[]> = ref([]);
   function getSelectRowIndex(row: Data) {
     const { rowKey } = unref(getProps);
     return unref(selectRows).findIndex((val) => {
@@ -47,7 +47,7 @@ export function useTableSelect<Data extends Recordable>(
     return unref(selectRows);
   });
   const selectColumn = computed<TableColumn<Data>>(() => {
-    const { selectType } = unref(getProps);
+    const { selectType, disableSelect } = unref(getProps);
     return {
       columnKey: "_select",
       formatter: (row) => {
@@ -55,6 +55,7 @@ export function useTableSelect<Data extends Recordable>(
           return (
             <el-radio
               modelValue={getSelectRowIndex(row) !== -1}
+              disabled={disableSelect ? disableSelect(row) : false}
               value={true}
               onChange={() => {
                 selectRow(row);
@@ -66,6 +67,7 @@ export function useTableSelect<Data extends Recordable>(
             <div>
               <el-checkbox
                 modelValue={getSelectRowIndex(row) !== -1}
+                disabled={disableSelect ? disableSelect(row) : false}
                 onChange={(val) => {
                   if (val) {
                     selectRow(row);
@@ -85,7 +87,7 @@ export function useTableSelect<Data extends Recordable>(
           return <span> </span>;
         } else if (toValue(selectType) === "Check") {
           const selectCount = unref(getSelectRows).length;
-          const pageData = unref(getData)||[];
+          const pageData = unref(getData) || [];
           return (
             <div>
               <el-tooltip placement="right">
@@ -93,7 +95,7 @@ export function useTableSelect<Data extends Recordable>(
                   default: () => (
                     <el-checkbox
                       indeterminate={
-                        selectCount !==0 && selectCount !== pageData.length
+                        selectCount !== 0 && selectCount !== pageData.length
                       }
                       modelValue={
                         pageData.length !== 0 && selectCount === pageData.length

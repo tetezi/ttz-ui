@@ -5,17 +5,17 @@
 import Draggable from 'vuedraggable'
 import FormItem from './FormItem.vue'
 import type { DesignFormSchema, FormItemGroupProps, FormItemProps, FormSchemas, JavaScriptCode } from './types';
-import type { Recordable } from '@/global';
+import type { Flatten, Recordable } from '@/global';
 import { get, isUndefined, pick } from 'lodash';
-import { computed, inject, unref, withModifiers, type ComponentInstance, type ComponentPublicInstance, } from 'vue';
-import { buildUUID, getInheritanceEvent } from '@/utils';
-import { useDynamicConfig, } from './hooks';
+import { computed, getCurrentInstance, inject, unref, withModifiers, type ComponentInstance, type ComponentPublicInstance, } from 'vue';
+import { getInheritanceEvent } from '@/utils';
+
 const props = defineProps<FormItemGroupProps<ExtraRenderParams>>()
 const emit = defineEmits<{
     formItemInstanceReady: [key: string, el: ComponentPublicInstance]
 }>()
-const isDesign = inject("isDesign", false);
-const isDesignFormSchema = inject("isDesignFormSchema", false);
+// const isDesign = inject("isDesign", false);
+// const isDesignFormSchema = inject("isDesignFormSchema", false);
 type WithoutUndefined<T> = T extends undefined ? never : T;
 type GetJavaScriptCodeKey = WithoutUndefined<{
     [K in keyof DesignFormSchema]: DesignFormSchema[K] extends (JavaScriptCode<any> | undefined) ? K : never;
@@ -54,7 +54,7 @@ function transitionDesignFormSchema(schema: DesignFormSchema): Schema {
         }
     }
     const reulust = {
-        schemaKey: schema.id,
+        schemaKey: schema.schemaKey,
         ifShow: getJSCodeToDynamicConfig('ifShow', true),
         label: getJSCodeToDynamicConfig('label', ''),
         labelRender: getJSCodeToDynamicConfig('labelRender', undefined),
@@ -63,57 +63,52 @@ function transitionDesignFormSchema(schema: DesignFormSchema): Schema {
         field: schema.field,
         category: schema.category,
         component: schema.component,
+        draggableTag: schema.draggableTag,
         children: (schema.children || []),
         componentProps: getJSCodeToDynamicConfig('componentProps', {}),
         componentStyle: getJSCodeToDynamicConfig('componentStyle', {}),
         render: getJSCodeToDynamicConfig('render', undefined),
         componentSlot: getJSCodeToDynamicConfig('componentSlot', undefined),
+        colProps: schema.colProps,
     } as Schema
     return reulust
 }
-function getFormItem(raw) {
-    let schema = unref(isDesignFormSchema) ? transitionDesignFormSchema(raw) : raw
+function getFormItem(raw: DesignFormSchema | Flatten<FormSchemas<ExtraRenderParams>>) {
+    let schema = (props.isDesignFormSchema ? transitionDesignFormSchema(raw as DesignFormSchema) : raw) as Flatten<FormSchemas<ExtraRenderParams>>
     const formItemProps = { schema, ...pick(props, ['formModel', 'setFieldsValue', 'getSlot', 'extraRenderParams']) }
-    const { getDynamicConfig } = useDynamicConfig(formItemProps)
+    // const { getDynamicConfig } = useDynamicConfig(formItemProps)
+    const colProps = schema.colProps
     const bind = {
         style: {
             padding: '5px',
-            outline: props.extraRenderParams?.isSelectedSchema(schema.schemaKey) ? '1px dashed black' : ''
+            outline: props.extraRenderParams?.isSelectedSchema(schema.schemaKey) ? '1px dashed black' : '',
         },
-        onclick: unref(isDesign) ? withModifiers(() => {
+        onClick: (props.isDesign) ? withModifiers(() => {
             props.extraRenderParams?.selectSchema?.(schema.schemaKey)
         }, ['stop',]) : undefined,
-        ...getDynamicConfig(schema.formItemProps),
+        // ...getDynamicConfig(schema.formItemProps),
+        key: schema.schemaKey,
+        isDesign: props.isDesign,
+        isDesignFormSchema: props.isDesignFormSchema,
         ...formItemProps,
         ...getInheritanceEvent(emit, ['formItemInstanceReady']),
     }
-    return <FormItem  {...bind} >   </FormItem>
+    return (isUndefined(colProps) ? <FormItem  {...bind} >   </FormItem> : <el-col {...colProps}><FormItem  {...bind} >   </FormItem></el-col>)
 
 }
-const formSchemasRef = computed(() => {
-    if (!unref(isDesignFormSchema)) {
-        return (props.formSchemas || []).map((schema) => {
-            return {
-                ...schema,
-                category: schema.category ?? "Input",
-                schemaKey: schema.schemaKey ?? buildUUID()
-            }
-        })
-    } else {
-        return props.formSchemas || []
-    }
-})
 const render = (() => {
-    if (unref(isDesign)) {
+    if (props.isDesign) {
         const draggableBind = {
-            modelValue: unref(formSchemasRef),
+            modelValue: props.formSchemas,
             'onUpdate:modelValue': (v) => {
                 props.extraRenderParams?.setSchemas?.(v, props.parentSchema?.schemaKey)
             },
+            tag: props.parentSchema?.category === 'Container' ? props.parentSchema.draggableTag : undefined,
             itemKey: 'schemaKey',
             group: 'formSchemas',
             style: {
                 height: '100%',
+                width: '100%'
             }
         }
         return <Draggable  {...draggableBind}>
@@ -124,7 +119,8 @@ const render = (() => {
             }}
         </Draggable>
     } else {
-        return unref(formSchemasRef).map(getFormItem)
+        return props.formSchemas.map(getFormItem)
+
     }
 }) 
 </script>
